@@ -1,8 +1,7 @@
 // src/index.ts
 import type { NextConfig } from "next";
-import { Parser } from "./parser/Parser";
-import { DictionaryGenerator } from "./translator/DictionaryGenerator";
-import { ASTTransformer } from "./compiler/ASTTransformer";
+import { Parser } from "./parser/Parser.js";
+import { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
 import fs from "fs";
 import path from "path";
 
@@ -21,20 +20,22 @@ export interface PluginOptions {
   includeNodeModules?: boolean;
   targetLocales?: string[];
   outputDir?: string;
-  enableTransformation?: boolean;
 }
 
 export default function myPlugin(options: PluginOptions = {}) {
   const {
     includeNodeModules = false,
     targetLocales = ["en", "es", "fr", "de"],
-    outputDir = "src/intl",
-    enableTransformation = true
+    outputDir = "./intl"
   } = options;
 
   return function wrapNextConfig(nextConfig: NextConfig): NextConfig {
-    const scheduledFlagPath = path.resolve(process.cwd(), ".intl/.scheduled");
-    const parserLockPath = path.resolve(process.cwd(), ".intl/.lock");
+    const scheduledFlagPath = path.resolve(
+      process.cwd(),
+      outputDir,
+      ".scheduled"
+    );
+    const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
     const timestamp = new Date().toISOString();
     const pid = process.pid;
 
@@ -86,7 +87,7 @@ export default function myPlugin(options: PluginOptions = {}) {
       );
 
       try {
-        const parser = new Parser({ includeNodeModules });
+        const parser = new Parser({ includeNodeModules, outputDir });
         const sourceMap = await parser.parseProject();
 
         // Generate dictionary
@@ -108,37 +109,10 @@ export default function myPlugin(options: PluginOptions = {}) {
       // Note: NOT removing scheduled flag here - let it persist for the build
     });
 
-    // Add webpack configuration for AST transformation if enabled
-    const modifiedNextConfig = {
-      ...nextConfig,
-      webpack: (config: any, options: any) => {
-        if (enableTransformation) {
-          // Add our custom loader for TSX/JSX files
-          config.module.rules.push({
-            test: /\.(tsx|jsx)$/,
-            exclude: /node_modules/,
-            use: [
-              {
-                loader: path.resolve(
-                  __dirname,
-                  "../dist/compiler/webpack-loader.cjs"
-                ),
-                options: {
-                  outputDir
-                }
-              }
-            ]
-          });
-        }
-
-        // Call the original webpack config if it exists
-        if (typeof nextConfig.webpack === "function") {
-          return nextConfig.webpack(config, options);
-        }
-        return config;
-      }
-    };
-
-    return modifiedNextConfig;
+    // Return the original nextConfig without webpack modifications
+    return nextConfig;
   };
 }
+
+// Export runtime utilities
+export * from "./runtime/index.js";

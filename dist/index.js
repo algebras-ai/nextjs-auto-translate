@@ -13,10 +13,10 @@ function isProcessAlive(pid) {
     }
 }
 export default function myPlugin(options = {}) {
-    const { includeNodeModules = false, targetLocales = ["en", "es", "fr", "de"], outputDir = "src/intl", enableTransformation = true } = options;
+    const { includeNodeModules = false, targetLocales = ["en", "es", "fr", "de"], outputDir = "./intl" } = options;
     return function wrapNextConfig(nextConfig) {
-        const scheduledFlagPath = path.resolve(process.cwd(), ".intl/.scheduled");
-        const parserLockPath = path.resolve(process.cwd(), ".intl/.lock");
+        const scheduledFlagPath = path.resolve(process.cwd(), outputDir, ".scheduled");
+        const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
         const timestamp = new Date().toISOString();
         const pid = process.pid;
         console.log(`🔍 [${timestamp}] Plugin called (PID: ${pid})`);
@@ -51,7 +51,7 @@ export default function myPlugin(options = {}) {
             const asyncTimestamp = new Date().toISOString();
             console.log(`⚡ [${asyncTimestamp}] setImmediate callback started (PID: ${pid})`);
             try {
-                const parser = new Parser({ includeNodeModules });
+                const parser = new Parser({ includeNodeModules, outputDir });
                 const sourceMap = await parser.parseProject();
                 // Generate dictionary
                 const dictionaryGenerator = new DictionaryGenerator({
@@ -66,32 +66,9 @@ export default function myPlugin(options = {}) {
             }
             // Note: NOT removing scheduled flag here - let it persist for the build
         });
-        // Add webpack configuration for AST transformation if enabled
-        const modifiedNextConfig = {
-            ...nextConfig,
-            webpack: (config, options) => {
-                if (enableTransformation) {
-                    // Add our custom loader for TSX/JSX files
-                    config.module.rules.push({
-                        test: /\.(tsx|jsx)$/,
-                        exclude: /node_modules/,
-                        use: [
-                            {
-                                loader: path.resolve(__dirname, "../dist/compiler/webpack-loader.cjs"),
-                                options: {
-                                    outputDir
-                                }
-                            }
-                        ]
-                    });
-                }
-                // Call the original webpack config if it exists
-                if (typeof nextConfig.webpack === "function") {
-                    return nextConfig.webpack(config, options);
-                }
-                return config;
-            }
-        };
-        return modifiedNextConfig;
+        // Return the original nextConfig without webpack modifications
+        return nextConfig;
     };
 }
+// Export runtime utilities
+export * from "./runtime";

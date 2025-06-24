@@ -3,7 +3,9 @@ export declare class Parser {
     private options;
     private lockPath;
     private sourceStore;
-    constructor(options?: ParserOptions);
+    constructor(options?: ParserOptions & {
+        outputDir?: string;
+    });
     parseProject(): Promise<ScopeMap>;
     private hasChanges;
 }

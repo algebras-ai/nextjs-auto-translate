@@ -2,9 +2,8 @@
 import fs from "fs";
 import path from "path";
 export class SourceStore {
-    constructor() {
-        // Expose path for Parser intlDir computation
-        this.path = path.resolve(process.cwd(), ".intl/source.json");
+    constructor(outputDir = ".intl") {
+        this.path = path.resolve(process.cwd(), outputDir, "source.json");
     }
     save(data) {
         fs.mkdirSync(path.dirname(this.path), { recursive: true });

@@ -4,8 +4,11 @@ import path from "path";
 import { ScopeMap } from "../types";
 
 export class SourceStore {
-  // Expose path for Parser intlDir computation
-  public path = path.resolve(process.cwd(), ".intl/source.json");
+  public path: string;
+
+  constructor(outputDir: string = ".intl") {
+    this.path = path.resolve(process.cwd(), outputDir, "source.json");
+  }
 
   save(data: ScopeMap): void {
     fs.mkdirSync(path.dirname(this.path), { recursive: true });

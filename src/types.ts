@@ -29,4 +29,5 @@ export type Dictionary = {
 
 export interface ParserOptions {
   includeNodeModules?: boolean;
+  outputDir?: string;
 }

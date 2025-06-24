@@ -52,10 +52,14 @@ function getRelativeScopePath(fullPath: string): string {
 }
 
 export class Parser {
-  private lockPath = path.resolve(process.cwd(), ".intl/.lock");
-  private sourceStore = new SourceStore();
+  private lockPath: string;
+  private sourceStore: SourceStore;
 
-  constructor(private options: ParserOptions = {}) {}
+  constructor(private options: ParserOptions & { outputDir?: string } = {}) {
+    const outputDir = options.outputDir || ".intl";
+    this.lockPath = path.resolve(process.cwd(), outputDir, ".lock");
+    this.sourceStore = new SourceStore(outputDir);
+  }
 
   async parseProject(): Promise<ScopeMap> {
     // Ensure .intl directory exists

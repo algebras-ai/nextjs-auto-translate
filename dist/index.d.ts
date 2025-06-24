@@ -3,6 +3,6 @@ export interface PluginOptions {
     includeNodeModules?: boolean;
     targetLocales?: string[];
     outputDir?: string;
-    enableTransformation?: boolean;
 }
 export default function myPlugin(options?: PluginOptions): (nextConfig: NextConfig) => NextConfig;
+export * from "./runtime";
