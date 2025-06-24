@@ -1,9 +1,10 @@
 // src/runtime/index.ts
-export { loadDictionary, loadDictionaryDefault, preloadDictionaries, clearDictionaryCache } from "./dictionary";
-export { setLocale, getLocale, setOutputDir, getOutputDir, translate, t, translateScope, configure, translateWithFallback } from "./translate";
+export { loadDictionary, loadDictionaryDefault, preloadDictionaries, clearDictionaryCache } from "./dictionary.js";
+export { setOutputDir, getOutputDir, translate, t, translateScope, configure, translateWithFallback } from "./translate.js";
+export { setLocale, getLocale, detectServerLocale, detectBrowserLocale } from "./locale.js";
 // Default configuration helper
 export function createTranslator(outputDir = "./intl", defaultLocale = "en") {
-    const { configure, translate, translateScope, t, setLocale, getLocale } = require("./translate");
+    const { configure, translate, translateScope, t, setLocale, getLocale } = require("./translate.js");
     // Initialize with provided settings
     configure({ locale: defaultLocale, outputDir });
     return {

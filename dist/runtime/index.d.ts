@@ -1,5 +1,6 @@
-export { loadDictionary, loadDictionaryDefault, preloadDictionaries, clearDictionaryCache } from "./dictionary";
-export { setLocale, getLocale, setOutputDir, getOutputDir, translate, t, translateScope, configure, translateWithFallback } from "./translate";
+export { loadDictionary, loadDictionaryDefault, preloadDictionaries, clearDictionaryCache } from "./dictionary.js";
+export { setOutputDir, getOutputDir, translate, t, translateScope, configure, translateWithFallback } from "./translate.js";
+export { setLocale, getLocale, detectServerLocale, detectBrowserLocale } from "./locale.js";
 export declare function createTranslator(outputDir?: string, defaultLocale?: string): {
     setLocale: any;
     getLocale: any;

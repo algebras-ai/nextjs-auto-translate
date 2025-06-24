@@ -1,12 +1,6 @@
-import { loadDictionary } from "./dictionary";
-let currentLocale = "en";
+import { loadDictionary } from "./dictionary.js";
+import { getLocale, setLocale } from "./locale";
 let currentOutputDir = "./intl";
-export function setLocale(locale) {
-    currentLocale = locale;
-}
-export function getLocale() {
-    return currentLocale;
-}
 export function setOutputDir(outputDir) {
     currentOutputDir = outputDir;
 }
@@ -14,7 +8,8 @@ export function getOutputDir() {
     return currentOutputDir;
 }
 export function translate(scope, locale, outputDir) {
-    const targetLocale = locale || currentLocale;
+    const targetLocale = locale || getLocale();
+    console.log("targetLocale", targetLocale);
     const targetOutputDir = outputDir || currentOutputDir;
     const dict = loadDictionary(targetLocale, targetOutputDir);
     return dict[scope] || scope;
@@ -38,5 +33,6 @@ export function configure(options) {
 // Function to get translation with fallback
 export function translateWithFallback(scope, fallback, locale, outputDir) {
     const result = translate(scope, locale, outputDir);
+    console.log("result", result);
     return result === scope ? fallback : result;
 }

@@ -1,15 +1,7 @@
 import { loadDictionary } from "./dictionary.js";
+import { getLocale, setLocale } from "./locale";
 
-let currentLocale = "en";
 let currentOutputDir = "./intl";
-
-export function setLocale(locale: string) {
-  currentLocale = locale;
-}
-
-export function getLocale() {
-  return currentLocale;
-}
 
 export function setOutputDir(outputDir: string) {
   currentOutputDir = outputDir;
@@ -24,7 +16,8 @@ export function translate(
   locale?: string,
   outputDir?: string
 ): string {
-  const targetLocale = locale || currentLocale;
+  const targetLocale = locale || getLocale();
+  console.log("targetLocale", targetLocale);
   const targetOutputDir = outputDir || currentOutputDir;
 
   const dict = loadDictionary(targetLocale, targetOutputDir);
@@ -61,5 +54,6 @@ export function translateWithFallback(
   outputDir?: string
 ): string {
   const result = translate(scope, locale, outputDir);
+  console.log("result", result);
   return result === scope ? fallback : result;
 }

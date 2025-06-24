@@ -9,8 +9,24 @@ export function loadDictionary(locale, outputDir = "./intl") {
     try {
         const raw = fs.readFileSync(dictPath, "utf-8");
         const all = JSON.parse(raw);
-        loaded[cacheKey] = all[locale] || {};
-        return loaded[cacheKey];
+        // Flatten the structure for the given locale
+        const flat = {};
+        if (all.files) {
+            for (const filePath of Object.keys(all.files)) {
+                const file = all.files[filePath];
+                if (file.entries) {
+                    for (const scopePath of Object.keys(file.entries)) {
+                        const entry = file.entries[scopePath];
+                        if (entry.content && entry.content[locale]) {
+                            // Compose a flat key, e.g. `${filePath}::${scopePath}`
+                            flat[`${filePath}::${scopePath}`] = entry.content[locale];
+                        }
+                    }
+                }
+            }
+        }
+        loaded[cacheKey] = flat;
+        return flat;
     }
     catch (error) {
         console.warn(`[Dictionary] Failed to load dictionary from ${dictPath}:`, error);

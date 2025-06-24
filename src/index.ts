@@ -4,6 +4,7 @@ import { Parser } from "./parser/Parser.js";
 import { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
 import fs from "fs";
 import path from "path";
+import { transformProject } from "./transformer/Injector.js";
 
 let hasScheduled = false;
 
@@ -100,12 +101,21 @@ export default function myPlugin(options: PluginOptions = {}) {
         console.log(
           `✅ [${asyncTimestamp}] Parser and dictionary generation completed (PID: ${pid})`
         );
+
+        // Step 2: Inject t() calls
+        setImmediate(() => {
+          console.log("transforming project");
+          transformProject(sourceMap).catch((err) =>
+            console.error("❌ Injector error:", err)
+          );
+        });
       } catch (err) {
         console.error(
           `❌ [${asyncTimestamp}] Parser error (PID: ${pid}):`,
           err
         );
       }
+
       // Note: NOT removing scheduled flag here - let it persist for the build
     });
 

@@ -1,5 +1,3 @@
-export declare function setLocale(locale: string): void;
-export declare function getLocale(): string;
 export declare function setOutputDir(outputDir: string): void;
 export declare function getOutputDir(): string;
 export declare function translate(scope: string, locale?: string, outputDir?: string): string;

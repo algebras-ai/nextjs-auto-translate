@@ -7,8 +7,6 @@ export {
 } from "./dictionary.js";
 
 export {
-  setLocale,
-  getLocale,
   setOutputDir,
   getOutputDir,
   translate,
@@ -17,6 +15,13 @@ export {
   configure,
   translateWithFallback
 } from "./translate.js";
+
+export {
+  setLocale,
+  getLocale,
+  detectServerLocale,
+  detectBrowserLocale
+} from "./locale.js";
 
 // Default configuration helper
 export function createTranslator(

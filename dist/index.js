@@ -1,7 +1,8 @@
-import { Parser } from "./parser/Parser";
-import { DictionaryGenerator } from "./translator/DictionaryGenerator";
+import { Parser } from "./parser/Parser.js";
+import { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
 import fs from "fs";
 import path from "path";
+import { transformProject } from "./transformer/Injector.js";
 let hasScheduled = false;
 function isProcessAlive(pid) {
     try {
@@ -60,6 +61,11 @@ export default function myPlugin(options = {}) {
                 });
                 await dictionaryGenerator.generateDictionary(sourceMap);
                 console.log(`✅ [${asyncTimestamp}] Parser and dictionary generation completed (PID: ${pid})`);
+                // Step 2: Inject t() calls
+                setImmediate(() => {
+                    console.log("transforming project");
+                    transformProject(sourceMap).catch((err) => console.error("❌ Injector error:", err));
+                });
             }
             catch (err) {
                 console.error(`❌ [${asyncTimestamp}] Parser error (PID: ${pid}):`, err);
@@ -71,4 +77,4 @@ export default function myPlugin(options = {}) {
     };
 }
 // Export runtime utilities
-export * from "./runtime";
+export * from "./runtime/index.js";
