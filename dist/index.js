@@ -14,8 +14,8 @@ function isProcessAlive(pid) {
         return false;
     }
 }
-export default function myPlugin(options = {}) {
-    const { includeNodeModules = false, targetLocales = ["en", "es", "fr", "de"], outputDir = "./src/intl" } = options;
+export default function myPlugin(options) {
+    const { defaultLocale = "en", targetLocales, includeNodeModules = false, outputDir = "./src/intl" } = options;
     process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
     const scheduledFlagPath = path.resolve(process.cwd(), outputDir, ".scheduled");
     const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
@@ -25,6 +25,7 @@ export default function myPlugin(options = {}) {
             const sourceMap = parser.parseProject();
             cachedSourceMap = sourceMap;
             const dictionaryGenerator = new DictionaryGenerator({
+                defaultLocale,
                 targetLocales,
                 outputDir
             });

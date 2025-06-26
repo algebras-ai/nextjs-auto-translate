@@ -19,15 +19,17 @@ function isProcessAlive(pid: number): boolean {
 }
 
 export interface PluginOptions {
+  defaultLocale: string;
+  targetLocales: string[];
   includeNodeModules?: boolean;
-  targetLocales?: string[];
   outputDir?: string;
 }
 
-export default function myPlugin(options: PluginOptions = {}) {
+export default function myPlugin(options: PluginOptions) {
   const {
+    defaultLocale = "en",
+    targetLocales,
     includeNodeModules = false,
-    targetLocales = ["en", "es", "fr", "de"],
     outputDir = "./src/intl"
   } = options;
 
@@ -47,6 +49,7 @@ export default function myPlugin(options: PluginOptions = {}) {
       cachedSourceMap = sourceMap;
 
       const dictionaryGenerator = new DictionaryGenerator({
+        defaultLocale,
         targetLocales,
         outputDir
       });

@@ -17,7 +17,11 @@ export class DictionaryGenerator {
         this.translationService = new MockTranslationService();
     }
     generateDictionary(sourceMap) {
-        console.log(`[DictionaryGenerator] Generating dictionary for locales: ${this.options.targetLocales.join(", ")}`);
+        const allLocales = [
+            this.options.defaultLocale,
+            ...this.options.targetLocales
+        ];
+        console.log(`[DictionaryGenerator] Generating dictionary for locales: ${allLocales.join(", ")}`);
         const dictionary = {
             version: 0.1,
             files: {}
@@ -30,8 +34,8 @@ export class DictionaryGenerator {
             // Process each scope in the file
             for (const [scopePath, scopeData] of Object.entries(fileData.scopes)) {
                 const translations = {};
-                // Generate translations for each target locale
-                for (const locale of this.options.targetLocales) {
+                // Generate translations for each locale
+                for (const locale of allLocales) {
                     try {
                         translations[locale] = this.translationService.translate(scopeData.content, locale);
                     }

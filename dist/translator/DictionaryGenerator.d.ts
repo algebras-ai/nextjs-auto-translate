@@ -1,5 +1,6 @@
 import { ScopeMap } from "../types";
 export interface DictionaryGeneratorOptions {
+    defaultLocale: string;
     targetLocales: string[];
     outputDir: string;
 }

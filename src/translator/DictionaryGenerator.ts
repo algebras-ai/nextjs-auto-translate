@@ -3,6 +3,7 @@ import path from "path";
 import { ScopeMap } from "../types";
 
 export interface DictionaryGeneratorOptions {
+  defaultLocale: string;
   targetLocales: string[];
   outputDir: string;
 }
@@ -39,8 +40,12 @@ export class DictionaryGenerator {
   constructor(private options: DictionaryGeneratorOptions) {}
 
   generateDictionary(sourceMap: ScopeMap): string {
+    const allLocales = [
+      this.options.defaultLocale,
+      ...this.options.targetLocales
+    ];
     console.log(
-      `[DictionaryGenerator] Generating dictionary for locales: ${this.options.targetLocales.join(
+      `[DictionaryGenerator] Generating dictionary for locales: ${allLocales.join(
         ", "
       )}`
     );
@@ -60,8 +65,8 @@ export class DictionaryGenerator {
       for (const [scopePath, scopeData] of Object.entries(fileData.scopes)) {
         const translations: Record<string, string> = {};
 
-        // Generate translations for each target locale
-        for (const locale of this.options.targetLocales) {
+        // Generate translations for each locale
+        for (const locale of allLocales) {
           try {
             translations[locale] = this.translationService.translate(
               scopeData.content,
