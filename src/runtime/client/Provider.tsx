@@ -8,18 +8,21 @@ import {
   useState
 } from "react";
 import { DictStructure } from "../types";
+import { LanguageCode } from "../../data/languageMap";
 
 const context = createContext<{
   dictionary: DictStructure;
-  locale: string;
-  setLocale: (locale: string) => void;
+  locale: LanguageCode;
+  setLocale: (locale: LanguageCode) => void;
+  getLocales: () => LanguageCode[];
 }>({
   dictionary: {
     version: "",
     files: {}
   },
-  locale: "",
-  setLocale: () => {}
+  locale: LanguageCode.en,
+  setLocale: () => {},
+  getLocales: () => []
 });
 
 export const useAlgebrasIntl = () => {
@@ -29,20 +32,26 @@ export const useAlgebrasIntl = () => {
 interface AlgebrasIntlProviderProps {
   children: ReactNode;
   dictionary: DictStructure;
-  locale: string;
+  locale: LanguageCode;
 }
 
 const AlgebrasIntlClientProvider = (props: AlgebrasIntlProviderProps) => {
-  console.log("provider mounted");
-  const [locale, setLocale] = useState(props.locale);
+  const [locale, setLocale] = useState<LanguageCode>(props.locale);
 
   useEffect(() => {
     document.cookie = `locale=${locale}; path=/;`;
   }, [locale]);
 
+  const getLocales = () => {
+    const entries = Object.values(props.dictionary.files)[0].entries;
+    const content = Object.values(entries)[0].content;
+    const locales = Object.keys(content) as LanguageCode[];
+    return locales;
+  };
+
   return (
     <context.Provider
-      value={{ dictionary: props.dictionary, locale, setLocale }}
+      value={{ dictionary: props.dictionary, locale, setLocale, getLocales }}
     >
       {props.children}
     </context.Provider>

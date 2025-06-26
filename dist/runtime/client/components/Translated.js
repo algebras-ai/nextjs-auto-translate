@@ -1,5 +1,5 @@
 "use client";
-import { Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { Fragment as _Fragment, jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 import { useAlgebrasIntl } from "../Provider";
 const Translated = (props) => {
     const { tKey } = props;
@@ -21,6 +21,6 @@ const Translated = (props) => {
         console.error(`Content for locale "${locale}" not found in "${fileKey}::${entryKey}"`);
         return _jsxs(_Fragment, { children: ["\uD83D\uDEAB Content not found for locale: ", locale] });
     }
-    return _jsxs(_Fragment, { children: ["\u2705 ", content] });
+    return _jsx(_Fragment, { children: content });
 };
 export default Translated;

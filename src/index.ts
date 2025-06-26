@@ -5,6 +5,11 @@ import path from "path";
 import { Parser } from "./parser/Parser.js";
 import { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
 import { ScopeMap } from "./types.js";
+import { LanguageCode } from "./data/languageMap.js";
+
+// Re-export commonly used types and components
+export { LanguageCode } from "./data/languageMap.js";
+export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
 
 let hasScheduled = false;
 let cachedSourceMap: ScopeMap | null = null;
@@ -19,8 +24,8 @@ function isProcessAlive(pid: number): boolean {
 }
 
 export interface PluginOptions {
-  defaultLocale: string;
-  targetLocales: string[];
+  defaultLocale: LanguageCode;
+  targetLocales: LanguageCode[];
   includeNodeModules?: boolean;
   outputDir?: string;
 }

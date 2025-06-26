@@ -60,10 +60,6 @@ export class DictionaryGenerator {
         const outputPath = path.resolve(process.cwd(), this.options.outputDir);
         // Ensure output directory exists
         fs.mkdirSync(outputPath, { recursive: true });
-        // Write dictionary.js file (ES module format)
-        const dictionaryJsPath = path.join(outputPath, "dictionary.js");
-        const dictionaryJsContent = this.generateDictionaryJsContent(dictionary);
-        fs.writeFileSync(dictionaryJsPath, dictionaryJsContent, "utf-8");
         // Write dictionary.json file (for debugging/inspection)
         const dictionaryJsonPath = path.join(outputPath, "dictionary.json");
         fs.writeFileSync(dictionaryJsonPath, JSON.stringify(dictionary, null, 2), "utf-8");
@@ -71,11 +67,5 @@ export class DictionaryGenerator {
         console.log(`[DictionaryGenerator] Generated dictionary with ${totalEntries} entries across ${Object.keys(dictionary.files).length} files`);
         console.log(`[DictionaryGenerator] Dictionary files written to: ${outputPath}`);
         return outputPath;
-    }
-    generateDictionaryJsContent(dictionary) {
-        return `const dictionary = ${JSON.stringify(dictionary, null, 2)};
-
-export default dictionary;
-`;
     }
 }

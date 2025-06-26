@@ -33,7 +33,7 @@ const Translated = (props: TranslatedProps) => {
     return <>🚫 Content not found for locale: {locale}</>;
   }
 
-  return <>✅ {content}</>;
+  return <>{content}</>;
 };
 
 export default Translated;

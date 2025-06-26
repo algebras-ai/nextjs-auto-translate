@@ -21,5 +21,4 @@ export declare class DictionaryGenerator {
     constructor(options: DictionaryGeneratorOptions);
     generateDictionary(sourceMap: ScopeMap): string;
     private writeDictionaryFiles;
-    private generateDictionaryJsContent;
 }

@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import AlgebrasIntlClientProvider from "../client/Provider";
 import Dictionary from "./Dictionary";
+import { LanguageCode } from "../../data/languageMap";
 
 interface AlgebrasIntlProviderProps {
   children: ReactNode;
@@ -16,10 +17,14 @@ const AlgebrasIntlProvider = async ({
   let cookiesLocale = cookieStore.get("locale")?.value;
 
   if (!cookiesLocale) {
-    cookiesLocale = "es";
+    cookiesLocale = LanguageCode.en;
   }
 
-  const locale = cookiesLocale;
+  if (!Object.values(LanguageCode).includes(cookiesLocale as LanguageCode)) {
+    cookiesLocale = LanguageCode.en;
+  }
+
+  const locale = cookiesLocale as LanguageCode;
 
   const dictionary = new Dictionary(locale);
   const dictionaryObject = await dictionary.load();
