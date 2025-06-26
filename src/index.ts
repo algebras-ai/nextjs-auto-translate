@@ -31,6 +31,8 @@ export default function myPlugin(options: PluginOptions = {}) {
     outputDir = "./src/intl"
   } = options;
 
+  process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
+
   const scheduledFlagPath = path.resolve(
     process.cwd(),
     outputDir,

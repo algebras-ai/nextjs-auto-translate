@@ -16,6 +16,7 @@ function isProcessAlive(pid) {
 }
 export default function myPlugin(options = {}) {
     const { includeNodeModules = false, targetLocales = ["en", "es", "fr", "de"], outputDir = "./src/intl" } = options;
+    process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
     const scheduledFlagPath = path.resolve(process.cwd(), outputDir, ".scheduled");
     const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
     function prepareSourceMap() {

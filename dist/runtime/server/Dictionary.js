@@ -7,7 +7,11 @@ class Dictionary {
             files: {}
         };
         this.load = async () => {
-            const dictionaryJsonPath = path.join(process.cwd(), "./src/intl", "dictionary.json");
+            const outputDir = process.env.ALGEBRAS_INTL_OUTPUT_DIR;
+            if (!outputDir) {
+                throw new Error("ALGEBRAS_INTL_OUTPUT_DIR is not set");
+            }
+            const dictionaryJsonPath = path.join(process.cwd(), outputDir, "dictionary.json");
             const dictionaryJson = await fs.readFile(dictionaryJsonPath, "utf8");
             this.dictionary = JSON.parse(dictionaryJson);
             return this.dictionary;
