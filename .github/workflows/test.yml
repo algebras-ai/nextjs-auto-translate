@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20, 22]
+        nextjs-version: [14, 15, 16]
         include:
           - nextjs-version: 14
             react-version: 18
