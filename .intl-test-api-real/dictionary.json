@@ -1,0 +1,25 @@
+{
+  "version": 0.1,
+  "files": {
+    "src/app/page.tsx": {
+      "entries": {
+        "main/heading": {
+          "content": {
+            "en": "Welcome to my application",
+            "es": "Bienvenido a mi aplicación",
+            "fr": "Bienvenue dans mon application"
+          },
+          "hash": "h1"
+        },
+        "main/button": {
+          "content": {
+            "en": "Get started now",
+            "es": "Comienza ahora",
+            "fr": "Commencer maintenant"
+          },
+          "hash": "h2"
+        }
+      }
+    }
+  }
+}

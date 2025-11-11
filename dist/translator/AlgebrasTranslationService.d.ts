@@ -6,12 +6,32 @@ export interface AlgebrasTranslationOptions {
     retryDelay?: number;
 }
 export interface BatchTranslationRequest {
+    texts: string[];
     sourceLanguage: string;
     targetLanguage: string;
-    texts: string[];
+    glossaryId?: string | null;
+    prompt?: string | null;
+    flag?: boolean;
+    ignoreCache?: boolean;
 }
 export interface BatchTranslationResponse {
-    translations: string[];
+    status: string;
+    timestamp: string;
+    data: {
+        translations: Array<{
+            index: number;
+            content: string;
+            warning?: string;
+            error?: string;
+            status_code?: number;
+        }>;
+        batch_summary: {
+            total: number;
+            successful: number;
+            failed: number;
+            total_credits: number;
+        };
+    };
 }
 export declare class AlgebrasTranslationService {
     private apiKey;

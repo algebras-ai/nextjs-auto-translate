@@ -1,0 +1,24 @@
+{
+  "node": {
+    "7fc6489aca3860787605d29ac1242ba83c9dd73000": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Ffirdavskarimov%2FDesktop%2Flandingpage%2Fnextjs-auto-translate%2Fdist%2Fruntime%2Fserver%2FProvider.js%22%2C%5B%7B%22id%22%3A%227fc6489aca3860787605d29ac1242ba83c9dd73000%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2F..%2Fdist%2Fruntime%2Fserver%2FProvider.js%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        },
+        "app/_not-found/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Ffirdavskarimov%2FDesktop%2Flandingpage%2Fnextjs-auto-translate%2Fdist%2Fruntime%2Fserver%2FProvider.js%22%2C%5B%7B%22id%22%3A%227fc6489aca3860787605d29ac1242ba83c9dd73000%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2F..%2Fdist%2Fruntime%2Fserver%2FProvider.js%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "rsc",
+        "app/_not-found/page": "rsc"
+      },
+      "filename": "../../dist/runtime/server/Provider.js",
+      "exportedName": "default"
+    }
+  },
+  "edge": {},
+  "encryptionKey": "75hmiL+FGq2hAgsm4rmhkooWk1jh2V+u8B8/Ty23jW4="
+}
