@@ -1,0 +1,61 @@
+{
+  "version": 0.1,
+  "files": {
+    "src/app/page.tsx": {
+      "entries": {
+        "main/heading": {
+          "content": {
+            "en": "Welcome to my application",
+            "es": "[ES] Welcome to my application",
+            "fr": "[FR] Welcome to my application",
+            "de": "[DE] Welcome to my application",
+            "ru": "[RU] Welcome to my application",
+            "ja": "[JA] Welcome to my application",
+            "zh": "[ZH] Welcome to my application",
+            "pt": "[PT] Welcome to my application",
+            "it": "[IT] Welcome to my application",
+            "ko": "[KO] Welcome to my application",
+            "ar": "[AR] Welcome to my application"
+          },
+          "hash": "h1"
+        },
+        "main/description": {
+          "content": {
+            "en": "This is a great app",
+            "es": "[ES] This is a great app",
+            "fr": "[FR] This is a great app",
+            "de": "[DE] This is a great app",
+            "ru": "[RU] This is a great app",
+            "ja": "[JA] This is a great app",
+            "zh": "[ZH] This is a great app",
+            "pt": "[PT] This is a great app",
+            "it": "[IT] This is a great app",
+            "ko": "[KO] This is a great app",
+            "ar": "[AR] This is a great app"
+          },
+          "hash": "h2"
+        }
+      }
+    },
+    "src/app/about.tsx": {
+      "entries": {
+        "about/title": {
+          "content": {
+            "en": "About Us",
+            "es": "[ES] About Us",
+            "fr": "[FR] About Us",
+            "de": "[DE] About Us",
+            "ru": "[RU] About Us",
+            "ja": "[JA] About Us",
+            "zh": "[ZH] About Us",
+            "pt": "[PT] About Us",
+            "it": "[IT] About Us",
+            "ko": "[KO] About Us",
+            "ar": "[AR] About Us"
+          },
+          "hash": "h3"
+        }
+      }
+    }
+  }
+}

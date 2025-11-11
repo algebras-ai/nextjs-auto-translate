@@ -18,11 +18,11 @@ function isProcessAlive(pid) {
     }
 }
 export default function myPlugin(options) {
-    const { defaultLocale = "en", targetLocales, includeNodeModules = false, outputDir = "./src/intl" } = options;
+    const { defaultLocale = "en", targetLocales, includeNodeModules = false, outputDir = "./src/intl", algebrasApiKey, useMockTranslation, batchSize } = options;
     process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
     const scheduledFlagPath = path.resolve(process.cwd(), outputDir, ".scheduled");
     const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
-    function prepareSourceMap() {
+    async function prepareSourceMap() {
         try {
             const parser = new Parser({ includeNodeModules, outputDir });
             const sourceMap = parser.parseProject();
@@ -30,9 +30,13 @@ export default function myPlugin(options) {
             const dictionaryGenerator = new DictionaryGenerator({
                 defaultLocale,
                 targetLocales,
-                outputDir
+                outputDir,
+                algebrasApiKey,
+                useMockTranslation,
+                batchSize
             });
-            dictionaryGenerator.generateDictionary(sourceMap);
+            // Wait for translation to complete
+            await dictionaryGenerator.generateDictionary(sourceMap);
             fs.writeFileSync(path.resolve(outputDir, "source.json"), JSON.stringify(sourceMap, null, 2), "utf-8");
         }
         catch (err) {
@@ -41,7 +45,11 @@ export default function myPlugin(options) {
         }
     }
     function wrapWebpack(nextWebpack) {
-        prepareSourceMap();
+        // Initiate async preparation (fire and forget for webpack config)
+        // The translations will be ready for subsequent builds
+        prepareSourceMap().catch(err => {
+            console.error("❌ Background source map preparation failed:", err);
+        });
         return function webpack(config, options) {
             config.module.rules.push({
                 test: /\.[jt]sx?$/,

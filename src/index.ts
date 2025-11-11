@@ -28,6 +28,9 @@ export interface PluginOptions {
   targetLocales: LanguageCode[];
   includeNodeModules?: boolean;
   outputDir?: string;
+  algebrasApiKey?: string;
+  useMockTranslation?: boolean;
+  batchSize?: number;
 }
 
 export default function myPlugin(options: PluginOptions) {
@@ -35,7 +38,10 @@ export default function myPlugin(options: PluginOptions) {
     defaultLocale = "en",
     targetLocales,
     includeNodeModules = false,
-    outputDir = "./src/intl"
+    outputDir = "./src/intl",
+    algebrasApiKey,
+    useMockTranslation,
+    batchSize
   } = options;
 
   process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
@@ -47,7 +53,7 @@ export default function myPlugin(options: PluginOptions) {
   );
   const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
 
-  function prepareSourceMap() {
+  async function prepareSourceMap() {
     try {
       const parser = new Parser({ includeNodeModules, outputDir });
       const sourceMap = parser.parseProject();
@@ -56,9 +62,14 @@ export default function myPlugin(options: PluginOptions) {
       const dictionaryGenerator = new DictionaryGenerator({
         defaultLocale,
         targetLocales,
-        outputDir
+        outputDir,
+        algebrasApiKey,
+        useMockTranslation,
+        batchSize
       });
-      dictionaryGenerator.generateDictionary(sourceMap);
+      
+      // Wait for translation to complete
+      await dictionaryGenerator.generateDictionary(sourceMap);
 
       fs.writeFileSync(
         path.resolve(outputDir, "source.json"),
@@ -74,7 +85,12 @@ export default function myPlugin(options: PluginOptions) {
   function wrapWebpack(
     nextWebpack?: NextConfig["webpack"]
   ): NextConfig["webpack"] {
-    prepareSourceMap();
+    // Initiate async preparation (fire and forget for webpack config)
+    // The translations will be ready for subsequent builds
+    prepareSourceMap().catch(err => {
+      console.error("❌ Background source map preparation failed:", err);
+    });
+    
     return function webpack(config, options) {
       config.module.rules.push({
         test: /\.[jt]sx?$/,

@@ -6,6 +6,9 @@ export interface PluginOptions {
     targetLocales: LanguageCode[];
     includeNodeModules?: boolean;
     outputDir?: string;
+    algebrasApiKey?: string;
+    useMockTranslation?: boolean;
+    batchSize?: number;
 }
 export default function myPlugin(options: PluginOptions): (nextConfig: Partial<Record<string, any>>) => {
     webpack: import("next/dist/server/config-shared.js").NextJsWebpackConfig | null | undefined;

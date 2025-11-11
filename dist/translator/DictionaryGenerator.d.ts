@@ -3,6 +3,9 @@ export interface DictionaryGeneratorOptions {
     defaultLocale: string;
     targetLocales: string[];
     outputDir: string;
+    algebrasApiKey?: string;
+    useMockTranslation?: boolean;
+    batchSize?: number;
 }
 export interface DictionaryEntry {
     content: Record<string, string>;
@@ -18,7 +21,8 @@ export interface Dictionary {
 export declare class DictionaryGenerator {
     private options;
     private translationService;
+    private useMockTranslation;
     constructor(options: DictionaryGeneratorOptions);
-    generateDictionary(sourceMap: ScopeMap): string;
+    generateDictionary(sourceMap: ScopeMap): Promise<string>;
     private writeDictionaryFiles;
 }
