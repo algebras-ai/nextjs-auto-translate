@@ -1,8 +1,10 @@
-import { ScopeMap } from "../types";
+import { ScopeMap } from "../types.js";
+import { AlgebrasTranslationProvider } from "./AlgebrasTranslationProvider.js";
 export interface DictionaryGeneratorOptions {
     defaultLocale: string;
     targetLocales: string[];
     outputDir: string;
+    translationProvider?: AlgebrasTranslationProvider;
 }
 export interface DictionaryEntry {
     content: Record<string, string>;
@@ -18,7 +20,10 @@ export interface Dictionary {
 export declare class DictionaryGenerator {
     private options;
     private translationService;
+    private translationProvider?;
     constructor(options: DictionaryGeneratorOptions);
-    generateDictionary(sourceMap: ScopeMap): string;
+    generateDictionary(sourceMap: ScopeMap): Promise<string>;
+    private generateWithAlgebrasAI;
+    private generateWithMockTranslation;
     private writeDictionaryFiles;
 }

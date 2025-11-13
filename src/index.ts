@@ -2,14 +2,22 @@
 import fs from "fs";
 import type { NextConfig } from "next";
 import path from "path";
+import { fileURLToPath } from "url";
 import { Parser } from "./parser/Parser.js";
 import { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
+import { AlgebrasTranslationProvider } from "./translator/AlgebrasTranslationProvider.js";
 import { ScopeMap } from "./types.js";
 import { LanguageCode } from "./data/languageMap.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Re-export commonly used types and components
 export { LanguageCode } from "./data/languageMap.js";
-export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
+export { AlgebrasTranslationProvider } from "./translator/AlgebrasTranslationProvider.js";
+export { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
+// Note: AlgebrasIntlProvider should be imported directly from the runtime path
+// export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
 
 let hasScheduled = false;
 let cachedSourceMap: ScopeMap | null = null;
@@ -28,6 +36,8 @@ export interface PluginOptions {
   targetLocales: LanguageCode[];
   includeNodeModules?: boolean;
   outputDir?: string;
+  translationApiKey?: string;
+  translationApiUrl?: string;
 }
 
 export default function myPlugin(options: PluginOptions) {
@@ -47,18 +57,43 @@ export default function myPlugin(options: PluginOptions) {
   );
   const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
 
-  function prepareSourceMap() {
+  async function prepareSourceMap() {
     try {
       const parser = new Parser({ includeNodeModules, outputDir });
       const sourceMap = parser.parseProject();
       cachedSourceMap = sourceMap;
 
+      // Create translation provider if API key is provided
+      let translationProvider: AlgebrasTranslationProvider | undefined;
+      const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
+      const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
+
+      console.log("\n========================================");
+      console.log("[AlgebrasIntl] Translation Configuration:");
+      console.log("  API Key:", apiKey ? `${apiKey.substring(0, 10)}...` : "NOT FOUND");
+      console.log("  API URL:", apiUrl || "https://beta.algebras.ai/api/v1");
+      console.log("  Target Locales:", targetLocales.join(", "));
+      console.log("========================================\n");
+
+      if (apiKey) {
+        console.log("[AlgebrasIntl] ✅ Using Algebras AI translation service");
+        translationProvider = new AlgebrasTranslationProvider({
+          apiKey,
+          apiUrl: apiUrl || "https://platform.algebras.ai/api/v1"
+        });
+      } else {
+        console.warn("[AlgebrasIntl] ⚠️  No API key found!");
+        console.warn("[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config");
+        console.warn("[AlgebrasIntl] Falling back to mock translations...\n");
+      }
+
       const dictionaryGenerator = new DictionaryGenerator({
         defaultLocale,
         targetLocales,
-        outputDir
+        outputDir,
+        translationProvider
       });
-      dictionaryGenerator.generateDictionary(sourceMap);
+      await dictionaryGenerator.generateDictionary(sourceMap);
 
       fs.writeFileSync(
         path.resolve(outputDir, "source.json"),
@@ -74,14 +109,17 @@ export default function myPlugin(options: PluginOptions) {
   function wrapWebpack(
     nextWebpack?: NextConfig["webpack"]
   ): NextConfig["webpack"] {
-    prepareSourceMap();
+    // Call prepareSourceMap without awaiting (runs in background)
+    prepareSourceMap().catch((err) => {
+      console.error("❌ Background source map preparation failed:", err);
+    });
     return function webpack(config, options) {
       config.module.rules.push({
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         use: [
           {
-            loader: require.resolve("./webpack/auto-intl-loader"),
+            loader: path.resolve(__dirname, "./webpack/auto-intl-loader.js"),
             options: {
               sourceMap: cachedSourceMap ?? {}
             }

@@ -1,15 +1,13 @@
-import generate from "@babel/generator";
+import generateDefault from "@babel/generator";
 import { parse } from "@babel/parser";
-import traverse, { NodePath } from "@babel/traverse";
+import traverseDefault, { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 import path from "path";
-import { ScopeMap } from "../types";
+import { ScopeMap } from "../types.js";
 
-const traverseFunction =
-  typeof traverse === "function" ? traverse : (traverse as any).default;
-
-const generateFunction =
-  typeof generate === "function" ? generate : (generate as any).default;
+// @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
+const traverse = (traverseDefault as any).default || traverseDefault;
+const generate = (generateDefault as any).default || generateDefault;
 
 // Injects <Translated tKey="scope" /> in place of JSXText
 export function injectTranslated(scope: string): t.JSXElement {
@@ -28,7 +26,7 @@ export function injectTranslated(scope: string): t.JSXElement {
 // Ensures import Translated from 'algebras-auto-intl/runtime/client/components/Translated' exists
 export function ensureImportTranslated(ast: t.File) {
   let hasImport = false;
-  traverseFunction(ast, {
+  traverse(ast, {
     ImportDeclaration(path: any) {
       if (
         path.node.source.value ===
@@ -52,6 +50,99 @@ export function ensureImportTranslated(ast: t.File) {
     );
     ast.program.body.unshift(importDecl);
   }
+}
+
+// Ensures import LocalesSwitcher exists
+export function ensureImportLocalesSwitcher(ast: t.File) {
+  let hasImport = false;
+  traverse(ast, {
+    ImportDeclaration(path: any) {
+      if (
+        path.node.source.value ===
+          "algebras-auto-intl/runtime/client/components/LocaleSwitcher" &&
+        path.node.specifiers.some(
+          (s: any) =>
+            t.isImportDefaultSpecifier(s) &&
+            t.isIdentifier(s.local) &&
+            s.local.name === "LocalesSwitcher"
+        )
+      ) {
+        hasImport = true;
+        path.stop();
+      }
+    }
+  });
+  if (!hasImport) {
+    const importDecl = t.importDeclaration(
+      [t.importDefaultSpecifier(t.identifier("LocalesSwitcher"))],
+      t.stringLiteral("algebras-auto-intl/runtime/client/components/LocaleSwitcher")
+    );
+    ast.program.body.unshift(importDecl);
+  }
+}
+
+// Inject LocalesSwitcher into the first section/div in the page
+export function injectLocaleSwitcher(ast: t.File) {
+  let injected = false;
+  
+  traverse(ast, {
+    JSXElement(path: any) {
+      if (injected) return;
+      
+      const openingElement = path.node.openingElement;
+      const tagName = openingElement.name;
+      
+      // Check if it's a section or div with className
+      if (
+        t.isJSXIdentifier(tagName) &&
+        (tagName.name === "section" || tagName.name === "div")
+      ) {
+        const hasClassName = openingElement.attributes.some(
+          (attr: any) =>
+            t.isJSXAttribute(attr) &&
+            t.isJSXIdentifier(attr.name) &&
+            attr.name.name === "className"
+        );
+        
+        if (hasClassName && path.node.children.length > 0) {
+          // Create language switcher element
+          const switcherElement = t.jsxElement(
+            t.jsxOpeningElement(
+              t.jsxIdentifier("div"),
+              [
+                t.jsxAttribute(
+                  t.jsxIdentifier("className"),
+                  t.stringLiteral("fixed top-4 right-4 z-[9999]")
+                ),
+              ],
+              false
+            ),
+            t.jsxClosingElement(t.jsxIdentifier("div")),
+            [
+              t.jsxText("\n          "),
+              t.jsxElement(
+                t.jsxOpeningElement(
+                  t.jsxIdentifier("LocalesSwitcher"),
+                  [],
+                  true
+                ),
+                null,
+                [],
+                true
+              ),
+              t.jsxText("\n        ")
+            ],
+            false
+          );
+          
+          // Add switcher as first child
+          path.node.children.unshift(t.jsxText("\n        "), switcherElement);
+          injected = true;
+          path.stop();
+        }
+      }
+    }
+  });
 }
 
 // Transforms the specified file, injecting t() calls
@@ -86,7 +177,7 @@ export function transformProject(
   let changed = false;
   const fileScopes = options.sourceMap.files[relativePath]?.scopes || {};
 
-  traverseFunction(ast, {
+  traverse(ast, {
     JSXText(path: NodePath<t.JSXText>) {
       const text = path.node.value.trim();
 
@@ -115,7 +206,14 @@ export function transformProject(
   }
 
   ensureImportTranslated(ast);
-  const output = generateFunction(ast, {
+  
+  // Inject language switcher for page.tsx files
+  if (relativePath.includes("page.tsx") || relativePath.includes("page.jsx")) {
+    ensureImportLocalesSwitcher(ast);
+    injectLocaleSwitcher(ast);
+  }
+  
+  const output = generate(ast, {
     retainLines: true,
     retainFunctionParens: true
   });

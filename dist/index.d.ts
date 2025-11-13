@@ -1,11 +1,14 @@
 import { LanguageCode } from "./data/languageMap.js";
 export { LanguageCode } from "./data/languageMap.js";
-export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
+export { AlgebrasTranslationProvider } from "./translator/AlgebrasTranslationProvider.js";
+export { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
 export interface PluginOptions {
     defaultLocale: LanguageCode;
     targetLocales: LanguageCode[];
     includeNodeModules?: boolean;
     outputDir?: string;
+    translationApiKey?: string;
+    translationApiUrl?: string;
 }
 export default function myPlugin(options: PluginOptions): (nextConfig: Partial<Record<string, any>>) => {
     webpack: import("next/dist/server/config-shared.js").NextJsWebpackConfig | null | undefined;

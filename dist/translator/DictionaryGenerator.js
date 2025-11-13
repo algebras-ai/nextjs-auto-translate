@@ -12,11 +12,14 @@ class MockTranslationService {
     }
 }
 export class DictionaryGenerator {
+    options;
+    translationService = new MockTranslationService();
+    translationProvider;
     constructor(options) {
         this.options = options;
-        this.translationService = new MockTranslationService();
+        this.translationProvider = options.translationProvider;
     }
-    generateDictionary(sourceMap) {
+    async generateDictionary(sourceMap) {
         const allLocales = [
             this.options.defaultLocale,
             ...this.options.targetLocales
@@ -26,6 +29,54 @@ export class DictionaryGenerator {
             version: 0.1,
             files: {}
         };
+        // Use Algebras AI translation if provider is available
+        if (this.translationProvider && this.options.targetLocales.length > 0) {
+            await this.generateWithAlgebrasAI(sourceMap, dictionary, allLocales);
+        }
+        else {
+            // Fallback to mock translation
+            this.generateWithMockTranslation(sourceMap, dictionary, allLocales);
+        }
+        // Write dictionary files
+        const outputPath = this.writeDictionaryFiles(dictionary);
+        const dictionaryJsonPath = path.join(outputPath, "dictionary.json");
+        return dictionaryJsonPath;
+    }
+    async generateWithAlgebrasAI(sourceMap, dictionary, allLocales) {
+        console.log("[DictionaryGenerator] Using Algebras AI for translation...");
+        // Collect all texts to translate
+        const textsMap = new Map();
+        const keyToFileScope = new Map();
+        for (const [filePath, fileData] of Object.entries(sourceMap.files)) {
+            dictionary.files[filePath] = { entries: {} };
+            for (const [scopePath, scopeData] of Object.entries(fileData.scopes)) {
+                const key = `${filePath}::${scopePath}`;
+                textsMap.set(key, scopeData.content);
+                keyToFileScope.set(key, { filePath, scopePath });
+            }
+        }
+        // Translate all texts at once (optimized batch translation)
+        const targetLocales = this.options.targetLocales;
+        const translationResults = await this.translationProvider.translateAll(textsMap, targetLocales, this.options.defaultLocale);
+        // Build dictionary from translation results
+        for (const [key, translations] of translationResults.entries()) {
+            const { filePath, scopePath } = keyToFileScope.get(key);
+            const scopeData = sourceMap.files[filePath].scopes[scopePath];
+            const translationRecord = {
+                [this.options.defaultLocale]: scopeData.content // Original text in default locale
+            };
+            // Add all target locale translations
+            for (const locale of targetLocales) {
+                translationRecord[locale] = translations.get(locale) || scopeData.content;
+            }
+            dictionary.files[filePath].entries[scopePath] = {
+                content: translationRecord,
+                hash: scopeData.hash
+            };
+        }
+    }
+    generateWithMockTranslation(sourceMap, dictionary, allLocales) {
+        console.log("[DictionaryGenerator] Using mock translation...");
         // Process each file
         for (const [filePath, fileData] of Object.entries(sourceMap.files)) {
             dictionary.files[filePath] = {
@@ -51,10 +102,6 @@ export class DictionaryGenerator {
                 };
             }
         }
-        // Write dictionary files
-        const outputPath = this.writeDictionaryFiles(dictionary);
-        const dictionaryJsonPath = path.join(outputPath, "dictionary.json");
-        return dictionaryJsonPath;
     }
     writeDictionaryFiles(dictionary) {
         const outputPath = path.resolve(process.cwd(), this.options.outputDir);
