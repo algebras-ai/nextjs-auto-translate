@@ -64,6 +64,53 @@ export default autoIntl({
 })(nextConfig);
 ```
 
+### With Algebras AI Translation (Recommended)
+
+For high-quality automatic translations, integrate with Algebras AI:
+
+1. **Create a `.env` file** in your project root:
+
+```bash
+ALGEBRAS_API_KEY=your_api_key_here
+ALGEBRAS_API_URL=https://platform.algebras.ai/api/v1
+```
+
+2. **Update your `next.config.ts`**:
+
+```typescript
+import autoIntl from "algebras-auto-intl";
+
+const nextConfig = {
+  // your existing config
+};
+
+export default autoIntl({
+  defaultLocale: "en",
+  targetLocales: ["es", "fr", "de", "zh", "ja", "ko", "ar", "pt", "ru"],
+  outputDir: "./src/intl",
+  includeNodeModules: false,
+  // The plugin will automatically use ALGEBRAS_API_KEY from .env
+  // Or you can pass it directly (not recommended for production):
+  // translationApiKey: process.env.ALGEBRAS_API_KEY,
+  // translationApiUrl: process.env.ALGEBRAS_API_URL,
+})(nextConfig);
+```
+
+That's it! The plugin will now use Algebras AI to generate high-quality translations automatically during your build process.
+
+#### Features of Algebras AI Integration:
+
+- 🤖 **Professional Translations** - Uses Algebras AI specialized translation endpoint
+- ⚡ **Batch Processing** - Translates up to 20 texts per API call (API limit)
+- 🔄 **Automatic Caching** - Avoids re-translating the same content
+- 🌍 **Multi-language Support** - Processes multiple target languages efficiently
+- 🛡️ **Fallback Handling** - Gracefully handles API errors with fallback translations
+- 📊 **Progress Logging** - See translation progress in real-time
+- 🎯 **Custom Glossaries** - Use domain-specific terminology with glossary support
+- 💬 **Custom Prompts** - Add context or tone instructions to translations
+
+See `ALGEBRAS_SETUP.md` for detailed configuration options.
+
 ### Standalone Usage
 
 ```typescript
@@ -296,16 +343,54 @@ src/intl/           # Generated dictionary files (configurable location)
 
 - `includeNodeModules`: Whether to scan files in node_modules (default: false)
 
-### Mock Translation Service
+### Translation Services
 
-The library includes a mock translation service for development that prefixes translations:
+The library supports two translation modes:
+
+#### Algebras AI Translation (Recommended)
+
+High-quality automatic translations using Algebras AI:
+
+```typescript
+import { AlgebrasTranslationProvider, DictionaryGenerator } from "algebras-auto-intl";
+
+const provider = new AlgebrasTranslationProvider({
+  apiKey: process.env.ALGEBRAS_API_KEY!,
+  apiUrl: "https://platform.algebras.ai/api/v1",
+  // Optional: Add custom translation settings
+  // glossaryId: "your-glossary-id",
+  // prompt: "Translate in a professional tone",
+  // ignoreCache: false
+});
+
+const generator = new DictionaryGenerator({
+  defaultLocale: "en",
+  targetLocales: ["es", "fr", "de"],
+  outputDir: "./src/intl",
+  translationProvider: provider
+});
+
+await generator.generateDictionary(sourceMap);
+```
+
+Features:
+- High-quality translations using Algebras AI batch endpoint
+- Batch processing (up to 20 texts per API call, API maximum)
+- Automatic caching to avoid duplicate API calls
+- Rate limiting and error handling
+- Support for custom glossaries and prompts
+- Configurable cache behavior
+
+#### Mock Translation Service
+
+For development without an API key, the library includes a mock translation service that prefixes translations:
 
 - `en`: Returns original text unchanged
 - `es`: `[ES] Original text`
 - `fr`: `[FR] Original text`
 - `de`: `[DE] Original text`
 
-You can replace this with a real translation API by modifying the `MockTranslationService` class in `src/translator/DictionaryGenerator.ts`.
+This is automatically used when no `translationProvider` is specified.
 
 ### Supported File Types
 

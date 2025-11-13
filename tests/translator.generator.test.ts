@@ -24,9 +24,9 @@ const makeScopeMap = (): ScopeMap => ({
 });
 
 describe("DictionaryGenerator", () => {
-	it("generates dictionary.json with target locales", () => {
+	it("generates dictionary.json with target locales", async () => {
 		const gen = new DictionaryGenerator({ defaultLocale: "en" as any, targetLocales: ["es", "fr"] as any, outputDir: tmpDir });
-		const out = gen.generateDictionary(makeScopeMap());
+		const out = await gen.generateDictionary(makeScopeMap());
 		expect(out).toContain(path.join(tmpDir, "dictionary.json"));
 		const raw = fs.readFileSync(out, "utf-8");
 		const json = JSON.parse(raw);
@@ -35,9 +35,9 @@ describe("DictionaryGenerator", () => {
 	});
 
 	for (let i = 0; i < 9; i++) {
-		it(`mock translation prefixes non-en (${i+1})`, () => {
+		it(`mock translation prefixes non-en (${i+1})`, async () => {
 			const gen = new DictionaryGenerator({ defaultLocale: "en" as any, targetLocales: ["de"] as any, outputDir: tmpDir });
-			const out = gen.generateDictionary(makeScopeMap());
+			const out = await gen.generateDictionary(makeScopeMap());
 			const raw = fs.readFileSync(out, "utf-8");
 			const json = JSON.parse(raw);
 			expect(json.files["src/C.tsx"].entries["a/b/c"].content.de.startsWith("[DE] ")).toBe(true);
