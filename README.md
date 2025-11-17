@@ -26,43 +26,92 @@ npm install algebras-auto-intl
 
 ### Using with Next.js 15/16 (Turbopack)
 
-Turbopack does not run webpack loaders. To ensure JSX text is replaced by injected `Translated` components during build, run your project with webpack.
+Turbopack fully supports the plugin as long as your Next.js config is authored as **`next.config.mjs`** (pure ESM). The plugin is evaluated during config loading, so ensuring an ESM entry guarantees it runs for both webpack and Turbopack builds.
 
 Recommended options:
 
-- For development:
-  - Run with an environment flag to disable Turbopack.
-  - Example (package.json scripts):
-    ```bash
-    NEXT_DISABLE_TURBOPACK=1 next dev
-    ```
-- For production builds:
-  - Ensure builds use webpack so the loader runs:
-    ```bash
-    NEXT_DISABLE_TURBOPACK=1 next build
-    ```
+- Rename your config to `next.config.mjs` (or use `"type": "module"` with `next.config.js`) and import/export using ESM syntax.
+- When you need to fallback to webpack (e.g., for debugging legacy loaders), you can still set `NEXT_DISABLE_TURBOPACK=1` temporarily.
 
-Note: Dictionary generation runs regardless of bundler, but source injection (replacing plain JSX text with `Translated`) requires webpack at the moment.
+> ⚠️ Source extraction happens regardless of bundler, but Turbopack skips webpack-only loaders. Using the ESM wrapper described below ensures the auto-intl plugin runs before Turbopack compiles routes.
 
 ## Quick Start
 
-### With Next.js
+### With Next.js (ESM / Turbopack-friendly)
 
-Add the plugin to your `next.config.ts`:
+Add the plugin to your `next.config.mjs` so it runs for both webpack and Turbopack builds:
 
-```typescript
-import autoIntl from "algebras-auto-intl";
+```javascript
+import autoIntl, { LanguageCode } from "algebras-auto-intl";
 
 const nextConfig = {
-  // your existing config
+  output: "standalone",
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com"
+      }
+    ]
+  }
 };
 
+// Wrap your config with autoIntl so it can extract strings during Turbopack builds
 export default autoIntl({
-  includeNodeModules: false, // optional - scan node_modules
-  targetLocales: ["en", "es", "fr", "de"], // languages to generate
-  outputDir: "src/intl" // where to output dictionary files
+  defaultLocale: LanguageCode.ru,
+  includeNodeModules: false,
+  targetLocales: [
+    LanguageCode.en,
+    LanguageCode.am,
+    LanguageCode.de,
+    LanguageCode.fr,
+    LanguageCode.es
+  ],
+  outputDir: "src/intl"
 })(nextConfig);
 ```
+
+> ℹ️ If you prefer TypeScript configs, ensure your project has `"type": "module"` set in `package.json` so `next.config.ts` is compiled as ESM. Otherwise, stick with `next.config.mjs`.
+
+### App Router Layout Setup
+
+After wrapping your config, wire the runtime provider in `app/layout.tsx` (or any root layout). This ensures dictionary data reaches both server and client components:
+
+```tsx
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import AlgebrasIntlProvider from "algebras-auto-intl/runtime/server";
+
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"]
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"]
+});
+
+export const metadata: Metadata = {
+  title: "YOUR TITLE,
+  description:
+    "YOUR  DESCRIPTION"
+    };
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ru">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <AlgebrasIntlProvider>{children}</AlgebrasIntlProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+> ✅ The provider automatically reads from the dictionaries generated in `src/intl`, so no extra wiring is required. Use `Translated` components inside your routes to render localized content.
 
 ### With Algebras AI Translation (Recommended)
 
@@ -75,9 +124,9 @@ ALGEBRAS_API_KEY=your_api_key_here
 ALGEBRAS_API_URL=https://platform.algebras.ai/api/v1
 ```
 
-2. **Update your `next.config.ts`**:
+2. **Update your `next.config.mjs` (or ESM config)**:
 
-```typescript
+```javascript
 import autoIntl from "algebras-auto-intl";
 
 const nextConfig = {
