@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { languageMap, LanguageCode } from "../../../data/languageMap.js";
 import { useAlgebrasIntl } from "../Provider.js";
 
@@ -111,6 +112,7 @@ const DropdownOption = ({
 
 const LocaleSwitcher = () => {
   const { locale: currentLocale, setLocale, getLocales } = useAlgebrasIntl();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   const availableLocales = getLocales();
@@ -120,6 +122,8 @@ const LocaleSwitcher = () => {
   const handleLocaleChange = (locale: string) => {
     setLocale(locale);
     setIsOpen(false);
+    // Refresh the page to update server components with new locale
+    router.refresh();
   };
 
   return (
