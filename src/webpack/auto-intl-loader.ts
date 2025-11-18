@@ -19,6 +19,13 @@ export default function loader(
   
   const processFile = async () => {
     try {
+      // Get the file path relative to the project root and normalize it
+      const projectRoot = this.rootContext || process.cwd();
+      const relativeFilePath = path
+        .relative(projectRoot, this.resourcePath)
+        .split(path.sep)
+        .join("/"); // Normalize to forward slashes to match sourceMap format
+      
       // First, automatically wrap layout with AlgebrasIntlProvider
       let result = wrapLayoutWithIntl(source, this.resourcePath);
       
@@ -28,7 +35,6 @@ export default function loader(
       if (!sourceMap || !sourceMap.files || Object.keys(sourceMap.files).length === 0) {
         // Try to load from disk (similar to turbopack transformer)
         const outputDir = options.outputDir || process.env.ALGEBRAS_INTL_OUTPUT_DIR || "./src/intl";
-        const projectRoot = this.rootContext || process.cwd();
         
         const possibleSourceMapPaths = [
           path.resolve(projectRoot, outputDir, "source.json"),
@@ -57,9 +63,10 @@ export default function loader(
       }
       
       // Then, transform the project with translation injections
+      // Use the normalized relative path for matching
       result = transformProject(result, {
         sourceMap,
-        filePath: this.resourcePath
+        filePath: path.resolve(projectRoot, relativeFilePath)
       });
       
       callback(null, result);
