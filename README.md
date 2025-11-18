@@ -44,20 +44,60 @@ No additional configuration needed - the plugin handles both bundlers automatica
 
 ### With Next.js
 
-Add the plugin to your `next.config.ts`:
+1. **Add the plugin to your `next.config.ts`**:
 
 ```typescript
-import autoIntl from "algebras-auto-intl";
+import type { NextConfig } from "next";
+import IntlConfig from "nextjs-auto-intl";
+import { LanguageCode } from "nextjs-auto-intl/data/languageMap";
 
-const nextConfig = {
-  // your existing config
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
 };
 
-export default autoIntl({
+export default IntlConfig({
   includeNodeModules: false, // optional - scan node_modules
-  targetLocales: ["en", "es", "fr", "de"], // languages to generate
+  sourceLanguage: LanguageCode.en,
+  targetLocales: [LanguageCode.es, LanguageCode.fr], // languages to generate
   outputDir: "src/intl" // where to output dictionary files
 })(nextConfig);
+```
+
+2. **Import and wrap your layout with `IntlWrapper`** in your root layout file (e.g., `app/layout.tsx`):
+
+```typescript
+import IntlWrapper from "nextjs-auto-intl/runtime/server";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <IntlWrapper>
+        <body>{children}</body>
+      </IntlWrapper>
+    </html>
+  );
+}
+```
+
+3. **(Optional) Add a locale switcher** to allow users to change languages. Import `LocaleSwitcher` in any client component:
+
+```typescript
+"use client";
+
+import LocaleSwitcher from "nextjs-auto-intl/runtime/client/components/LocaleSwitcher";
+
+export default function Header() {
+  return (
+    <header>
+      {/* Your header content */}
+      <LocaleSwitcher />
+    </header>
+  );
+}
 ```
 
 ### With Algebras AI Translation (Recommended)
@@ -74,15 +114,17 @@ ALGEBRAS_API_URL=https://platform.algebras.ai/api/v1
 2. **Update your `next.config.ts`**:
 
 ```typescript
-import autoIntl from "algebras-auto-intl";
+import type { NextConfig } from "next";
+import IntlConfig from "nextjs-auto-intl";
+import { LanguageCode } from "nextjs-auto-intl/data/languageMap";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   // your existing config
 };
 
-export default autoIntl({
-  defaultLocale: "en",
-  targetLocales: ["es", "fr", "de", "zh", "ja", "ko", "ar", "pt", "ru"],
+export default IntlConfig({
+  sourceLanguage: LanguageCode.en,
+  targetLocales: [LanguageCode.es, LanguageCode.fr, LanguageCode.de, LanguageCode.zh, LanguageCode.ja, LanguageCode.ko, LanguageCode.ar, LanguageCode.pt, LanguageCode.ru],
   outputDir: "./src/intl",
   includeNodeModules: false,
   // The plugin will automatically use ALGEBRAS_API_KEY from .env
