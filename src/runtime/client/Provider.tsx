@@ -29,11 +29,38 @@ export const useAlgebrasIntl = () => {
   const ctx = useContext(context);
   
   const getLocales = () => {
-    const entries = Object.values(ctx.dictionary.files)[0]?.entries;
-    if (!entries) return [];
-    const content = Object.values(entries)[0]?.content;
-    if (!content) return [];
-    return Object.keys(content);
+    // Collect all unique locales from all files and entries
+    const localeSet = new Set<string>();
+    
+    // Debug: log dictionary structure
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.log('[AlgebrasIntl] Dictionary files count:', Object.keys(ctx.dictionary.files).length);
+    }
+    
+    // Iterate through all files
+    for (const file of Object.values(ctx.dictionary.files)) {
+      if (!file.entries) continue;
+      
+      // Iterate through all entries in the file
+      for (const entry of Object.values(file.entries)) {
+        if (!entry.content) continue;
+        
+        // Add all locale keys from this entry's content
+        for (const locale of Object.keys(entry.content)) {
+          localeSet.add(locale);
+        }
+      }
+    }
+    
+    // Return sorted array of unique locales, defaulting to ['en'] if empty
+    const locales = Array.from(localeSet).sort();
+    
+    // Debug: log found locales
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.log('[AlgebrasIntl] Found locales:', locales);
+    }
+    
+    return locales.length > 0 ? locales : ['en'];
   };
   
   return {

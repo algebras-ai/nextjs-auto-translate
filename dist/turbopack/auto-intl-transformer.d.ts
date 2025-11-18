@@ -5,7 +5,7 @@ interface TransformerOptions {
 }
 /**
  * Turbopack transformer for auto-intl
- * Transforms JSX files to inject Translated components and wrap layouts with IntlWrapper
+ * Transforms JSX files to inject Translated components and wrap layouts with AlgebrasIntlProvider
  *
  * @param source - The source code to transform
  * @param context - Turbopack transformer context containing file path and options

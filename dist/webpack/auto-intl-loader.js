@@ -5,7 +5,7 @@ export default function loader(source) {
     const options = this.getOptions();
     const callback = this.async();
     try {
-        // First, automatically wrap layout with IntlWrapper
+        // First, automatically wrap layout with AlgebrasIntlProvider
         let result = wrapLayoutWithIntl(source, this.resourcePath);
         // Then, transform the project with translation injections
         result = transformProject(result, {

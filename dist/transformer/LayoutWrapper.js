@@ -10,6 +10,7 @@ export function wrapLayoutWithIntl(code, filePath) {
     if (!filePath.includes("app/layout.tsx") && !filePath.includes("app/layout.jsx")) {
         return code;
     }
+    console.log(`[LayoutWrapper] Processing layout file: ${filePath}`);
     let ast;
     try {
         ast = parse(code, {
@@ -21,15 +22,16 @@ export function wrapLayoutWithIntl(code, filePath) {
         console.warn(`[LayoutWrapper] Failed to parse ${filePath}:`, e);
         return code;
     }
-    let hasIntlWrapperImport = false;
+    let hasAlgebrasIntlProviderImport = false;
     let hasWrapped = false;
     let layoutExportNode = null;
-    // Check if IntlWrapper is already imported
+    // Check if AlgebrasIntlProvider is already imported
     traverse(ast, {
         ImportDeclaration(path) {
-            if (path.node.source.value === "algebras-auto-intl/runtime/server/IntlWrapper" ||
-                path.node.source.value.includes("IntlWrapper")) {
-                hasIntlWrapperImport = true;
+            if (path.node.source.value === "algebras-auto-intl/runtime/server" &&
+                path.node.specifiers.some((s) => (t.isImportDefaultSpecifier(s) && t.isIdentifier(s.local) && s.local.name === "AlgebrasIntlProvider") ||
+                    (t.isImportSpecifier(s) && t.isIdentifier(s.imported) && s.imported.name === "AlgebrasIntlProvider"))) {
+                hasAlgebrasIntlProviderImport = true;
             }
         },
         ExportDefaultDeclaration(path) {
@@ -37,13 +39,13 @@ export function wrapLayoutWithIntl(code, filePath) {
         }
     });
     // If already has the import, assume it's already wrapped
-    if (hasIntlWrapperImport) {
+    if (hasAlgebrasIntlProviderImport) {
         return code;
     }
-    // Add IntlWrapper import
-    const intlWrapperImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier("IntlWrapper"))], t.stringLiteral("algebras-auto-intl/runtime/server/IntlWrapper"));
-    ast.program.body.unshift(intlWrapperImport);
-    // Wrap the layout's children with IntlWrapper
+    // Add AlgebrasIntlProvider import
+    const algebrasIntlProviderImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier("AlgebrasIntlProvider"))], t.stringLiteral("algebras-auto-intl/runtime/server"));
+    ast.program.body.unshift(algebrasIntlProviderImport);
+    // Wrap the layout's children with AlgebrasIntlProvider
     traverse(ast, {
         ExportDefaultDeclaration(path) {
             if (hasWrapped)
@@ -59,14 +61,14 @@ export function wrapLayoutWithIntl(code, filePath) {
                         if (t.isJSXIdentifier(openingElement.name) &&
                             openingElement.name.name === "body") {
                             const bodyChildren = bodyPath.node.children;
-                            // Check if IntlWrapper is already there
-                            const hasIntlWrapper = bodyChildren.some((child) => t.isJSXElement(child) &&
+                            // Check if AlgebrasIntlProvider is already there
+                            const hasAlgebrasIntlProvider = bodyChildren.some((child) => t.isJSXElement(child) &&
                                 t.isJSXIdentifier(child.openingElement.name) &&
-                                child.openingElement.name.name === "IntlWrapper");
-                            if (!hasIntlWrapper) {
-                                // Wrap children with IntlWrapper
-                                const intlWrapperElement = t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("IntlWrapper"), [], false), t.jsxClosingElement(t.jsxIdentifier("IntlWrapper")), bodyChildren, false);
-                                bodyPath.node.children = [intlWrapperElement];
+                                child.openingElement.name.name === "AlgebrasIntlProvider");
+                            if (!hasAlgebrasIntlProvider) {
+                                // Wrap children with AlgebrasIntlProvider
+                                const algebrasIntlProviderElement = t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("AlgebrasIntlProvider"), [], false), t.jsxClosingElement(t.jsxIdentifier("AlgebrasIntlProvider")), bodyChildren, false);
+                                bodyPath.node.children = [algebrasIntlProviderElement];
                                 hasWrapped = true;
                             }
                         }

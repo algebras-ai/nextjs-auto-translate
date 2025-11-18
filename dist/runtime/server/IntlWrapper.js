@@ -13,8 +13,27 @@ const IntlWrapper = async ({ children }) => {
     // Load dictionary directly as JSON
     const outputDir = process.env.ALGEBRAS_INTL_OUTPUT_DIR || ".intl";
     const dictionaryPath = path.join(process.cwd(), outputDir, "dictionary.json");
-    const dictionaryJson = await fs.readFile(dictionaryPath, "utf8");
-    const dictionary = JSON.parse(dictionaryJson);
+    let dictionary;
+    try {
+        const dictionaryJson = await fs.readFile(dictionaryPath, "utf8");
+        const parsed = JSON.parse(dictionaryJson);
+        // Ensure version is a string (dictionary might have number version)
+        dictionary = {
+            ...parsed,
+            version: String(parsed.version || "0.1")
+        };
+        // Debug: log dictionary info
+        const fileCount = Object.keys(dictionary.files).length;
+        console.log(`[AlgebrasIntl] Loaded dictionary with ${fileCount} files from ${dictionaryPath}`);
+    }
+    catch (error) {
+        console.error(`[AlgebrasIntl] Failed to load dictionary from ${dictionaryPath}:`, error);
+        // Return empty dictionary structure as fallback
+        dictionary = {
+            version: "0.1",
+            files: {}
+        };
+    }
     // Create completely plain serializable object
     const dictData = JSON.stringify(dictionary);
     const parsedDict = JSON.parse(dictData);

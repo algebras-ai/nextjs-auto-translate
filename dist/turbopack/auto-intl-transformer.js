@@ -5,7 +5,7 @@ import { transformProject } from "../transformer/Injector.js";
 import { wrapLayoutWithIntl } from "../transformer/LayoutWrapper.js";
 /**
  * Turbopack transformer for auto-intl
- * Transforms JSX files to inject Translated components and wrap layouts with IntlWrapper
+ * Transforms JSX files to inject Translated components and wrap layouts with AlgebrasIntlProvider
  *
  * @param source - The source code to transform
  * @param context - Turbopack transformer context containing file path and options
@@ -18,7 +18,7 @@ export default function transformer(source, context) {
         return source;
     }
     try {
-        // First, automatically wrap layout with IntlWrapper
+        // First, automatically wrap layout with AlgebrasIntlProvider
         let result = wrapLayoutWithIntl(source, filePath);
         // Load source map - try from options first, then from disk
         let sourceMap = options.sourceMap || null;

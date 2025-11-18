@@ -12,6 +12,8 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   if (!filePath.includes("app/layout.tsx") && !filePath.includes("app/layout.jsx")) {
     return code;
   }
+  
+  console.log(`[LayoutWrapper] Processing layout file: ${filePath}`);
 
   let ast;
   try {
@@ -24,18 +26,22 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
     return code;
   }
 
-  let hasIntlWrapperImport = false;
+  let hasAlgebrasIntlProviderImport = false;
   let hasWrapped = false;
   let layoutExportNode: any = null;
 
-  // Check if IntlWrapper is already imported
+  // Check if AlgebrasIntlProvider is already imported
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
-        path.node.source.value === "algebras-auto-intl/runtime/server/IntlWrapper" ||
-        path.node.source.value.includes("IntlWrapper")
+        path.node.source.value === "algebras-auto-intl/runtime/server" &&
+        path.node.specifiers.some(
+          (s: any) =>
+            (t.isImportDefaultSpecifier(s) && t.isIdentifier(s.local) && s.local.name === "AlgebrasIntlProvider") ||
+            (t.isImportSpecifier(s) && t.isIdentifier(s.imported) && s.imported.name === "AlgebrasIntlProvider")
+        )
       ) {
-        hasIntlWrapperImport = true;
+        hasAlgebrasIntlProviderImport = true;
       }
     },
     ExportDefaultDeclaration(path: any) {
@@ -44,18 +50,18 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   });
 
   // If already has the import, assume it's already wrapped
-  if (hasIntlWrapperImport) {
+  if (hasAlgebrasIntlProviderImport) {
     return code;
   }
 
-  // Add IntlWrapper import
-  const intlWrapperImport = t.importDeclaration(
-    [t.importDefaultSpecifier(t.identifier("IntlWrapper"))],
-    t.stringLiteral("algebras-auto-intl/runtime/server/IntlWrapper")
+  // Add AlgebrasIntlProvider import
+  const algebrasIntlProviderImport = t.importDeclaration(
+    [t.importDefaultSpecifier(t.identifier("AlgebrasIntlProvider"))],
+    t.stringLiteral("algebras-auto-intl/runtime/server")
   );
-  ast.program.body.unshift(intlWrapperImport);
+  ast.program.body.unshift(algebrasIntlProviderImport);
 
-  // Wrap the layout's children with IntlWrapper
+  // Wrap the layout's children with AlgebrasIntlProvider
   traverse(ast, {
     ExportDefaultDeclaration(path: any) {
       if (hasWrapped) return;
@@ -77,23 +83,23 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
             ) {
               const bodyChildren = bodyPath.node.children;
               
-              // Check if IntlWrapper is already there
-              const hasIntlWrapper = bodyChildren.some((child: any) =>
+              // Check if AlgebrasIntlProvider is already there
+              const hasAlgebrasIntlProvider = bodyChildren.some((child: any) =>
                 t.isJSXElement(child) &&
                 t.isJSXIdentifier(child.openingElement.name) &&
-                child.openingElement.name.name === "IntlWrapper"
+                child.openingElement.name.name === "AlgebrasIntlProvider"
               );
               
-              if (!hasIntlWrapper) {
-                // Wrap children with IntlWrapper
-                const intlWrapperElement = t.jsxElement(
-                  t.jsxOpeningElement(t.jsxIdentifier("IntlWrapper"), [], false),
-                  t.jsxClosingElement(t.jsxIdentifier("IntlWrapper")),
+              if (!hasAlgebrasIntlProvider) {
+                // Wrap children with AlgebrasIntlProvider
+                const algebrasIntlProviderElement = t.jsxElement(
+                  t.jsxOpeningElement(t.jsxIdentifier("AlgebrasIntlProvider"), [], false),
+                  t.jsxClosingElement(t.jsxIdentifier("AlgebrasIntlProvider")),
                   bodyChildren,
                   false
                 );
                 
-                bodyPath.node.children = [intlWrapperElement];
+                bodyPath.node.children = [algebrasIntlProviderElement];
                 hasWrapped = true;
               }
             }
