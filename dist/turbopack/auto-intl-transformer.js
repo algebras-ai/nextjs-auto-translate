@@ -13,6 +13,10 @@ import { wrapLayoutWithIntl } from "../transformer/LayoutWrapper.js";
  */
 export default function transformer(source, context) {
     const { path: filePath, options = {} } = context;
+    // Exclude node_modules files (matching webpack loader behavior)
+    if (filePath.includes("node_modules")) {
+        return source;
+    }
     try {
         // First, automatically wrap layout with IntlWrapper
         let result = wrapLayoutWithIntl(source, filePath);

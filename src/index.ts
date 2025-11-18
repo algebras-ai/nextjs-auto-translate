@@ -145,23 +145,40 @@ export default function myPlugin(options: PluginOptions) {
 
     const transformerPath = path.resolve(__dirname, "./turbopack/auto-intl-transformer.js");
     
+    // Use explicit patterns for common Next.js source directories to avoid matching node_modules
+    // The transformer itself also checks for node_modules as a fallback
+    const sourcePatterns = [
+      "app/**/*.{js,jsx,ts,tsx}",
+      "src/**/*.{js,jsx,ts,tsx}",
+      "pages/**/*.{js,jsx,ts,tsx}",
+      "components/**/*.{js,jsx,ts,tsx}",
+      "lib/**/*.{js,jsx,ts,tsx}",
+      "utils/**/*.{js,jsx,ts,tsx}",
+      "hooks/**/*.{js,jsx,ts,tsx}",
+      "styles/**/*.{js,jsx,ts,tsx}"
+    ];
+    
+    const rules: Record<string, any> = { ...nextTurbopack?.rules };
+    
+    // Add a rule for each source directory pattern
+    for (const pattern of sourcePatterns) {
+      rules[pattern] = {
+        loaders: [
+          {
+            loader: transformerPath,
+            options: {
+              sourceMap: cachedSourceMap ?? {},
+              outputDir
+            }
+          }
+        ],
+        as: "*.{js,jsx,ts,tsx}"
+      };
+    }
+    
     return {
       ...nextTurbopack,
-      rules: {
-        ...nextTurbopack?.rules,
-        "*.{js,jsx,ts,tsx}": {
-          loaders: [
-            {
-              loader: transformerPath,
-              options: {
-                sourceMap: cachedSourceMap ?? {},
-                outputDir
-              }
-            }
-          ],
-          as: "*.{js,jsx,ts,tsx}"
-        }
-      }
+      rules
     };
   }
 
