@@ -1,6 +1,7 @@
 "use client";
 import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { languageMap } from "../../../data/languageMap.js";
 import { useAlgebrasIntl } from "../Provider.js";
 const DropdownTrigger = ({ currentLocale, isOpen, onClick }) => (_jsxs("button", { onClick: onClick, style: {
@@ -58,12 +59,15 @@ const DropdownOption = ({ locale, isSelected, onClick }) => (_jsxs("button", { o
     }, children: [isSelected && (_jsx("span", { style: { color: "#10b981", fontSize: "12px" }, children: "\u2713" })), languageMap[locale]] }));
 const LocaleSwitcher = () => {
     const { locale: currentLocale, setLocale, getLocales } = useAlgebrasIntl();
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const availableLocales = getLocales();
     const toggleDropdown = () => setIsOpen(!isOpen);
     const handleLocaleChange = (locale) => {
         setLocale(locale);
         setIsOpen(false);
+        // Refresh the page to update server components with new locale
+        router.refresh();
     };
     return (_jsxs("div", { style: { position: "relative", display: "inline-block" }, children: [_jsx(DropdownTrigger, { currentLocale: currentLocale, isOpen: isOpen, onClick: toggleDropdown }), isOpen && (_jsx("div", { style: {
                     position: "absolute",
