@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import fs from "fs/promises";
 import path from "path";
-import { existsSync } from "fs";
 import AlgebrasIntlClientProvider from "../client/Provider.js";
 import { LanguageCode } from "../../data/languageMap.js";
 import { DictStructure } from "../types.js";
