@@ -83,7 +83,8 @@ export default function myPlugin(options) {
                     {
                         loader: path.resolve(__dirname, "./webpack/auto-intl-loader.js"),
                         options: {
-                            sourceMap: cachedSourceMap ?? {}
+                            sourceMap: cachedSourceMap ?? {},
+                            outputDir
                         }
                     }
                 ]
