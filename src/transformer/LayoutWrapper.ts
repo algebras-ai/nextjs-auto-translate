@@ -26,22 +26,22 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
     return code;
   }
 
-  let hasAlgebrasIntlProviderImport = false;
+  let hasIntlWrapperImport = false;
   let hasWrapped = false;
   let layoutExportNode: any = null;
 
-  // Check if AlgebrasIntlProvider is already imported
+  // Check if IntlWrapper is already imported
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
-        path.node.source.value === "algebras-auto-intl/runtime/server" &&
+        path.node.source.value === "algebras-auto-intl/runtime/server/IntlWrapper" &&
         path.node.specifiers.some(
           (s: any) =>
-            (t.isImportDefaultSpecifier(s) && t.isIdentifier(s.local) && s.local.name === "AlgebrasIntlProvider") ||
-            (t.isImportSpecifier(s) && t.isIdentifier(s.imported) && s.imported.name === "AlgebrasIntlProvider")
+            (t.isImportDefaultSpecifier(s) && t.isIdentifier(s.local) && s.local.name === "IntlWrapper") ||
+            (t.isImportSpecifier(s) && t.isIdentifier(s.imported) && s.imported.name === "IntlWrapper")
         )
       ) {
-        hasAlgebrasIntlProviderImport = true;
+        hasIntlWrapperImport = true;
       }
     },
     ExportDefaultDeclaration(path: any) {
@@ -50,18 +50,18 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   });
 
   // If already has the import, assume it's already wrapped
-  if (hasAlgebrasIntlProviderImport) {
+  if (hasIntlWrapperImport) {
     return code;
   }
 
-  // Add AlgebrasIntlProvider import
-  const algebrasIntlProviderImport = t.importDeclaration(
-    [t.importDefaultSpecifier(t.identifier("AlgebrasIntlProvider"))],
-    t.stringLiteral("algebras-auto-intl/runtime/server")
+  // Add IntlWrapper import
+  const intlWrapperImport = t.importDeclaration(
+    [t.importDefaultSpecifier(t.identifier("IntlWrapper"))],
+    t.stringLiteral("algebras-auto-intl/runtime/server/IntlWrapper")
   );
-  ast.program.body.unshift(algebrasIntlProviderImport);
+  ast.program.body.unshift(intlWrapperImport);
 
-  // Wrap the layout's children with AlgebrasIntlProvider
+  // Wrap the layout's children with IntlWrapper
   traverse(ast, {
     ExportDefaultDeclaration(path: any) {
       if (hasWrapped) return;
@@ -83,23 +83,23 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
             ) {
               const bodyChildren = bodyPath.node.children;
               
-              // Check if AlgebrasIntlProvider is already there
-              const hasAlgebrasIntlProvider = bodyChildren.some((child: any) =>
+              // Check if IntlWrapper is already there
+              const hasIntlWrapper = bodyChildren.some((child: any) =>
                 t.isJSXElement(child) &&
                 t.isJSXIdentifier(child.openingElement.name) &&
-                child.openingElement.name.name === "AlgebrasIntlProvider"
+                child.openingElement.name.name === "IntlWrapper"
               );
               
-              if (!hasAlgebrasIntlProvider) {
-                // Wrap children with AlgebrasIntlProvider
-                const algebrasIntlProviderElement = t.jsxElement(
-                  t.jsxOpeningElement(t.jsxIdentifier("AlgebrasIntlProvider"), [], false),
-                  t.jsxClosingElement(t.jsxIdentifier("AlgebrasIntlProvider")),
+              if (!hasIntlWrapper) {
+                // Wrap children with IntlWrapper
+                const intlWrapperElement = t.jsxElement(
+                  t.jsxOpeningElement(t.jsxIdentifier("IntlWrapper"), [], false),
+                  t.jsxClosingElement(t.jsxIdentifier("IntlWrapper")),
                   bodyChildren,
                   false
                 );
                 
-                bodyPath.node.children = [algebrasIntlProviderElement];
+                bodyPath.node.children = [intlWrapperElement];
                 hasWrapped = true;
               }
             }
