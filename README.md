@@ -16,7 +16,7 @@ An automated internationalization (i18n) tool for React and Next.js applications
 ## Installation
 
 ```bash
-npm install algebras-auto-intl
+npm install https://github.com/algebras-ai/nextjs-auto-translate
 ```
 
 ## Next.js Compatibility
