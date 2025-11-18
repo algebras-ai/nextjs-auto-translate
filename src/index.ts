@@ -135,21 +135,86 @@ export default function myPlugin(options: PluginOptions) {
     };
   }
 
-  return function wrapNextConfig(nextConfig: Partial<Record<string, any>>) {
-    if (hasScheduled) {
-      return {
-        ...nextConfig,
-        webpack: wrapWebpack(nextConfig.webpack)
+  function wrapTurbopack(
+    nextTurbopack?: any
+  ): any {
+    // Call prepareSourceMap without awaiting (runs in background)
+    prepareSourceMap().catch((err) => {
+      console.error("❌ Background source map preparation failed:", err);
+    });
+
+    const transformerPath = path.resolve(__dirname, "./turbopack/auto-intl-transformer.js");
+    
+    // Use explicit patterns for common Next.js source directories to avoid matching node_modules
+    // The transformer itself also checks for node_modules as a fallback
+    const sourcePatterns = [
+      "app/**/*.{js,jsx,ts,tsx}",
+      "src/**/*.{js,jsx,ts,tsx}",
+      "pages/**/*.{js,jsx,ts,tsx}",
+      "components/**/*.{js,jsx,ts,tsx}",
+      "lib/**/*.{js,jsx,ts,tsx}",
+      "utils/**/*.{js,jsx,ts,tsx}",
+      "hooks/**/*.{js,jsx,ts,tsx}",
+      "styles/**/*.{js,jsx,ts,tsx}"
+    ];
+    
+    const rules: Record<string, any> = { ...nextTurbopack?.rules };
+    
+    // Add a rule for each source directory pattern
+    for (const pattern of sourcePatterns) {
+      rules[pattern] = {
+        loaders: [
+          {
+            loader: transformerPath,
+            options: {
+              sourceMap: cachedSourceMap ?? {},
+              outputDir
+            }
+          }
+        ],
+        as: "*.{js,jsx,ts,tsx}"
       };
+    }
+    
+    return {
+      ...nextTurbopack,
+      rules
+    };
+  }
+
+  return function wrapNextConfig(nextConfig: Partial<Record<string, any>>) {
+    const config: Partial<Record<string, any>> = { ...nextConfig };
+
+    // Helper to set both webpack and turbopack configs
+    const applyConfigs = () => {
+      // Always configure webpack (for webpack builds)
+      config.webpack = wrapWebpack(nextConfig.webpack);
+      
+      // Always configure turbopack (for Turbopack builds)
+      // Next.js 15/16 uses `turbopack` directly, not `experimental.turbo`
+      const existingTurbopack = (config as any).turbopack || (config.experimental as any)?.turbo;
+      const wrappedTurbopack = wrapTurbopack(existingTurbopack);
+      
+      // Always set turbopack directly (Next.js 15/16)
+      (config as any).turbopack = wrappedTurbopack;
+      
+      // Also set experimental.turbo for older Next.js versions that might use it
+      if (!config.experimental) {
+        config.experimental = {};
+      }
+      (config.experimental as any).turbo = wrappedTurbopack;
+    };
+
+    if (hasScheduled) {
+      applyConfigs();
+      return config;
     }
 
     if (fs.existsSync(scheduledFlagPath)) {
       const flagPid = parseInt(fs.readFileSync(scheduledFlagPath, "utf-8"));
       if (isProcessAlive(flagPid)) {
-        return {
-          ...nextConfig,
-          webpack: wrapWebpack(nextConfig.webpack)
-        };
+        applyConfigs();
+        return config;
       } else {
         fs.unlinkSync(scheduledFlagPath);
       }
@@ -160,9 +225,7 @@ export default function myPlugin(options: PluginOptions) {
     fs.writeFileSync(scheduledFlagPath, process.pid.toString());
     if (fs.existsSync(parserLockPath)) fs.unlinkSync(parserLockPath);
 
-    return {
-      ...nextConfig,
-      webpack: wrapWebpack(nextConfig.webpack)
-    };
+    applyConfigs();
+    return config;
   };
 }

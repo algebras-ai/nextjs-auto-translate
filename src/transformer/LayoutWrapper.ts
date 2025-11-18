@@ -12,6 +12,8 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   if (!filePath.includes("app/layout.tsx") && !filePath.includes("app/layout.jsx")) {
     return code;
   }
+  
+  console.log(`[LayoutWrapper] Processing layout file: ${filePath}`);
 
   let ast;
   try {
@@ -32,8 +34,12 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
-        path.node.source.value === "algebras-auto-intl/runtime/server/IntlWrapper" ||
-        path.node.source.value.includes("IntlWrapper")
+        path.node.source.value === "algebras-auto-intl/runtime/server/IntlWrapper" &&
+        path.node.specifiers.some(
+          (s: any) =>
+            (t.isImportDefaultSpecifier(s) && t.isIdentifier(s.local) && s.local.name === "IntlWrapper") ||
+            (t.isImportSpecifier(s) && t.isIdentifier(s.imported) && s.imported.name === "IntlWrapper")
+        )
       ) {
         hasIntlWrapperImport = true;
       }

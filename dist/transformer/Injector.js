@@ -51,45 +51,154 @@ export function ensureImportLocalesSwitcher(ast) {
         ast.program.body.unshift(importDecl);
     }
 }
-// Inject LocalesSwitcher into the first section/div in the page
+// Create the language switcher element
+function createSwitcherElement() {
+    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("div"), [
+        t.jsxAttribute(t.jsxIdentifier("className"), t.stringLiteral("fixed top-4 right-4 z-[9999]")),
+    ], false), t.jsxClosingElement(t.jsxIdentifier("div")), [
+        t.jsxText("\n          "),
+        t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("LocalesSwitcher"), [], true), null, [], true),
+        t.jsxText("\n        ")
+    ], false);
+}
+// Inject LocalesSwitcher into the page component's return statement
 export function injectLocaleSwitcher(ast) {
     let injected = false;
+    // Strategy 1: Find return statement and inject into its JSX
     traverse(ast, {
-        JSXElement(path) {
+        ReturnStatement(path) {
             if (injected)
                 return;
-            const openingElement = path.node.openingElement;
-            const tagName = openingElement.name;
-            // Check if it's a section or div with className
-            if (t.isJSXIdentifier(tagName) &&
-                (tagName.name === "section" || tagName.name === "div")) {
-                const hasClassName = openingElement.attributes.some((attr) => t.isJSXAttribute(attr) &&
-                    t.isJSXIdentifier(attr.name) &&
-                    attr.name.name === "className");
-                if (hasClassName && path.node.children.length > 0) {
-                    // Create language switcher element
-                    const switcherElement = t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("div"), [
-                        t.jsxAttribute(t.jsxIdentifier("className"), t.stringLiteral("fixed top-4 right-4 z-[9999]")),
-                    ], false), t.jsxClosingElement(t.jsxIdentifier("div")), [
-                        t.jsxText("\n          "),
-                        t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("LocalesSwitcher"), [], true), null, [], true),
-                        t.jsxText("\n        ")
-                    ], false);
-                    // Add switcher as first child
-                    path.node.children.unshift(t.jsxText("\n        "), switcherElement);
+            const returnArg = path.node.argument;
+            // If return has a JSX element, try to inject into it
+            if (t.isJSXElement(returnArg)) {
+                const switcherElement = createSwitcherElement();
+                // Try to inject as first child
+                if (Array.isArray(returnArg.children)) {
+                    returnArg.children.unshift(t.jsxText("\n        "), switcherElement);
+                    injected = true;
+                    path.stop();
+                }
+            }
+            // If return has a JSX fragment, inject into it
+            else if (t.isJSXFragment(returnArg)) {
+                const switcherElement = createSwitcherElement();
+                if (Array.isArray(returnArg.children)) {
+                    returnArg.children.unshift(t.jsxText("\n        "), switcherElement);
+                    injected = true;
+                    path.stop();
+                }
+            }
+            // If return has a parenthesized expression (common in JSX), unwrap and try again
+            else if (t.isParenthesizedExpression(returnArg) && t.isJSXElement(returnArg.expression)) {
+                const jsxElement = returnArg.expression;
+                const switcherElement = createSwitcherElement();
+                if (Array.isArray(jsxElement.children)) {
+                    jsxElement.children.unshift(t.jsxText("\n        "), switcherElement);
                     injected = true;
                     path.stop();
                 }
             }
         }
     });
+    // Strategy 2: Handle arrow function expressions (common in Next.js pages)
+    if (!injected) {
+        traverse(ast, {
+            ArrowFunctionExpression(path) {
+                if (injected)
+                    return;
+                const body = path.node.body;
+                // If arrow function returns JSX directly
+                if (t.isJSXElement(body)) {
+                    const switcherElement = createSwitcherElement();
+                    if (Array.isArray(body.children)) {
+                        body.children.unshift(t.jsxText("\n        "), switcherElement);
+                        injected = true;
+                        path.stop();
+                    }
+                }
+                // If arrow function returns a fragment
+                else if (t.isJSXFragment(body)) {
+                    const switcherElement = createSwitcherElement();
+                    if (Array.isArray(body.children)) {
+                        body.children.unshift(t.jsxText("\n        "), switcherElement);
+                        injected = true;
+                        path.stop();
+                    }
+                }
+                // If arrow function returns parenthesized JSX
+                else if (t.isParenthesizedExpression(body) && t.isJSXElement(body.expression)) {
+                    const jsxElement = body.expression;
+                    const switcherElement = createSwitcherElement();
+                    if (Array.isArray(jsxElement.children)) {
+                        jsxElement.children.unshift(t.jsxText("\n        "), switcherElement);
+                        injected = true;
+                        path.stop();
+                    }
+                }
+            }
+        });
+    }
+    // Strategy 3: If we didn't find a return statement, try to find any JSX element
+    // (fallback for different patterns)
+    if (!injected) {
+        traverse(ast, {
+            JSXElement(path) {
+                if (injected)
+                    return;
+                const openingElement = path.node.openingElement;
+                const tagName = openingElement.name;
+                // Look for common container elements: main, section, div, article
+                if (t.isJSXIdentifier(tagName) &&
+                    (tagName.name === "main" ||
+                        tagName.name === "section" ||
+                        tagName.name === "div" ||
+                        tagName.name === "article")) {
+                    const switcherElement = createSwitcherElement();
+                    // Inject as first child
+                    if (Array.isArray(path.node.children)) {
+                        path.node.children.unshift(t.jsxText("\n        "), switcherElement);
+                        injected = true;
+                        path.stop();
+                    }
+                }
+            }
+        });
+    }
+    // Strategy 4: If still not injected, wrap the entire return in a fragment
+    if (!injected) {
+        traverse(ast, {
+            ReturnStatement(path) {
+                if (injected)
+                    return;
+                const returnArg = path.node.argument;
+                const switcherElement = createSwitcherElement();
+                // Wrap return value in a fragment with the switcher
+                const fragment = t.jsxFragment(t.jsxOpeningFragment(), t.jsxClosingFragment(), [
+                    switcherElement,
+                    t.jsxText("\n        "),
+                    returnArg
+                ]);
+                path.node.argument = fragment;
+                injected = true;
+                path.stop();
+            }
+        });
+    }
+    // Log if injection failed (for debugging)
+    if (!injected) {
+        console.warn("[AutoIntl] Failed to inject LocaleSwitcher - no suitable injection point found");
+    }
 }
 // Transforms the specified file, injecting t() calls
 export function transformProject(code, options) {
     const { filePath } = options;
     const relativePath = path.relative(process.cwd(), filePath);
-    // Only process if the file exists in sourceMap
-    if (!options.sourceMap.files || !options.sourceMap.files[relativePath]) {
+    const isPageFile = relativePath.includes("page.tsx") || relativePath.includes("page.jsx");
+    const isInSourceMap = options.sourceMap.files && options.sourceMap.files[relativePath];
+    // For page files, always parse AST to inject language switcher
+    // For other files, only process if they exist in sourceMap
+    if (!isPageFile && !isInSourceMap) {
         return code;
     }
     let ast;
@@ -104,40 +213,48 @@ export function transformProject(code, options) {
         return code;
     }
     let changed = false;
-    const fileScopes = options.sourceMap.files[relativePath]?.scopes || {};
-    traverse(ast, {
-        JSXText(path) {
-            const text = path.node.value.trim();
-            if (!text)
-                return;
-            // Find the closest JSXElement ancestor
-            const jsxElement = path.findParent((p) => p.isJSXElement());
-            if (!jsxElement)
-                return;
-            // Find the scope for this element
-            const scopePath = jsxElement
-                .getPathLocation()
-                .replace(/\[(\d+)\]/g, "$1")
-                .replace(/\./g, "/");
-            if (!fileScopes[scopePath])
-                return;
-            // Replace text with <Translated tKey="scope" />
-            path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`));
-            changed = true;
+    // Only do text transformation if file is in sourceMap
+    if (isInSourceMap) {
+        const fileScopes = options.sourceMap.files[relativePath]?.scopes || {};
+        traverse(ast, {
+            JSXText(path) {
+                const text = path.node.value.trim();
+                if (!text)
+                    return;
+                // Find the closest JSXElement ancestor
+                const jsxElement = path.findParent((p) => p.isJSXElement());
+                if (!jsxElement)
+                    return;
+                // Find the scope for this element
+                const scopePath = jsxElement
+                    .getPathLocation()
+                    .replace(/\[(\d+)\]/g, "$1")
+                    .replace(/\./g, "/");
+                if (!fileScopes[scopePath])
+                    return;
+                // Replace text with <Translated tKey="scope" />
+                path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`));
+                changed = true;
+            }
+        });
+        // Add Translated import if we made text changes
+        if (changed) {
+            ensureImportTranslated(ast);
         }
-    });
-    if (!changed) {
-        return code;
     }
-    ensureImportTranslated(ast);
-    // Inject language switcher for page.tsx files
-    if (relativePath.includes("page.tsx") || relativePath.includes("page.jsx")) {
+    // Always inject language switcher for page files, regardless of text changes or sourceMap
+    if (isPageFile) {
         ensureImportLocalesSwitcher(ast);
         injectLocaleSwitcher(ast);
     }
-    const output = generate(ast, {
-        retainLines: true,
-        retainFunctionParens: true
-    });
-    return output.code;
+    // Only regenerate code if we made changes (text transformation or language switcher injection)
+    // For page files, we always inject the switcher, so we always need to regenerate
+    if (changed || isPageFile) {
+        const output = generate(ast, {
+            retainLines: true,
+            retainFunctionParens: true
+        });
+        return output.code;
+    }
+    return code;
 }
