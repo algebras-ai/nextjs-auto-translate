@@ -35,7 +35,6 @@ The library automatically detects and configures the appropriate transformer bas
 
 Both transformers perform the same transformations:
 - Inject `Translated` components to replace JSX text
-- Wrap layouts with `IntlWrapper` automatically
 - Dictionary generation works regardless of bundler
 
 No additional configuration needed - the plugin handles both bundlers automatically!
@@ -63,7 +62,7 @@ export default IntlConfig({
 })(nextConfig);
 ```
 
-2. **Import and wrap your layout with `IntlWrapper`** in your root layout file (e.g., `app/layout.tsx`):
+2. **You must import and wrap your layout with `IntlWrapper`** in your root layout file (e.g., `app/layout.tsx`). This is required and must be done manually:
 
 ```typescript
 import IntlWrapper from "nextjs-auto-intl/runtime/server";
