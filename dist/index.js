@@ -100,57 +100,66 @@ export default function myPlugin(options) {
         prepareSourceMap().catch((err) => {
             console.error("❌ Background source map preparation failed:", err);
         });
-        const transformerPath = path.resolve(__dirname, "./turbopack/auto-intl-transformer.js");
-        // Use explicit patterns for common Next.js source directories to avoid matching node_modules
-        // The transformer itself also checks for node_modules as a fallback
-        const sourcePatterns = [
+        // Use relative path from node_modules - Turbopack needs serializable paths
+        // The transformer will be resolved from node_modules/nextjs-auto-intl
+        const transformerPath = "nextjs-auto-intl/turbopack/auto-intl-transformer";
+        console.log(`[AutoIntl] 🔧 Configuring Turbopack transformer: ${transformerPath}`);
+        console.log(`[AutoIntl] 📁 Output dir: ${outputDir}`);
+        console.log(`[AutoIntl] 📊 SourceMap cached: ${cachedSourceMap ? Object.keys(cachedSourceMap.files || {}).length + ' files' : 'not loaded yet'}`);
+        // Turbopack rules format for Next.js 16
+        // Options must be JSON-serializable, so we only pass outputDir
+        // The transformer will load sourceMap from disk
+        const rules = { ...nextTurbopack?.rules };
+        // Add rules for TypeScript/JavaScript files
+        // Turbopack uses glob patterns similar to webpack
+        const patterns = [
+            "*.{js,jsx,ts,tsx}",
             "app/**/*.{js,jsx,ts,tsx}",
             "src/**/*.{js,jsx,ts,tsx}",
             "pages/**/*.{js,jsx,ts,tsx}",
             "components/**/*.{js,jsx,ts,tsx}",
             "lib/**/*.{js,jsx,ts,tsx}",
             "utils/**/*.{js,jsx,ts,tsx}",
-            "hooks/**/*.{js,jsx,ts,tsx}",
-            "styles/**/*.{js,jsx,ts,tsx}"
+            "hooks/**/*.{js,jsx,ts,tsx}"
         ];
-        const rules = { ...nextTurbopack?.rules };
-        // Add a rule for each source directory pattern
-        for (const pattern of sourcePatterns) {
+        for (const pattern of patterns) {
+            // Turbopack format: { loaders: [loaderPath] }
+            // Don't set 'as' - let Turbopack preserve the original file type (tsx/jsx)
+            // Options must be JSON-serializable - only pass outputDir, not the full sourceMap
             rules[pattern] = {
-                loaders: [
-                    {
-                        loader: transformerPath,
-                        options: {
-                            sourceMap: cachedSourceMap ?? {},
-                            outputDir
-                        }
-                    }
-                ],
-                as: "*.{js,jsx,ts,tsx}"
+                loaders: [transformerPath],
+                // Pass only serializable options
+                options: {
+                    outputDir
+                }
             };
         }
-        return {
+        console.log(`[AutoIntl] ✅ Configured ${patterns.length} Turbopack patterns`);
+        console.log(`[AutoIntl] 📋 Sample rule for *.{js,jsx,ts,tsx}:`, JSON.stringify(rules["*.{js,jsx,ts,tsx}"] || {}, null, 2));
+        // Return config with rules - Next.js 16 format
+        const result = {
             ...nextTurbopack,
             rules
         };
+        console.log(`[AutoIntl] 🔍 Turbopack config keys:`, Object.keys(result));
+        return result;
     }
     return function wrapNextConfig(nextConfig) {
+        console.log(`[AutoIntl] 🚀 Wrapping Next.js config...`);
         const config = { ...nextConfig };
         // Helper to set both webpack and turbopack configs
         const applyConfigs = () => {
+            console.log(`[AutoIntl] ⚙️  Applying configs (webpack + turbopack)...`);
             // Always configure webpack (for webpack builds)
             config.webpack = wrapWebpack(nextConfig.webpack);
             // Always configure turbopack (for Turbopack builds)
-            // Next.js 15/16 uses `turbopack` directly, not `experimental.turbo`
-            const existingTurbopack = config.turbopack || config.experimental?.turbo;
+            // Next.js 16 uses `turbopack` directly at the top level
+            const existingTurbopack = config.turbopack;
+            console.log(`[AutoIntl] 📦 Existing turbopack config:`, existingTurbopack ? 'found' : 'none');
             const wrappedTurbopack = wrapTurbopack(existingTurbopack);
-            // Always set turbopack directly (Next.js 15/16)
+            // Set turbopack directly (Next.js 16)
             config.turbopack = wrappedTurbopack;
-            // Also set experimental.turbo for older Next.js versions that might use it
-            if (!config.experimental) {
-                config.experimental = {};
-            }
-            config.experimental.turbo = wrappedTurbopack;
+            console.log(`[AutoIntl] ✅ Set config.turbopack`);
         };
         if (hasScheduled) {
             applyConfigs();

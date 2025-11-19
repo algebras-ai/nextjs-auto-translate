@@ -273,7 +273,11 @@ export function transformProject(
 ) {
   const { filePath } = options;
 
-  const relativePath = path.relative(process.cwd(), filePath);
+  // Normalize path to match sourceMap format (forward slashes)
+  const relativePath = path
+    .relative(process.cwd(), filePath)
+    .split(path.sep)
+    .join("/");
   const isPageFile = relativePath.includes("page.tsx") || relativePath.includes("page.jsx");
   const isInSourceMap = options.sourceMap.files && options.sourceMap.files[relativePath];
 

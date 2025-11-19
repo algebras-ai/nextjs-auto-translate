@@ -28,10 +28,17 @@ export function wrapLayoutWithIntl(code, filePath) {
     // Check if IntlWrapper is already imported
     traverse(ast, {
         ImportDeclaration(path) {
-            if (path.node.source.value === "algebras-auto-intl/runtime/server/IntlWrapper" &&
+            const sourceValue = path.node.source.value;
+            // Check for various import paths that might be used
+            const isIntlWrapperImport = sourceValue === "algebras-auto-intl/runtime/server/IntlWrapper" ||
+                sourceValue === "nextjs-auto-intl/runtime/server/IntlWrapper" ||
+                sourceValue === "algebras-auto-intl/runtime/server" ||
+                sourceValue === "nextjs-auto-intl/runtime/server";
+            if (isIntlWrapperImport &&
                 path.node.specifiers.some((s) => (t.isImportDefaultSpecifier(s) && t.isIdentifier(s.local) && s.local.name === "IntlWrapper") ||
                     (t.isImportSpecifier(s) && t.isIdentifier(s.imported) && s.imported.name === "IntlWrapper"))) {
                 hasIntlWrapperImport = true;
+                console.log(`[LayoutWrapper] Found existing IntlWrapper import from: ${sourceValue}`);
             }
         },
         ExportDefaultDeclaration(path) {
