@@ -111,11 +111,8 @@ export class Parser {
                         else if (t.isJSXMemberExpression(elementName)) {
                             tagName = elementName.property.name;
                         }
-                        // For <p> tags, we extract their text content but ignore the <p> wrapper
-                        // This means nested elements inside <p> are treated as if they're at the parent level
-                        const isPTag = tagName === "p";
                         // Check if this element is nested inside another element that has text
-                        // Skip this check if parent is a <p> tag (we ignore p tags as wrappers)
+                        // If so, skip extracting it to avoid duplication (content is already in parent's extraction)
                         let parentPath = path.parentPath;
                         while (parentPath) {
                             if (parentPath.isJSXElement && parentPath.isJSXElement()) {
@@ -127,22 +124,17 @@ export class Parser {
                                 else if (t.isJSXMemberExpression(parentElementName)) {
                                     parentTagName = parentElementName.property.name;
                                 }
-                                // Skip if parent is a <p> tag (we ignore p tags, so nested elements can be extracted)
-                                if (parentTagName === "p") {
-                                    parentPath = parentPath.parentPath;
-                                    continue;
-                                }
                                 // Check if parent has JSXText children (meaning it will be extracted)
                                 const hasTextInParent = parentPath.node.children.some((child) => t.isJSXText(child) && child.value.trim());
+                                // If parent has text, this nested element's content is already included in parent's extraction
+                                // Skip extracting it separately to avoid duplication
+                                // This applies to all parents, including <p> tags
                                 if (hasTextInParent) {
-                                    // This element is nested inside a parent that has text, skip it
                                     return;
                                 }
                             }
                             parentPath = parentPath.parentPath;
                         }
-                        // Extract text content from elements (including <p> tags)
-                        // For <p> tags, we extract the content but the <p> itself is ignored in the output
                         for (const child of path.node.children) {
                             if (t.isJSXText(child)) {
                                 const text = child.value.trim();

@@ -220,6 +220,45 @@ export function transformProject(code, options) {
     // Only do text transformation if file is in sourceMap
     if (isInSourceMap) {
         const fileScopes = options.sourceMap.files[relativePath]?.scopes || {};
+        const processedElements = new Set();
+        // First pass: Replace entire elements that have scope entries
+        // This handles cases where an element contains both text and nested elements
+        traverse(ast, {
+            JSXElement(path) {
+                const scopePath = path
+                    .getPathLocation()
+                    .replace(/\[(\d+)\]/g, "$1")
+                    .replace(/\./g, "/");
+                if (!fileScopes[scopePath])
+                    return;
+                if (processedElements.has(scopePath))
+                    return;
+                // Check if any ancestor element also has a scope entry
+                // If so, this element is nested inside it and shouldn't be replaced separately
+                let parentPath = path.parentPath;
+                while (parentPath) {
+                    if (parentPath.isJSXElement && parentPath.isJSXElement()) {
+                        const parentScopePath = parentPath
+                            .getPathLocation()
+                            .replace(/\[(\d+)\]/g, "$1")
+                            .replace(/\./g, "/");
+                        if (fileScopes[parentScopePath]) {
+                            return;
+                        }
+                    }
+                    parentPath = parentPath.parentPath;
+                }
+                // Check if this element has JSXText children (meaning it should be replaced)
+                const hasText = path.node.children.some((child) => t.isJSXText(child) && child.value.trim());
+                if (hasText) {
+                    // Replace all children with a single Translated component
+                    path.node.children = [injectTranslated(`${relativePath}::${scopePath}`)];
+                    processedElements.add(scopePath);
+                    changed = true;
+                }
+            }
+        });
+        // Second pass: Handle any remaining JSXText nodes that weren't part of replaced elements
         traverse(ast, {
             JSXText(path) {
                 const text = path.node.value.trim();
@@ -234,11 +273,12 @@ export function transformProject(code, options) {
                     .getPathLocation()
                     .replace(/\[(\d+)\]/g, "$1")
                     .replace(/\./g, "/");
+                // Skip if this element was already processed in the first pass
+                if (processedElements.has(scopePath))
+                    return;
                 if (!fileScopes[scopePath])
                     return;
-                // Check if any ancestor element (parent of the current element) also has a scope entry
-                // If so, this text is already part of the parent's content and shouldn't be replaced separately
-                // We need to traverse from the jsxElement's parent, not from the JSXText path
+                // Check if any ancestor element also has a scope entry
                 let parentPath = jsxElement.parentPath;
                 while (parentPath) {
                     if (parentPath.isJSXElement && parentPath.isJSXElement()) {
@@ -246,8 +286,6 @@ export function transformProject(code, options) {
                             .getPathLocation()
                             .replace(/\[(\d+)\]/g, "$1")
                             .replace(/\./g, "/");
-                        // If parent has a scope entry, this text is nested inside it
-                        // and should not be replaced separately (it's already part of the parent's content)
                         if (fileScopes[parentScopePath]) {
                             return;
                         }
