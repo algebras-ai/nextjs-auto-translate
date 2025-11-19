@@ -9,7 +9,7 @@ export default function About() {
           <h1>About This Project</h1>
           <p>
             This example demonstrates how <strong>algebras-auto-intl</strong> works
-            with Next.js 16.
+            with Next.js 15.
           </p>
           <p>
             The plugin automatically:

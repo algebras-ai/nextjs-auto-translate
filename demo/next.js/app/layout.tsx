@@ -6,8 +6,8 @@ import "./globals.css";
 // You don't need to import it manually.
 
 export const metadata: Metadata = {
-  title: "Next.js 16 Example",
-  description: "Example Next.js 16 project - add internationalization with algebras-auto-intl",
+  title: "Next.js 15 Example",
+  description: "Example Next.js 15 project - add internationalization with algebras-auto-intl",
 };
 
 export default function RootLayout({

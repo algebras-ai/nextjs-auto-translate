@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "algebras-auto-intl": "file:../../",
-    "next": "^16.0.0",
+    "next": "^15.0.0",
+    "nextjs-auto-intl": "file:../..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

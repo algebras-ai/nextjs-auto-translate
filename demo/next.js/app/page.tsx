@@ -12,7 +12,7 @@ export default function Home() {
         <section className="section">
           <h2>Getting Started</h2>
           <p>
-            This is a Next.js 16 example project demonstrating how to use{" "}
+            This is a Next.js 15 example project demonstrating how to use{" "}
             <strong>algebras-auto-intl</strong> for automatic internationalization.
           </p>
           <p>

@@ -26,7 +26,7 @@ export default function Features() {
         <div className="feature-card">
           <h3>Zero Configuration</h3>
           <p>
-            Works out of the box with Next.js 14, 15, and 16. Supports both
+            Works out of the box with Next.js 14 and 15. Supports both
             Webpack and Turbopack automatically.
           </p>
         </div>
