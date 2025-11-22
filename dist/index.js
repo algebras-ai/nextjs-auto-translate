@@ -64,6 +64,46 @@ export default function myPlugin(options) {
             });
             await dictionaryGenerator.generateDictionary(sourceMap);
             fs.writeFileSync(path.resolve(outputDir, "source.json"), JSON.stringify(sourceMap, null, 2), "utf-8");
+            // Transform files directly on disk (for Turbopack compatibility)
+            // Since Turbopack doesn't use webpack loaders, we transform files directly
+            const { transformProject } = await import("./transformer/Injector.js");
+            const appDir = path.resolve(process.cwd(), "app");
+            if (fs.existsSync(appDir) && sourceMap.files) {
+                const findAndTransform = (dir) => {
+                    try {
+                        const entries = fs.readdirSync(dir, { withFileTypes: true });
+                        for (const entry of entries) {
+                            const fullPath = path.join(dir, entry.name);
+                            if (entry.isDirectory()) {
+                                findAndTransform(fullPath);
+                            }
+                            else if ((entry.name === "page.tsx" || entry.name === "page.jsx") && sourceMap.files) {
+                                const relativePath = path.relative(process.cwd(), fullPath);
+                                if (sourceMap.files[relativePath]) {
+                                    try {
+                                        const originalCode = fs.readFileSync(fullPath, "utf-8");
+                                        const transformedCode = transformProject(originalCode, {
+                                            sourceMap,
+                                            filePath: fullPath
+                                        });
+                                        if (originalCode !== transformedCode) {
+                                            fs.writeFileSync(fullPath, transformedCode, "utf-8");
+                                            console.log(`[AlgebrasIntl] ✅ Transformed file: ${relativePath}`);
+                                        }
+                                    }
+                                    catch (err) {
+                                        console.error(`[AlgebrasIntl] ❌ Error transforming ${relativePath}:`, err);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (err) {
+                        // Ignore directory read errors
+                    }
+                };
+                findAndTransform(appDir);
+            }
         }
         catch (err) {
             console.error("❌ Failed to parse/generate source map:", err);
@@ -94,20 +134,59 @@ export default function myPlugin(options) {
             return config;
         };
     }
+    function wrapTurbopack(nextConfig) {
+        // Call prepareSourceMap without awaiting (runs in background)
+        prepareSourceMap().catch((err) => {
+            console.error("❌ Background source map preparation failed:", err);
+        });
+        // Configure Turbopack loaders
+        // Turbopack uses experimental.turbo.loaders to register custom loaders
+        const turboLoaders = nextConfig.experimental?.turbo?.loaders || {};
+        // Use the package export path for the Turbopack loader
+        const loaderPath = "algebras-auto-intl/turbopack/auto-intl-transformer";
+        // Register loader for TS/TSX/JS/JSX files
+        const filePatterns = ["*.tsx", "*.ts", "*.jsx", "*.js"];
+        filePatterns.forEach((pattern) => {
+            if (!turboLoaders[pattern]) {
+                turboLoaders[pattern] = loaderPath;
+            }
+            else if (Array.isArray(turboLoaders[pattern])) {
+                // If it's already an array, append our loader
+                turboLoaders[pattern].push(loaderPath);
+            }
+            else {
+                // If it's a string, convert to array
+                const existingLoader = turboLoaders[pattern];
+                turboLoaders[pattern] = [existingLoader, loaderPath];
+            }
+        });
+        return {
+            ...nextConfig,
+            experimental: {
+                ...nextConfig.experimental,
+                turbo: {
+                    ...nextConfig.experimental?.turbo,
+                    loaders: turboLoaders
+                }
+            },
+            // Also keep webpack config for fallback when not using Turbopack
+            webpack: wrapWebpack(nextConfig.webpack)
+        };
+    }
     return function wrapNextConfig(nextConfig) {
         if (hasScheduled) {
-            return {
+            return wrapTurbopack({
                 ...nextConfig,
                 webpack: wrapWebpack(nextConfig.webpack)
-            };
+            });
         }
         if (fs.existsSync(scheduledFlagPath)) {
             const flagPid = parseInt(fs.readFileSync(scheduledFlagPath, "utf-8"));
             if (isProcessAlive(flagPid)) {
-                return {
+                return wrapTurbopack({
                     ...nextConfig,
                     webpack: wrapWebpack(nextConfig.webpack)
-                };
+                });
             }
             else {
                 fs.unlinkSync(scheduledFlagPath);
@@ -118,9 +197,9 @@ export default function myPlugin(options) {
         fs.writeFileSync(scheduledFlagPath, process.pid.toString());
         if (fs.existsSync(parserLockPath))
             fs.unlinkSync(parserLockPath);
-        return {
+        return wrapTurbopack({
             ...nextConfig,
             webpack: wrapWebpack(nextConfig.webpack)
-        };
+        });
     };
 }

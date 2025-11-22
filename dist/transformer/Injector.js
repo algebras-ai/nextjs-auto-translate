@@ -3,6 +3,7 @@ import { parse } from "@babel/parser";
 import traverseDefault from "@babel/traverse";
 import * as t from "@babel/types";
 import path from "path";
+import { getRelativeScopePath } from "../parser/utils.js";
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = traverseDefault.default || traverseDefault;
 const generate = generateDefault.default || generateDefault;
@@ -105,6 +106,8 @@ export function transformProject(code, options) {
     }
     let changed = false;
     const fileScopes = options.sourceMap.files[relativePath]?.scopes || {};
+    console.log(`[Injector] 🔍 Processing ${relativePath}, found ${Object.keys(fileScopes).length} scopes`);
+    let replacedCount = 0;
     traverse(ast, {
         JSXText(path) {
             const text = path.node.value.trim();
@@ -114,18 +117,32 @@ export function transformProject(code, options) {
             const jsxElement = path.findParent((p) => p.isJSXElement());
             if (!jsxElement)
                 return;
-            // Find the scope for this element
-            const scopePath = jsxElement
-                .getPathLocation()
-                .replace(/\[(\d+)\]/g, "$1")
-                .replace(/\./g, "/");
-            if (!fileScopes[scopePath])
+            // Find the scope for this element - use same normalization as parser
+            const fullScopePath = jsxElement.getPathLocation();
+            const scopePath = getRelativeScopePath(fullScopePath);
+            if (!fileScopes[scopePath]) {
+                // Try to find a matching scope by checking if any scope contains this text
+                const matchingScope = Object.keys(fileScopes).find(scope => {
+                    const scopeData = fileScopes[scope];
+                    return scopeData.content && scopeData.content.includes(text);
+                });
+                if (matchingScope) {
+                    console.log(`[Injector] ✅ Replacing text "${text.substring(0, 30)}..." with scope: ${matchingScope}`);
+                    path.replaceWith(injectTranslated(`${relativePath}::${matchingScope}`));
+                    changed = true;
+                    replacedCount++;
+                    return;
+                }
                 return;
+            }
+            console.log(`[Injector] ✅ Replacing text "${text.substring(0, 30)}..." with scope: ${scopePath}`);
             // Replace text with <Translated tKey="scope" />
             path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`));
             changed = true;
+            replacedCount++;
         }
     });
+    console.log(`[Injector] ✅ Replaced ${replacedCount} text nodes in ${relativePath}`);
     if (!changed) {
         return code;
     }

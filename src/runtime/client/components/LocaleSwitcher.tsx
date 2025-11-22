@@ -115,12 +115,18 @@ const LocaleSwitcher = () => {
 
   const availableLocales = getLocales();
 
+  // Fallback to default locales if none found
+  const locales = availableLocales.length > 0 ? availableLocales : ["en", "uz"];
+
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleLocaleChange = (locale: string) => {
     setLocale(locale);
     setIsOpen(false);
   };
+
+  // Always render with fallback locales
+  const displayLocales = locales.length > 0 ? locales : ["en", "uz"];
 
   return (
     <div style={{ position: "relative", display: "inline-block" }}>
@@ -149,7 +155,7 @@ const LocaleSwitcher = () => {
             animation: "fadeIn 0.15s ease-out"
           }}
         >
-          {availableLocales.map((locale) => (
+          {displayLocales.map((locale) => (
             <DropdownOption
               key={locale}
               locale={locale}

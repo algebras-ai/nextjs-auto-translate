@@ -60,11 +60,15 @@ const LocaleSwitcher = () => {
     const { locale: currentLocale, setLocale, getLocales } = useAlgebrasIntl();
     const [isOpen, setIsOpen] = useState(false);
     const availableLocales = getLocales();
+    // Fallback to default locales if none found
+    const locales = availableLocales.length > 0 ? availableLocales : ["en", "uz"];
     const toggleDropdown = () => setIsOpen(!isOpen);
     const handleLocaleChange = (locale) => {
         setLocale(locale);
         setIsOpen(false);
     };
+    // Always render with fallback locales
+    const displayLocales = locales.length > 0 ? locales : ["en", "uz"];
     return (_jsxs("div", { style: { position: "relative", display: "inline-block" }, children: [_jsx(DropdownTrigger, { currentLocale: currentLocale, isOpen: isOpen, onClick: toggleDropdown }), isOpen && (_jsx("div", { style: {
                     position: "absolute",
                     top: "100%",
@@ -78,7 +82,7 @@ const LocaleSwitcher = () => {
                     zIndex: 1000,
                     overflow: "hidden",
                     animation: "fadeIn 0.15s ease-out"
-                }, children: availableLocales.map((locale) => (_jsx(DropdownOption, { locale: locale, isSelected: locale === currentLocale, onClick: handleLocaleChange }, locale))) })), isOpen && (_jsx("div", { onClick: () => setIsOpen(false), style: {
+                }, children: displayLocales.map((locale) => (_jsx(DropdownOption, { locale: locale, isSelected: locale === currentLocale, onClick: handleLocaleChange }, locale))) })), isOpen && (_jsx("div", { onClick: () => setIsOpen(false), style: {
                     position: "fixed",
                     top: "0",
                     left: "0",

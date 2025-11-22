@@ -25,6 +25,7 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   }
 
   let hasIntlWrapperImport = false;
+  let hasLocaleSwitcherImport = false;
   let hasWrapped = false;
   let layoutExportNode: any = null;
 
@@ -33,9 +34,16 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
     ImportDeclaration(path: any) {
       if (
         path.node.source.value === "algebras-auto-intl/runtime/server/IntlWrapper" ||
+        path.node.source.value === "algebras-auto-intl/runtime/server" ||
         path.node.source.value.includes("IntlWrapper")
       ) {
         hasIntlWrapperImport = true;
+      }
+      if (
+        path.node.source.value === "algebras-auto-intl/runtime/client/components/LocaleSwitcher" ||
+        path.node.source.value.includes("LocaleSwitcher")
+      ) {
+        hasLocaleSwitcherImport = true;
       }
     },
     ExportDefaultDeclaration(path: any) {
@@ -43,17 +51,25 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
     }
   });
 
-  // If already has the import, assume it's already wrapped
-  if (hasIntlWrapperImport) {
+  // If already has both imports, assume it's already wrapped
+  if (hasIntlWrapperImport && hasLocaleSwitcherImport) {
     return code;
   }
 
-  // Add IntlWrapper import
-  const intlWrapperImport = t.importDeclaration(
-    [t.importDefaultSpecifier(t.identifier("IntlWrapper"))],
-    t.stringLiteral("algebras-auto-intl/runtime/server/IntlWrapper")
-  );
-  ast.program.body.unshift(intlWrapperImport);
+  // Add IntlWrapper import if not present
+  if (!hasIntlWrapperImport) {
+    const intlWrapperImport = t.importDeclaration(
+      [t.importDefaultSpecifier(t.identifier("IntlWrapper"))],
+      t.stringLiteral("algebras-auto-intl/runtime/server/IntlWrapper")
+    );
+    ast.program.body.unshift(intlWrapperImport);
+  }
+
+  // Add LocaleSwitcher import if not present (as dynamic import for client component)
+  if (!hasLocaleSwitcherImport) {
+    // We'll inject it as a client component inline, so we don't need to import it here
+    // The LocaleSwitcher will be wrapped in a client component boundary
+  }
 
   // Wrap the layout's children with IntlWrapper
   traverse(ast, {
@@ -85,7 +101,10 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
               );
               
               if (!hasIntlWrapper) {
-                // Wrap children with IntlWrapper
+                // LocaleSwitcher is now included in IntlWrapper, so we don't need to inject it here
+                // Just wrap children with IntlWrapper
+
+                // Wrap children with IntlWrapper (LocaleSwitcher is included in IntlWrapper)
                 const intlWrapperElement = t.jsxElement(
                   t.jsxOpeningElement(t.jsxIdentifier("IntlWrapper"), [], false),
                   t.jsxClosingElement(t.jsxIdentifier("IntlWrapper")),
@@ -96,6 +115,7 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
                 bodyPath.node.children = [intlWrapperElement];
                 hasWrapped = true;
               }
+              // LocaleSwitcher is now included in IntlWrapper, so no need to add it separately
             }
           }
         }, path.scope, path.state);
