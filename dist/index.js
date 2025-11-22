@@ -31,9 +31,52 @@ export default function myPlugin(options) {
     const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
     async function prepareSourceMap() {
         try {
+            // Check if source.json already exists and has data
+            const sourceMapPath = path.resolve(outputDir, "source.json");
+            if (fs.existsSync(sourceMapPath)) {
+                try {
+                    const existingSourceMap = JSON.parse(fs.readFileSync(sourceMapPath, "utf-8"));
+                    if (existingSourceMap.files && Object.keys(existingSourceMap.files).length > 0) {
+                        console.log(`[AlgebrasIntl] ✅ Using existing sourceMap with ${Object.keys(existingSourceMap.files).length} files`);
+                        cachedSourceMap = existingSourceMap;
+                        // Still generate dictionary in case translations are missing
+                        const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
+                        const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
+                        let translationProvider;
+                        if (apiKey) {
+                            translationProvider = new AlgebrasTranslationProvider({
+                                apiKey,
+                                apiUrl: apiUrl || "https://platform.algebras.ai/api/v1"
+                            });
+                        }
+                        const dictionaryGenerator = new DictionaryGenerator({
+                            defaultLocale,
+                            targetLocales,
+                            outputDir,
+                            translationProvider
+                        });
+                        await dictionaryGenerator.generateDictionary(existingSourceMap);
+                        return;
+                    }
+                }
+                catch (err) {
+                    // If source.json is corrupted, continue to parse
+                }
+            }
+            // Clear lock file to force fresh parse
+            const lockPath = path.resolve(process.cwd(), outputDir, ".lock");
+            if (fs.existsSync(lockPath)) {
+                fs.unlinkSync(lockPath);
+            }
             const parser = new Parser({ includeNodeModules, outputDir });
             const sourceMap = parser.parseProject();
             cachedSourceMap = sourceMap;
+            // If sourceMap is empty, log warning
+            if (!sourceMap.files || Object.keys(sourceMap.files).length === 0) {
+                console.warn("[AlgebrasIntl] ⚠️  SourceMap is empty! Files may already be transformed.");
+                console.warn("[AlgebrasIntl] 💡 Try: rm -rf src/intl/.lock src/intl/.scheduled src/intl/source.json && git restore app/page.tsx");
+                return;
+            }
             // Create translation provider if API key is provided
             let translationProvider;
             const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
@@ -116,6 +159,79 @@ export default function myPlugin(options) {
             console.error("❌ Background source map preparation failed:", err);
         });
         return function webpack(config, options) {
+            // Preserve existing resolve configuration
+            if (!config.resolve) {
+                config.resolve = {};
+            }
+            if (!config.resolve.alias) {
+                config.resolve.alias = {};
+            }
+            // Enable symlinks resolution (important for npm link)
+            config.resolve.symlinks = true;
+            // Ensure package.json exports are resolved
+            if (!config.resolve.conditionNames) {
+                config.resolve.conditionNames = ["require", "node", "import", "default"];
+            }
+            // Help resolve the linked package (for npm link scenarios)
+            const linkedPackagePath = path.resolve(process.cwd(), "node_modules/algebras-auto-intl");
+            let realPackagePath = null;
+            try {
+                if (fs.existsSync(linkedPackagePath)) {
+                    realPackagePath = fs.realpathSync(linkedPackagePath);
+                }
+            }
+            catch {
+                // If realpath fails, use the symlink path
+                if (fs.existsSync(linkedPackagePath)) {
+                    realPackagePath = linkedPackagePath;
+                }
+            }
+            if (realPackagePath && fs.existsSync(realPackagePath)) {
+                // Resolve main package
+                if (!config.resolve.alias["algebras-auto-intl"]) {
+                    config.resolve.alias["algebras-auto-intl"] = realPackagePath;
+                }
+                // Resolve subpaths (critical for exports like /runtime/server)
+                const subpaths = [
+                    "runtime",
+                    "runtime/server",
+                    "runtime/server/IntlWrapper",
+                    "runtime/client",
+                    "runtime/client/components/Translated",
+                    "runtime/client/components/LocaleSwitcher",
+                    "webpack/auto-intl-loader",
+                    "turbopack/auto-intl-transformer"
+                ];
+                subpaths.forEach((subpath) => {
+                    const aliasKey = `algebras-auto-intl/${subpath}`;
+                    if (!config.resolve.alias[aliasKey]) {
+                        // For runtime/server, point directly to Provider.js
+                        if (subpath === "runtime/server") {
+                            const providerPath = path.join(realPackagePath, "dist", subpath, "Provider.js");
+                            if (fs.existsSync(providerPath)) {
+                                config.resolve.alias[aliasKey] = providerPath;
+                            }
+                        }
+                        else if (subpath === "runtime/client") {
+                            const providerPath = path.join(realPackagePath, "dist", subpath, "Provider.js");
+                            if (fs.existsSync(providerPath)) {
+                                config.resolve.alias[aliasKey] = providerPath;
+                            }
+                        }
+                        else {
+                            // For other subpaths, try .js extension first
+                            const subpathFile = path.join(realPackagePath, "dist", subpath);
+                            if (fs.existsSync(subpathFile + ".js")) {
+                                config.resolve.alias[aliasKey] = subpathFile + ".js";
+                            }
+                            else if (fs.existsSync(subpathFile)) {
+                                config.resolve.alias[aliasKey] = subpathFile;
+                            }
+                        }
+                    }
+                });
+            }
+            // Add our loader rule
             config.module.rules.push({
                 test: /\.[jt]sx?$/,
                 exclude: /node_modules/,
@@ -139,39 +255,41 @@ export default function myPlugin(options) {
         prepareSourceMap().catch((err) => {
             console.error("❌ Background source map preparation failed:", err);
         });
-        // Configure Turbopack loaders
-        // Turbopack uses experimental.turbo.loaders to register custom loaders
-        const turboLoaders = nextConfig.experimental?.turbo?.loaders || {};
-        // Use the package export path for the Turbopack loader
-        const loaderPath = "algebras-auto-intl/turbopack/auto-intl-transformer";
-        // Register loader for TS/TSX/JS/JSX files
-        const filePatterns = ["*.tsx", "*.ts", "*.jsx", "*.js"];
-        filePatterns.forEach((pattern) => {
-            if (!turboLoaders[pattern]) {
-                turboLoaders[pattern] = loaderPath;
+        // Resolve npm-linked packages
+        let linkedPackagePath = null;
+        try {
+            const linkedPath = path.resolve(process.cwd(), "node_modules/algebras-auto-intl");
+            if (fs.existsSync(linkedPath)) {
+                linkedPackagePath = fs.realpathSync(linkedPath);
             }
-            else if (Array.isArray(turboLoaders[pattern])) {
-                // If it's already an array, append our loader
-                turboLoaders[pattern].push(loaderPath);
+        }
+        catch {
+            if (fs.existsSync(path.resolve(process.cwd(), "node_modules/algebras-auto-intl"))) {
+                linkedPackagePath = path.resolve(process.cwd(), "node_modules/algebras-auto-intl");
             }
-            else {
-                // If it's a string, convert to array
-                const existingLoader = turboLoaders[pattern];
-                turboLoaders[pattern] = [existingLoader, loaderPath];
-            }
-        });
-        return {
+        }
+        // Configure webpack for module resolution (needed even with Turbopack)
+        const webpackConfigFn = wrapWebpack(nextConfig.webpack);
+        const config = {
             ...nextConfig,
-            experimental: {
-                ...nextConfig.experimental,
-                turbo: {
-                    ...nextConfig.experimental?.turbo,
-                    loaders: turboLoaders
-                }
-            },
-            // Also keep webpack config for fallback when not using Turbopack
-            webpack: wrapWebpack(nextConfig.webpack)
+            // Add transpilePackages for npm-linked packages
+            transpilePackages: [
+                ...(nextConfig.transpilePackages || []),
+                "algebras-auto-intl"
+            ],
+            // Webpack config is needed for resolve.alias even with Turbopack
+            webpack: webpackConfigFn
         };
+        // Configure outputFileTracingRoot for Turbopack to resolve linked packages
+        if (linkedPackagePath) {
+            const projectRoot = process.cwd();
+            const parentDir = path.dirname(projectRoot);
+            // Only set if the linked package is actually outside the project root
+            if (linkedPackagePath.startsWith(parentDir)) {
+                config.outputFileTracingRoot = parentDir;
+            }
+        }
+        return config;
     }
     return function wrapNextConfig(nextConfig) {
         if (hasScheduled) {

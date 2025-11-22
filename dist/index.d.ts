@@ -10,7 +10,4 @@ export interface PluginOptions {
     translationApiKey?: string;
     translationApiUrl?: string;
 }
-export default function myPlugin(options: PluginOptions): (nextConfig: Partial<Record<string, any>>) => {
-    experimental: any;
-    webpack: import("next/dist/server/config-shared.js").NextJsWebpackConfig | null | undefined;
-};
+export default function myPlugin(options: PluginOptions): (nextConfig: Partial<Record<string, any>>) => Partial<Record<string, any>>;

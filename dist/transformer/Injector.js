@@ -147,11 +147,8 @@ export function transformProject(code, options) {
         return code;
     }
     ensureImportTranslated(ast);
-    // Inject language switcher for page.tsx files
-    if (relativePath.includes("page.tsx") || relativePath.includes("page.jsx")) {
-        ensureImportLocalesSwitcher(ast);
-        injectLocaleSwitcher(ast);
-    }
+    // NOTE: Language switcher is injected via IntlWrapper in layout.tsx, not here
+    // This prevents duplicate switchers appearing on the page
     const output = generate(ast, {
         retainLines: true,
         retainFunctionParens: true
