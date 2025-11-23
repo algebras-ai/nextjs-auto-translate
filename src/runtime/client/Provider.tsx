@@ -9,6 +9,7 @@ import {
   useCallback,
   useMemo
 } from "react";
+import { useRouter } from "next/navigation";
 import { DictStructure } from "../types.js";
 import { LanguageCode } from "../../data/languageMap.js";
 
@@ -49,6 +50,7 @@ interface AlgebrasIntlProviderProps {
 }
 
 const AlgebrasIntlClientProvider = (props: AlgebrasIntlProviderProps) => {
+  const router = useRouter();
   const [dictionary] = useState<DictStructure>(() => JSON.parse(props.dictJson));
   const [locale, setLocaleState] = useState<string>(props.initialLocale);
 
@@ -57,8 +59,14 @@ const AlgebrasIntlClientProvider = (props: AlgebrasIntlProviderProps) => {
   }, [locale]);
 
   const setLocale = useCallback((newLocale: string) => {
-    setLocaleState(newLocale);
-  }, []);
+    if (newLocale !== locale) {
+      // Set cookie immediately before state update
+      document.cookie = `locale=${newLocale}; path=/;`;
+      setLocaleState(newLocale);
+      // Refresh the router to trigger server component re-render with new locale
+      router.refresh();
+    }
+  }, [locale, router]);
 
   const contextValue = useMemo(() => ({
     dictionary,
