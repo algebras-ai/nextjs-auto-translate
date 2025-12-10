@@ -1,8 +1,8 @@
 // example.config.ts
 // Example Next.js configuration with Algebras AI translation
 
-import autoIntl, { LanguageCode } from 'algebras-auto-intl'
 import type { NextConfig } from 'next'
+import autoIntl, { LanguageCode } from 'nextjs-auto-intl'
 
 // Make sure to create a .env file in your project root with:
 // ALGEBRAS_API_KEY=your_api_key_from_platform_algebras_ai
