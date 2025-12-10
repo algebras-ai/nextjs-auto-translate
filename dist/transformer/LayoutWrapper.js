@@ -1,21 +1,22 @@
 // src/transformer/LayoutWrapper.ts
-import generateDefault from "@babel/generator";
-import { parse } from "@babel/parser";
-import traverseDefault from "@babel/traverse";
-import * as t from "@babel/types";
+import generateDefault from '@babel/generator';
+import { parse } from '@babel/parser';
+import traverseDefault from '@babel/traverse';
+import * as t from '@babel/types';
 const traverse = traverseDefault.default || traverseDefault;
 const generate = generateDefault.default || generateDefault;
 export function wrapLayoutWithIntl(code, filePath) {
     // Only process app/layout.tsx or app/layout.jsx
-    if (!filePath.includes("app/layout.tsx") && !filePath.includes("app/layout.jsx")) {
+    if (!filePath.includes('app/layout.tsx') &&
+        !filePath.includes('app/layout.jsx')) {
         return code;
     }
     console.log(`[LayoutWrapper] Processing layout file: ${filePath}`);
     let ast;
     try {
         ast = parse(code, {
-            sourceType: "module",
-            plugins: ["jsx", "typescript"]
+            sourceType: 'module',
+            plugins: ['jsx', 'typescript'],
         });
     }
     catch (e) {
@@ -30,27 +31,31 @@ export function wrapLayoutWithIntl(code, filePath) {
         ImportDeclaration(path) {
             const sourceValue = path.node.source.value;
             // Check for various import paths that might be used
-            const isIntlWrapperImport = sourceValue === "algebras-auto-intl/runtime/server/IntlWrapper" ||
-                sourceValue === "nextjs-auto-intl/runtime/server/IntlWrapper" ||
-                sourceValue === "algebras-auto-intl/runtime/server" ||
-                sourceValue === "nextjs-auto-intl/runtime/server";
+            const isIntlWrapperImport = sourceValue === 'algebras-auto-intl/runtime/server/IntlWrapper' ||
+                sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
+                sourceValue === 'algebras-auto-intl/runtime/server' ||
+                sourceValue === 'nextjs-auto-intl/runtime/server';
             if (isIntlWrapperImport &&
-                path.node.specifiers.some((s) => (t.isImportDefaultSpecifier(s) && t.isIdentifier(s.local) && s.local.name === "IntlWrapper") ||
-                    (t.isImportSpecifier(s) && t.isIdentifier(s.imported) && s.imported.name === "IntlWrapper"))) {
+                path.node.specifiers.some((s) => (t.isImportDefaultSpecifier(s) &&
+                    t.isIdentifier(s.local) &&
+                    s.local.name === 'IntlWrapper') ||
+                    (t.isImportSpecifier(s) &&
+                        t.isIdentifier(s.imported) &&
+                        s.imported.name === 'IntlWrapper'))) {
                 hasIntlWrapperImport = true;
                 console.log(`[LayoutWrapper] Found existing IntlWrapper import from: ${sourceValue}`);
             }
         },
         ExportDefaultDeclaration(path) {
             layoutExportNode = path;
-        }
+        },
     });
     // If already has the import, assume it's already wrapped
     if (hasIntlWrapperImport) {
         return code;
     }
     // Add IntlWrapper import
-    const intlWrapperImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier("IntlWrapper"))], t.stringLiteral("algebras-auto-intl/runtime/server/IntlWrapper"));
+    const intlWrapperImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier('IntlWrapper'))], t.stringLiteral('nextjs-auto-intl/runtime/server/IntlWrapper'));
     ast.program.body.unshift(intlWrapperImport);
     // Wrap the layout's children with IntlWrapper
     traverse(ast, {
@@ -59,34 +64,37 @@ export function wrapLayoutWithIntl(code, filePath) {
                 return;
             const declaration = path.node.declaration;
             // Handle function declaration
-            if (t.isFunctionDeclaration(declaration) || t.isArrowFunctionExpression(declaration)) {
-                const funcNode = t.isFunctionDeclaration(declaration) ? declaration : declaration;
+            if (t.isFunctionDeclaration(declaration) ||
+                t.isArrowFunctionExpression(declaration)) {
+                const funcNode = t.isFunctionDeclaration(declaration)
+                    ? declaration
+                    : declaration;
                 traverse(funcNode, {
                     JSXElement(bodyPath) {
                         const openingElement = bodyPath.node.openingElement;
                         // Find the <body> element
                         if (t.isJSXIdentifier(openingElement.name) &&
-                            openingElement.name.name === "body") {
+                            openingElement.name.name === 'body') {
                             const bodyChildren = bodyPath.node.children;
                             // Check if IntlWrapper is already there
                             const hasIntlWrapper = bodyChildren.some((child) => t.isJSXElement(child) &&
                                 t.isJSXIdentifier(child.openingElement.name) &&
-                                child.openingElement.name.name === "IntlWrapper");
+                                child.openingElement.name.name === 'IntlWrapper');
                             if (!hasIntlWrapper) {
                                 // Wrap children with IntlWrapper
-                                const intlWrapperElement = t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("IntlWrapper"), [], false), t.jsxClosingElement(t.jsxIdentifier("IntlWrapper")), bodyChildren, false);
+                                const intlWrapperElement = t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('IntlWrapper'), [], false), t.jsxClosingElement(t.jsxIdentifier('IntlWrapper')), bodyChildren, false);
                                 bodyPath.node.children = [intlWrapperElement];
                                 hasWrapped = true;
                             }
                         }
-                    }
+                    },
                 }, path.scope, path.state);
             }
-        }
+        },
     });
     const output = generate(ast, {
         retainLines: true,
-        retainFunctionParens: true
+        retainFunctionParens: true,
     });
     return output.code;
 }

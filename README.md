@@ -34,6 +34,7 @@ The library automatically detects and configures the appropriate transformer bas
 - **Turbopack**: Uses a custom Turbopack transformer (`auto-intl-transformer`)
 
 Both transformers perform the same transformations:
+
 - Inject `Translated` components to replace JSX text
 - Dictionary generation works regardless of bundler
 
@@ -46,56 +47,56 @@ No additional configuration needed - the plugin handles both bundlers automatica
 1. **Add the plugin to your `next.config.ts`**:
 
 ```typescript
-import type { NextConfig } from "next";
-import IntlConfig from "nextjs-auto-intl";
-import { LanguageCode } from "nextjs-auto-intl/data/languageMap";
+import type { NextConfig } from 'next'
+import IntlConfig from 'nextjs-auto-intl'
+import { LanguageCode } from 'nextjs-auto-intl/data/languageMap'
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
-};
+	reactStrictMode: true,
+}
 
 export default IntlConfig({
-  includeNodeModules: false, // optional - scan node_modules
-  sourceLanguage: LanguageCode.en,
-  targetLocales: [LanguageCode.es, LanguageCode.fr], // languages to generate
-  outputDir: "src/intl" // where to output dictionary files
-})(nextConfig);
+	includeNodeModules: false, // optional - scan node_modules
+	sourceLanguage: LanguageCode.en,
+	targetLocales: [LanguageCode.es, LanguageCode.fr], // languages to generate
+	outputDir: 'src/intl', // where to output dictionary files
+})(nextConfig)
 ```
 
 2. **You must import and wrap your layout with `IntlWrapper`** in your root layout file (e.g., `app/layout.tsx`). This is required and must be done manually:
 
 ```typescript
-import IntlWrapper from "nextjs-auto-intl/runtime/server";
+import IntlWrapper from 'nextjs-auto-intl/runtime/server'
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <IntlWrapper>
-        <body>{children}</body>
-      </IntlWrapper>
-    </html>
-  );
+	return (
+		<html lang='en'>
+			<IntlWrapper>
+				<body>{children}</body>
+			</IntlWrapper>
+		</html>
+	)
 }
 ```
 
 3. **(Optional) Add a locale switcher** to allow users to change languages. Import `LocaleSwitcher` in any client component:
 
 ```typescript
-"use client";
+'use client'
 
-import LocaleSwitcher from "nextjs-auto-intl/runtime/client/components/LocaleSwitcher";
+import LocaleSwitcher from 'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
 
 export default function Header() {
-  return (
-    <header>
-      {/* Your header content */}
-      <LocaleSwitcher />
-    </header>
-  );
+	return (
+		<header>
+			{/* Your header content */}
+			<LocaleSwitcher />
+		</header>
+	)
 }
 ```
 
@@ -113,24 +114,34 @@ ALGEBRAS_API_URL=https://platform.algebras.ai/api/v1
 2. **Update your `next.config.ts`**:
 
 ```typescript
-import type { NextConfig } from "next";
-import IntlConfig from "nextjs-auto-intl";
-import { LanguageCode } from "nextjs-auto-intl/data/languageMap";
+import type { NextConfig } from 'next'
+import IntlConfig from 'nextjs-auto-intl'
+import { LanguageCode } from 'nextjs-auto-intl/data/languageMap'
 
 const nextConfig: NextConfig = {
-  // your existing config
-};
+	// your existing config
+}
 
 export default IntlConfig({
-  sourceLanguage: LanguageCode.en,
-  targetLocales: [LanguageCode.es, LanguageCode.fr, LanguageCode.de, LanguageCode.zh, LanguageCode.ja, LanguageCode.ko, LanguageCode.ar, LanguageCode.pt, LanguageCode.ru],
-  outputDir: "./src/intl",
-  includeNodeModules: false,
-  // The plugin will automatically use ALGEBRAS_API_KEY from .env
-  // Or you can pass it directly (not recommended for production):
-  // translationApiKey: process.env.ALGEBRAS_API_KEY,
-  // translationApiUrl: process.env.ALGEBRAS_API_URL,
-})(nextConfig);
+	sourceLanguage: LanguageCode.en,
+	targetLocales: [
+		LanguageCode.es,
+		LanguageCode.fr,
+		LanguageCode.de,
+		LanguageCode.zh,
+		LanguageCode.ja,
+		LanguageCode.ko,
+		LanguageCode.ar,
+		LanguageCode.pt,
+		LanguageCode.ru,
+	],
+	outputDir: './src/intl',
+	includeNodeModules: false,
+	// The plugin will automatically use ALGEBRAS_API_KEY from .env
+	// Or you can pass it directly (not recommended for production):
+	// translationApiKey: process.env.ALGEBRAS_API_KEY,
+	// translationApiUrl: process.env.ALGEBRAS_API_URL,
+})(nextConfig)
 ```
 
 That's it! The plugin will now use Algebras AI to generate high-quality translations automatically during your build process.
@@ -151,14 +162,14 @@ See `ALGEBRAS_SETUP.md` for detailed configuration options.
 ### Standalone Usage
 
 ```typescript
-import { Parser } from "algebras-auto-intl";
+import { Parser } from 'algebras-auto-intl'
 
 const parser = new Parser({
-  includeNodeModules: false // optional
-});
+	includeNodeModules: false, // optional
+})
 
-const scopeMap = await parser.parseProject();
-console.log("Extracted strings:", scopeMap);
+const scopeMap = await parser.parseProject()
+console.log('Extracted strings:', scopeMap)
 ```
 
 ## How It Works
@@ -174,14 +185,14 @@ The tool automatically scans your React/JSX files and extracts text content from
 
 ```jsx
 function Welcome() {
-  return (
-    <div>
-      <h1>Welcome to our app!</h1>
-      <p>
-        Get started by <strong>clicking here</strong>
-      </p>
-    </div>
-  );
+	return (
+		<div>
+			<h1>Welcome to our app!</h1>
+			<p>
+				Get started by <strong>clicking here</strong>
+			</p>
+		</div>
+	)
 }
 ```
 
@@ -231,16 +242,16 @@ When you build your project, the plugin creates:
 
 ```javascript
 // Import the generated dictionary
-import dictionary from "./src/intl/dictionary.js";
+import dictionary from './src/intl/dictionary.js'
 
 // Access translations
-const filePath = "src/components/Welcome.tsx";
-const scopePath = "program/body1/declaration/body/body1/argument/children1";
-const locale = "es";
+const filePath = 'src/components/Welcome.tsx'
+const scopePath = 'program/body1/declaration/body/body1/argument/children1'
+const locale = 'es'
 
 const translation =
-  dictionary.files[filePath].entries[scopePath].content[locale];
-console.log(translation); // "[ES] Welcome to our app!"
+	dictionary.files[filePath].entries[scopePath].content[locale]
+console.log(translation) // "[ES] Welcome to our app!"
 ```
 
 ## API Reference
@@ -250,16 +261,16 @@ console.log(translation); // "[ES] Welcome to our app!"
 The main parsing engine that extracts translatable strings from your codebase.
 
 ```typescript
-import { Parser, ParserOptions } from "algebras-auto-intl";
+import { Parser, ParserOptions } from 'algebras-auto-intl'
 
-const parser = new Parser(options);
+const parser = new Parser(options)
 ```
 
 #### ParserOptions
 
 ```typescript
 interface ParserOptions {
-  includeNodeModules?: boolean; // Default: false
+	includeNodeModules?: boolean // Default: false
 }
 ```
 
@@ -272,17 +283,17 @@ interface ParserOptions {
 Implement custom translation providers:
 
 ```typescript
-import { Translator, ITranslateProvider } from "algebras-auto-intl";
+import { Translator, ITranslateProvider } from 'algebras-auto-intl'
 
 class MyTranslateProvider implements ITranslateProvider {
-  async translateText(text: string, targetLang: string): Promise<string> {
-    // Your translation logic here
-    return translatedText;
-  }
+	async translateText(text: string, targetLang: string): Promise<string> {
+		// Your translation logic here
+		return translatedText
+	}
 }
 
-const translator = new Translator(new MyTranslateProvider());
-const dictionary = await translator.translate(scopeMap, ["es", "fr", "de"]);
+const translator = new Translator(new MyTranslateProvider())
+const dictionary = await translator.translate(scopeMap, ['es', 'fr', 'de'])
 ```
 
 ### Dictionary Generation
@@ -290,14 +301,14 @@ const dictionary = await translator.translate(scopeMap, ["es", "fr", "de"]);
 The new dictionary generation system automatically creates translation files during build:
 
 ```typescript
-import { DictionaryGenerator } from "algebras-auto-intl";
+import { DictionaryGenerator } from 'algebras-auto-intl'
 
 const generator = new DictionaryGenerator({
-  targetLocales: ["en", "es", "fr", "de"],
-  outputDir: "src/intl"
-});
+	targetLocales: ['en', 'es', 'fr', 'de'],
+	outputDir: 'src/intl',
+})
 
-await generator.generateDictionary(sourceMap);
+await generator.generateDictionary(sourceMap)
 ```
 
 ### Dictionary Loader Utility
@@ -305,32 +316,32 @@ await generator.generateDictionary(sourceMap);
 Use the DictionaryLoader to easily access translations in your application:
 
 ```typescript
-import { DictionaryLoader } from "algebras-auto-intl/integration/DictionaryLoader";
+import { DictionaryLoader } from 'algebras-auto-intl/integration/DictionaryLoader'
 
-const loader = new DictionaryLoader("./intl/dictionary.js");
+const loader = new DictionaryLoader('./intl/dictionary.js')
 
 // Get a specific translation
 const translation = await loader.getTranslation(
-  "src/components/Welcome.tsx",
-  "program/body1/declaration/body/body1/argument/children1",
-  "es"
-);
+	'src/components/Welcome.tsx',
+	'program/body1/declaration/body/body1/argument/children1',
+	'es'
+)
 
 // Get all available locales
-const locales = await loader.getAvailableLocales();
+const locales = await loader.getAvailableLocales()
 
 // Get all translations for a file
 const fileTranslations = await loader.getFileTranslations(
-  "src/components/Welcome.tsx",
-  "es"
-);
+	'src/components/Welcome.tsx',
+	'es'
+)
 
 // Check if a translation exists
 const exists = await loader.hasTranslation(
-  "src/components/Welcome.tsx",
-  "program/body1/declaration/body/body1/argument/children1",
-  "es"
-);
+	'src/components/Welcome.tsx',
+	'program/body1/declaration/body/body1/argument/children1',
+	'es'
+)
 ```
 
 ### Storage Classes
@@ -340,11 +351,11 @@ const exists = await loader.hasTranslation(
 Manages the extracted source strings:
 
 ```typescript
-import { SourceStore } from "algebras-auto-intl";
+import { SourceStore } from 'algebras-auto-intl'
 
-const store = new SourceStore();
-store.save(scopeMap);
-const loaded = store.load();
+const store = new SourceStore()
+store.save(scopeMap)
+const loaded = store.load()
 ```
 
 #### DictionaryStore
@@ -352,11 +363,11 @@ const loaded = store.load();
 Manages translated dictionaries:
 
 ```typescript
-import { DictionaryStore } from "algebras-auto-intl";
+import { DictionaryStore } from 'algebras-auto-intl'
 
-const store = new DictionaryStore();
-store.save(dictionary);
-const merged = store.merge(newTranslations);
+const store = new DictionaryStore()
+store.save(dictionary)
+const merged = store.merge(newTranslations)
 ```
 
 ## File Structure
@@ -389,28 +400,32 @@ The library supports two translation modes:
 High-quality automatic translations using Algebras AI:
 
 ```typescript
-import { AlgebrasTranslationProvider, DictionaryGenerator } from "algebras-auto-intl";
+import {
+	AlgebrasTranslationProvider,
+	DictionaryGenerator,
+} from 'algebras-auto-intl'
 
 const provider = new AlgebrasTranslationProvider({
-  apiKey: process.env.ALGEBRAS_API_KEY!,
-  apiUrl: "https://platform.algebras.ai/api/v1",
-  // Optional: Add custom translation settings
-  // glossaryId: "your-glossary-id",
-  // prompt: "Translate in a professional tone",
-  // ignoreCache: false
-});
+	apiKey: process.env.ALGEBRAS_API_KEY!,
+	apiUrl: 'https://platform.algebras.ai/api/v1',
+	// Optional: Add custom translation settings
+	// glossaryId: "your-glossary-id",
+	// prompt: "Translate in a professional tone",
+	// ignoreCache: false
+})
 
 const generator = new DictionaryGenerator({
-  defaultLocale: "en",
-  targetLocales: ["es", "fr", "de"],
-  outputDir: "./src/intl",
-  translationProvider: provider
-});
+	defaultLocale: 'en',
+	targetLocales: ['es', 'fr', 'de'],
+	outputDir: './src/intl',
+	translationProvider: provider,
+})
 
-await generator.generateDictionary(sourceMap);
+await generator.generateDictionary(sourceMap)
 ```
 
 Features:
+
 - High-quality translations using Algebras AI batch endpoint
 - Batch processing (up to 20 texts per API call, API maximum)
 - Automatic caching to avoid duplicate API calls
@@ -447,20 +462,20 @@ By default, the following directories are excluded:
 ### Custom Translation Workflow
 
 ```typescript
-import { Parser, Translator, DictionaryStore } from "algebras-auto-intl";
+import { Parser, Translator, DictionaryStore } from 'algebras-auto-intl'
 
 // 1. Extract strings
-const parser = new Parser();
-const sources = await parser.parseProject();
+const parser = new Parser()
+const sources = await parser.parseProject()
 
 // 2. Translate
-const translator = new Translator(myProvider);
-const translations = await translator.translate(sources, ["es", "fr"]);
+const translator = new Translator(myProvider)
+const translations = await translator.translate(sources, ['es', 'fr'])
 
 // 3. Store translations
-const dictStore = new DictionaryStore();
-const merged = dictStore.merge(translations);
-dictStore.save(merged);
+const dictStore = new DictionaryStore()
+const merged = dictStore.merge(translations)
+dictStore.save(merged)
 ```
 
 ### Integration with Build Systems
@@ -469,24 +484,24 @@ The Next.js plugin automatically runs during development and build processes. Fo
 
 ```javascript
 // webpack.config.js
-const { Parser } = require("algebras-auto-intl");
+const { Parser } = require('algebras-auto-intl')
 
 module.exports = {
-  plugins: [
-    {
-      apply: (compiler) => {
-        compiler.hooks.beforeCompile.tapAsync(
-          "AutoIntl",
-          async (params, callback) => {
-            const parser = new Parser();
-            await parser.parseProject();
-            callback();
-          }
-        );
-      }
-    }
-  ]
-};
+	plugins: [
+		{
+			apply: compiler => {
+				compiler.hooks.beforeCompile.tapAsync(
+					'AutoIntl',
+					async (params, callback) => {
+						const parser = new Parser()
+						await parser.parseProject()
+						callback()
+					}
+				)
+			},
+		},
+	],
+}
 ```
 
 ## Performance
@@ -509,6 +524,7 @@ MIT License - see LICENSE file for details.
 This project includes a unit test suite using Vitest (jsdom) and Testing Library.
 
 - How to run tests:
+
   - `npm run test` (one-off)
   - `npm run test:watch` (watch mode)
 
