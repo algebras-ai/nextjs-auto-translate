@@ -1,21 +1,21 @@
 // src/index.ts
-import fs from "fs";
-import type { NextConfig } from "next";
-import path from "path";
-import { fileURLToPath } from "url";
-import { Parser } from "./parser/Parser.js";
-import { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
-import { AlgebrasTranslationProvider } from "./translator/AlgebrasTranslationProvider.js";
-import { ScopeMap } from "./types.js";
-import { LanguageCode } from "./data/languageMap.js";
+import fs from 'fs';
+import type { NextConfig } from 'next';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { Parser } from './parser/Parser.js';
+import { DictionaryGenerator } from './translator/DictionaryGenerator.js';
+import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
+import { ScopeMap } from './types.js';
+import { LanguageCode } from './data/languageMap.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Re-export commonly used types and components
-export { LanguageCode } from "./data/languageMap.js";
-export { AlgebrasTranslationProvider } from "./translator/AlgebrasTranslationProvider.js";
-export { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
+export { LanguageCode } from './data/languageMap.js';
+export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
+export { DictionaryGenerator } from './translator/DictionaryGenerator.js';
 // Note: AlgebrasIntlProvider should be imported directly from the runtime path
 // export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
 
@@ -42,10 +42,10 @@ export interface PluginOptions {
 
 export default function myPlugin(options: PluginOptions) {
   const {
-    defaultLocale = "en",
+    defaultLocale = 'en',
     targetLocales,
     includeNodeModules = false,
-    outputDir = "./src/intl"
+    outputDir = './src/intl',
   } = options;
 
   process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
@@ -53,9 +53,9 @@ export default function myPlugin(options: PluginOptions) {
   const scheduledFlagPath = path.resolve(
     process.cwd(),
     outputDir,
-    ".scheduled"
+    '.scheduled'
   );
-  const parserLockPath = path.resolve(process.cwd(), outputDir, ".lock");
+  const parserLockPath = path.resolve(process.cwd(), outputDir, '.lock');
 
   async function prepareSourceMap() {
     try {
@@ -68,50 +68,55 @@ export default function myPlugin(options: PluginOptions) {
       const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
       const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
 
-      console.log("\n========================================");
-      console.log("[AlgebrasIntl] Translation Configuration:");
-      console.log("  API Key:", apiKey ? `${apiKey.substring(0, 10)}...` : "NOT FOUND");
-      console.log("  API URL:", apiUrl || "https://beta.algebras.ai/api/v1");
-      console.log("  Target Locales:", targetLocales.join(", "));
-      console.log("========================================\n");
+      console.log('\n========================================');
+      console.log('[AlgebrasIntl] Translation Configuration:');
+      console.log(
+        '  API Key:',
+        apiKey ? `${apiKey.substring(0, 10)}...` : 'NOT FOUND'
+      );
+      console.log('  API URL:', apiUrl || 'https://beta.algebras.ai/api/v1');
+      console.log('  Target Locales:', targetLocales.join(', '));
+      console.log('========================================\n');
 
       if (apiKey) {
-        console.log("[AlgebrasIntl] ✅ Using Algebras AI translation service");
+        console.log('[AlgebrasIntl] ✅ Using Algebras AI translation service');
         translationProvider = new AlgebrasTranslationProvider({
           apiKey,
-          apiUrl: apiUrl || "https://platform.algebras.ai/api/v1"
+          apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
         });
       } else {
-        console.warn("[AlgebrasIntl] ⚠️  No API key found!");
-        console.warn("[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config");
-        console.warn("[AlgebrasIntl] Falling back to mock translations...\n");
+        console.warn('[AlgebrasIntl] ⚠️  No API key found!');
+        console.warn(
+          '[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config'
+        );
+        console.warn('[AlgebrasIntl] Falling back to mock translations...\n');
       }
 
       const dictionaryGenerator = new DictionaryGenerator({
         defaultLocale,
         targetLocales,
         outputDir,
-        translationProvider
+        translationProvider,
       });
       await dictionaryGenerator.generateDictionary(sourceMap);
 
       fs.writeFileSync(
-        path.resolve(outputDir, "source.json"),
+        path.resolve(outputDir, 'source.json'),
         JSON.stringify(sourceMap, null, 2),
-        "utf-8"
+        'utf-8'
       );
     } catch (err) {
-      console.error("❌ Failed to parse/generate source map:", err);
+      console.error('❌ Failed to parse/generate source map:', err);
       cachedSourceMap = null;
     }
   }
 
   function wrapWebpack(
-    nextWebpack?: NextConfig["webpack"]
-  ): NextConfig["webpack"] {
+    nextWebpack?: NextConfig['webpack']
+  ): NextConfig['webpack'] {
     // Call prepareSourceMap without awaiting (runs in background)
     prepareSourceMap().catch((err) => {
-      console.error("❌ Background source map preparation failed:", err);
+      console.error('❌ Background source map preparation failed:', err);
     });
     return function webpack(config, options) {
       config.module.rules.push({
@@ -119,16 +124,16 @@ export default function myPlugin(options: PluginOptions) {
         exclude: /node_modules/,
         use: [
           {
-            loader: path.resolve(__dirname, "./webpack/auto-intl-loader.js"),
+            loader: path.resolve(__dirname, './webpack/auto-intl-loader.js'),
             options: {
               sourceMap: cachedSourceMap ?? {},
-              outputDir
-            }
-          }
-        ]
+              outputDir,
+            },
+          },
+        ],
       });
 
-      if (typeof nextWebpack === "function") {
+      if (typeof nextWebpack === 'function') {
         return nextWebpack(config, options);
       }
 
@@ -136,40 +141,42 @@ export default function myPlugin(options: PluginOptions) {
     };
   }
 
-  function wrapTurbopack(
-    nextTurbopack?: any
-  ): any {
+  function wrapTurbopack(nextTurbopack?: any): any {
     // Call prepareSourceMap without awaiting (runs in background)
     prepareSourceMap().catch((err) => {
-      console.error("❌ Background source map preparation failed:", err);
+      console.error('❌ Background source map preparation failed:', err);
     });
 
     // Use relative path from node_modules - Turbopack needs serializable paths
     // The transformer will be resolved from node_modules/nextjs-auto-intl
-    const transformerPath = "nextjs-auto-intl/turbopack/auto-intl-transformer";
-    
-    console.log(`[AutoIntl] 🔧 Configuring Turbopack transformer: ${transformerPath}`);
+    const transformerPath = 'nextjs-auto-intl/turbopack/auto-intl-transformer';
+
+    console.log(
+      `[AutoIntl] 🔧 Configuring Turbopack transformer: ${transformerPath}`
+    );
     console.log(`[AutoIntl] 📁 Output dir: ${outputDir}`);
-    console.log(`[AutoIntl] 📊 SourceMap cached: ${cachedSourceMap ? Object.keys(cachedSourceMap.files || {}).length + ' files' : 'not loaded yet'}`);
-    
+    console.log(
+      `[AutoIntl] 📊 SourceMap cached: ${cachedSourceMap ? Object.keys(cachedSourceMap.files || {}).length + ' files' : 'not loaded yet'}`
+    );
+
     // Turbopack rules format for Next.js 16
     // Options must be JSON-serializable, so we only pass outputDir
     // The transformer will load sourceMap from disk
     const rules: Record<string, any> = { ...nextTurbopack?.rules };
-    
+
     // Add rules for TypeScript/JavaScript files
     // Turbopack uses glob patterns similar to webpack
     const patterns = [
-      "*.{js,jsx,ts,tsx}",
-      "app/**/*.{js,jsx,ts,tsx}",
-      "src/**/*.{js,jsx,ts,tsx}",
-      "pages/**/*.{js,jsx,ts,tsx}",
-      "components/**/*.{js,jsx,ts,tsx}",
-      "lib/**/*.{js,jsx,ts,tsx}",
-      "utils/**/*.{js,jsx,ts,tsx}",
-      "hooks/**/*.{js,jsx,ts,tsx}"
+      '*.{js,jsx,ts,tsx}',
+      'app/**/*.{js,jsx,ts,tsx}',
+      'src/**/*.{js,jsx,ts,tsx}',
+      'pages/**/*.{js,jsx,ts,tsx}',
+      'components/**/*.{js,jsx,ts,tsx}',
+      'lib/**/*.{js,jsx,ts,tsx}',
+      'utils/**/*.{js,jsx,ts,tsx}',
+      'hooks/**/*.{js,jsx,ts,tsx}',
     ];
-    
+
     for (const pattern of patterns) {
       // Turbopack format: { loaders: [loaderPath] }
       // Don't set 'as' - let Turbopack preserve the original file type (tsx/jsx)
@@ -178,22 +185,27 @@ export default function myPlugin(options: PluginOptions) {
         loaders: [transformerPath],
         // Pass only serializable options
         options: {
-          outputDir
-        }
+          outputDir,
+        },
       };
     }
-    
-    console.log(`[AutoIntl] ✅ Configured ${patterns.length} Turbopack patterns`);
-    console.log(`[AutoIntl] 📋 Sample rule for *.{js,jsx,ts,tsx}:`, JSON.stringify(rules["*.{js,jsx,ts,tsx}"] || {}, null, 2));
-    
+
+    console.log(
+      `[AutoIntl] ✅ Configured ${patterns.length} Turbopack patterns`
+    );
+    console.log(
+      `[AutoIntl] 📋 Sample rule for *.{js,jsx,ts,tsx}:`,
+      JSON.stringify(rules['*.{js,jsx,ts,tsx}'] || {}, null, 2)
+    );
+
     // Return config with rules - Next.js 16 format
     const result = {
       ...nextTurbopack,
-      rules
+      rules,
     };
-    
+
     console.log(`[AutoIntl] 🔍 Turbopack config keys:`, Object.keys(result));
-    
+
     return result;
   }
 
@@ -206,13 +218,16 @@ export default function myPlugin(options: PluginOptions) {
       console.log(`[AutoIntl] ⚙️  Applying configs (webpack + turbopack)...`);
       // Always configure webpack (for webpack builds)
       config.webpack = wrapWebpack(nextConfig.webpack);
-      
+
       // Always configure turbopack (for Turbopack builds)
       // Next.js 16 uses `turbopack` directly at the top level
       const existingTurbopack = (config as any).turbopack;
-      console.log(`[AutoIntl] 📦 Existing turbopack config:`, existingTurbopack ? 'found' : 'none');
+      console.log(
+        `[AutoIntl] 📦 Existing turbopack config:`,
+        existingTurbopack ? 'found' : 'none'
+      );
       const wrappedTurbopack = wrapTurbopack(existingTurbopack);
-      
+
       // Set turbopack directly (Next.js 16)
       (config as any).turbopack = wrappedTurbopack;
       console.log(`[AutoIntl] ✅ Set config.turbopack`);
@@ -224,7 +239,7 @@ export default function myPlugin(options: PluginOptions) {
     }
 
     if (fs.existsSync(scheduledFlagPath)) {
-      const flagPid = parseInt(fs.readFileSync(scheduledFlagPath, "utf-8"));
+      const flagPid = parseInt(fs.readFileSync(scheduledFlagPath, 'utf-8'));
       if (isProcessAlive(flagPid)) {
         applyConfigs();
         return config;

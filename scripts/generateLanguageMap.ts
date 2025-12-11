@@ -1,12 +1,12 @@
-import { writeFileSync, mkdirSync, existsSync } from "fs";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
-import { languages } from "../data/languages";
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { languages } from '../data/languages';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const outputPath = resolve(__dirname, "../src/data/languageMap.ts");
+const outputPath = resolve(__dirname, '../src/data/languageMap.ts');
 const outputDir = dirname(outputPath);
 if (!existsSync(outputDir)) {
   mkdirSync(outputDir, { recursive: true });
@@ -30,13 +30,13 @@ const fileContent = `// 🛑 GENERATED FILE — DO NOT EDIT MANUALLY
 
 /** Language codes */
 export enum LanguageCode {
-${enumEntries.join("\n")}
+${enumEntries.join('\n')}
 }
 
 export const languageMap = {
-${mapEntries.join("\n")}
+${mapEntries.join('\n')}
 } as const;
 `;
 
-writeFileSync(outputPath, fileContent, "utf-8");
-console.log("✅ languageMap.ts generated at:", outputPath);
+writeFileSync(outputPath, fileContent, 'utf-8');
+console.log('✅ languageMap.ts generated at:', outputPath);

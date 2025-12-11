@@ -1,7 +1,7 @@
-import { LanguageCode } from "./data/languageMap.js";
-export { LanguageCode } from "./data/languageMap.js";
-export { AlgebrasTranslationProvider } from "./translator/AlgebrasTranslationProvider.js";
-export { DictionaryGenerator } from "./translator/DictionaryGenerator.js";
+import { LanguageCode } from './data/languageMap.js';
+export { LanguageCode } from './data/languageMap.js';
+export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
+export { DictionaryGenerator } from './translator/DictionaryGenerator.js';
 export interface PluginOptions {
     defaultLocale: LanguageCode;
     targetLocales: LanguageCode[];

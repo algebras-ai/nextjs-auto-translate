@@ -1,5 +1,5 @@
 // src/translator/AlgebrasTranslationProvider.ts
-import { ITranslateProvider } from "./Translator.js";
+import { ITranslateProvider } from './Translator.js';
 
 export interface AlgebrasTranslationOptions {
   apiKey: string;
@@ -54,15 +54,23 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
 
   constructor(options: AlgebrasTranslationOptions) {
     this.apiKey = options.apiKey;
-    this.apiUrl = options.apiUrl || "https://platform.algebras.ai/api/v1";
+    this.apiUrl = options.apiUrl || 'https://platform.algebras.ai/api/v1';
     this.glossaryId = options.glossaryId;
     this.prompt = options.prompt;
     this.flag = options.flag;
     this.ignoreCache = options.ignoreCache;
-    
-    console.log(`[AlgebrasTranslationProvider] Initialized with endpoint: ${this.apiUrl}`);
-    if (this.glossaryId) console.log(`[AlgebrasTranslationProvider] Using glossaryId: ${this.glossaryId}`);
-    if (this.prompt) console.log(`[AlgebrasTranslationProvider] Using custom prompt: ${this.prompt}`);
+
+    console.log(
+      `[AlgebrasTranslationProvider] Initialized with endpoint: ${this.apiUrl}`
+    );
+    if (this.glossaryId)
+      console.log(
+        `[AlgebrasTranslationProvider] Using glossaryId: ${this.glossaryId}`
+      );
+    if (this.prompt)
+      console.log(
+        `[AlgebrasTranslationProvider] Using custom prompt: ${this.prompt}`
+      );
   }
 
   /**
@@ -86,7 +94,7 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
   async translateBatch(
     texts: string[],
     targetLanguage: string,
-    sourceLanguage: string = "en"
+    sourceLanguage: string = 'en'
   ): Promise<BatchTranslationResponse> {
     if (texts.length === 0) {
       return { translations: [] };
@@ -98,7 +106,9 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
         `[AlgebrasTranslation] Quota exceeded - using fallback translations for ${texts.length} texts to ${targetLanguage}...`
       );
       return {
-        translations: texts.map((text) => `[${targetLanguage.toUpperCase()}] ${text}`)
+        translations: texts.map(
+          (text) => `[${targetLanguage.toUpperCase()}] ${text}`
+        ),
       };
     }
 
@@ -111,7 +121,7 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
       const requestBody: any = {
         texts,
         sourceLanguage,
-        targetLanguage
+        targetLanguage,
       };
 
       // Only add optional fields if they are explicitly set
@@ -128,38 +138,52 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
         requestBody.ignoreCache = this.ignoreCache;
       }
 
-      const response = await fetch(`${this.apiUrl}/translation/translate-batch`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Api-Key": this.apiKey
-        },
-        body: JSON.stringify(requestBody)
-      });
+      const response = await fetch(
+        `${this.apiUrl}/translation/translate-batch`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Api-Key': this.apiKey,
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
-        
+
         // Check if this is a quota exceeded error
         if (response.status === 402) {
           try {
             const errorJson = JSON.parse(errorText);
             if (errorJson.error?.quota_exceeded === true) {
               this.quotaExceeded = true;
-              console.error("\n⚠️  [AlgebrasTranslation] Quota exceeded detected!");
-              console.error("   Organization has no quota left");
-              console.error("   All subsequent translations will use fallback translations\n");
+              console.error(
+                '\n⚠️  [AlgebrasTranslation] Quota exceeded detected!'
+              );
+              console.error('   Organization has no quota left');
+              console.error(
+                '   All subsequent translations will use fallback translations\n'
+              );
             }
           } catch (parseError) {
             // If we can't parse the error, check the error message
-            if (errorText.includes("quota_exceeded") || errorText.includes("no quota left")) {
+            if (
+              errorText.includes('quota_exceeded') ||
+              errorText.includes('no quota left')
+            ) {
               this.quotaExceeded = true;
-              console.error("\n⚠️  [AlgebrasTranslation] Quota exceeded detected!");
-              console.error("   All subsequent translations will use fallback translations\n");
+              console.error(
+                '\n⚠️  [AlgebrasTranslation] Quota exceeded detected!'
+              );
+              console.error(
+                '   All subsequent translations will use fallback translations\n'
+              );
             }
           }
         }
-        
+
         throw new Error(
           `Algebras API error: ${response.status} ${response.statusText} - ${errorText}`
         );
@@ -167,14 +191,18 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
 
       const apiResponse: AlgebrasAPIResponse = await response.json();
 
-      if (!apiResponse.data || !apiResponse.data.translations || !Array.isArray(apiResponse.data.translations)) {
-        throw new Error("Invalid response format: missing translations array");
+      if (
+        !apiResponse.data ||
+        !apiResponse.data.translations ||
+        !Array.isArray(apiResponse.data.translations)
+      ) {
+        throw new Error('Invalid response format: missing translations array');
       }
 
       // Extract translations in order
       const translations = apiResponse.data.translations
         .sort((a, b) => a.index - b.index)
-        .map(t => t.content);
+        .map((t) => t.content);
 
       console.log(
         `[AlgebrasTranslation] Successfully translated ${texts.length} texts to ${targetLanguage} (${apiResponse.data.word_count} words, ${apiResponse.data.batch_summary.total_credits} credits)`
@@ -185,7 +213,10 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
       // Also check error message in catch block in case error was thrown before parsing
       if (!this.quotaExceeded && error instanceof Error) {
         const errorMessage = error.message;
-        if (errorMessage.includes("402") || errorMessage.includes("Payment Required")) {
+        if (
+          errorMessage.includes('402') ||
+          errorMessage.includes('Payment Required')
+        ) {
           try {
             // Try to extract JSON from error message
             const jsonMatch = errorMessage.match(/\{.*\}/s);
@@ -193,42 +224,67 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
               const errorJson = JSON.parse(jsonMatch[0]);
               if (errorJson.error?.quota_exceeded === true) {
                 this.quotaExceeded = true;
-                console.error("\n⚠️  [AlgebrasTranslation] Quota exceeded detected!");
-                console.error("   Organization has no quota left");
-                console.error("   All subsequent translations will use fallback translations\n");
+                console.error(
+                  '\n⚠️  [AlgebrasTranslation] Quota exceeded detected!'
+                );
+                console.error('   Organization has no quota left');
+                console.error(
+                  '   All subsequent translations will use fallback translations\n'
+                );
               }
-            } else if (errorMessage.includes("quota_exceeded") || errorMessage.includes("no quota left")) {
+            } else if (
+              errorMessage.includes('quota_exceeded') ||
+              errorMessage.includes('no quota left')
+            ) {
               this.quotaExceeded = true;
-              console.error("\n⚠️  [AlgebrasTranslation] Quota exceeded detected!");
-              console.error("   All subsequent translations will use fallback translations\n");
+              console.error(
+                '\n⚠️  [AlgebrasTranslation] Quota exceeded detected!'
+              );
+              console.error(
+                '   All subsequent translations will use fallback translations\n'
+              );
             }
           } catch (parseError) {
             // If parsing fails, check for quota keywords in error message
-            if (errorMessage.includes("quota_exceeded") || errorMessage.includes("no quota left")) {
+            if (
+              errorMessage.includes('quota_exceeded') ||
+              errorMessage.includes('no quota left')
+            ) {
               this.quotaExceeded = true;
-              console.error("\n⚠️  [AlgebrasTranslation] Quota exceeded detected!");
-              console.error("   All subsequent translations will use fallback translations\n");
+              console.error(
+                '\n⚠️  [AlgebrasTranslation] Quota exceeded detected!'
+              );
+              console.error(
+                '   All subsequent translations will use fallback translations\n'
+              );
             }
           }
         }
       }
 
-      console.error("\n❌ [AlgebrasTranslation] Translation API Error:");
-      console.error("   Endpoint:", `${this.apiUrl}/translation/translate-batch`);
-      console.error("   Target Language:", targetLanguage);
-      console.error("   Number of texts:", texts.length);
-      console.error("   Error details:", error);
-      
+      console.error('\n❌ [AlgebrasTranslation] Translation API Error:');
+      console.error(
+        '   Endpoint:',
+        `${this.apiUrl}/translation/translate-batch`
+      );
+      console.error('   Target Language:', targetLanguage);
+      console.error('   Number of texts:', texts.length);
+      console.error('   Error details:', error);
+
       // If quota is exceeded, log a specific message
       if (this.quotaExceeded) {
-        console.error("   ⚠️  Quota exceeded - using fallback translations for remaining items\n");
+        console.error(
+          '   ⚠️  Quota exceeded - using fallback translations for remaining items\n'
+        );
       } else {
-        console.error("   ⚠️  Falling back to mock translations\n");
+        console.error('   ⚠️  Falling back to mock translations\n');
       }
-      
+
       // Fallback: return original texts with locale prefix
       return {
-        translations: texts.map((text) => `[${targetLanguage.toUpperCase()}] ${text}`)
+        translations: texts.map(
+          (text) => `[${targetLanguage.toUpperCase()}] ${text}`
+        ),
       };
     }
   }
@@ -240,7 +296,7 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
   async translateAll(
     textsMap: Map<string, string>,
     targetLanguages: string[],
-    sourceLanguage: string = "en"
+    sourceLanguage: string = 'en'
   ): Promise<Map<string, Map<string, string>>> {
     const keys = Array.from(textsMap.keys());
     const texts = Array.from(textsMap.values());
@@ -264,12 +320,14 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
         console.log(
           `[AlgebrasTranslation] Quota exceeded - using fallback translations for all texts to ${targetLang}...`
         );
-        
+
         // Generate fallback translations for all texts in this language
         for (let i = 0; i < texts.length; i++) {
           const key = keys[i];
           const text = texts[i];
-          results.get(key)!.set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+          results
+            .get(key)!
+            .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
         }
         continue;
       }
@@ -285,12 +343,14 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
           console.log(
             `[AlgebrasTranslation] Quota exceeded during batch processing - using fallback translations for remaining batches...`
           );
-          
+
           // Generate fallback translations for all remaining texts in this language
           for (let j = i; j < texts.length; j++) {
             const key = keys[j];
             const text = texts[j];
-            results.get(key)!.set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+            results
+              .get(key)!
+              .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
           }
           break;
         }
@@ -321,12 +381,14 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
           console.log(
             `[AlgebrasTranslation] Quota exceeded detected - using fallback translations for remaining items...`
           );
-          
+
           // Generate fallback translations for all remaining texts in this language
           for (let j = i + batchSize; j < texts.length; j++) {
             const key = keys[j];
             const text = texts[j];
-            results.get(key)!.set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+            results
+              .get(key)!
+              .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
           }
           break; // Stop processing remaining batches for this language
         }
@@ -338,7 +400,10 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
       }
 
       // Delay between languages to avoid rate limiting (only if quota not exceeded)
-      if (!this.quotaExceeded && targetLanguages.indexOf(targetLang) < targetLanguages.length - 1) {
+      if (
+        !this.quotaExceeded &&
+        targetLanguages.indexOf(targetLang) < targetLanguages.length - 1
+      ) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
@@ -346,4 +411,3 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
     return results;
   }
 }
-

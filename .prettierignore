@@ -1,0 +1,9 @@
+node_modules
+dist
+.next
+coverage
+*.min.js
+package-lock.json
+vitest.config.ts
+tsconfig.json
+

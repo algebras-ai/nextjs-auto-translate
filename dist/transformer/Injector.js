@@ -11,7 +11,7 @@ export function injectTranslated(scope) {
     return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
     ), null, [], true);
 }
-// Ensures import Translated from 'algebras-auto-intl/runtime/client/components/Translated' exists
+// Ensures import Translated from 'nextjs-auto-intl/runtime/client/components/Translated' exists
 export function ensureImportTranslated(ast) {
     let hasImport = false;
     traverse(ast, {

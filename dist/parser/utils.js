@@ -1,10 +1,10 @@
-import * as t from "@babel/types";
+import * as t from '@babel/types';
 /**
  * Builds a readable content string from a JSXElement node,
  * using pseudo-tags for JSXElements and trimmed text for JSXText.
  */
 export function buildContent(node) {
-    let out = "";
+    let out = '';
     const children = node.children;
     for (let i = 0; i < children.length; i++) {
         const child = children[i];
@@ -15,11 +15,13 @@ export function buildContent(node) {
             // Preserve leading space if this text comes after an element or expression
             const hasLeadingSpace = /^\s/.test(text);
             const shouldPreserveLeadingSpace = hasLeadingSpace &&
-                (prevChild && (t.isJSXElement(prevChild) || t.isJSXExpressionContainer(prevChild)));
+                prevChild &&
+                (t.isJSXElement(prevChild) || t.isJSXExpressionContainer(prevChild));
             // Preserve trailing space if this text comes before an element or expression
             const hasTrailingSpace = /\s$/.test(text);
             const shouldPreserveTrailingSpace = hasTrailingSpace &&
-                (nextChild && (t.isJSXElement(nextChild) || t.isJSXExpressionContainer(nextChild)));
+                nextChild &&
+                (t.isJSXElement(nextChild) || t.isJSXExpressionContainer(nextChild));
             let processedText = text;
             if (shouldPreserveLeadingSpace && shouldPreserveTrailingSpace) {
                 // Keep as-is (has spaces on both sides that are meaningful)
@@ -53,7 +55,7 @@ export function buildContent(node) {
         }
         else if (t.isJSXElement(child)) {
             const nameNode = child.openingElement.name;
-            let name = "Unknown";
+            let name = 'Unknown';
             if (t.isJSXIdentifier(nameNode)) {
                 name = nameNode.name;
             }
@@ -61,7 +63,7 @@ export function buildContent(node) {
                 name = nameNode.property.name;
             }
             // Skip <p> tags - just include their content directly without the element wrapper
-            if (name === "p") {
+            if (name === 'p') {
                 const inner = buildContent(child);
                 out += inner;
             }
@@ -79,13 +81,13 @@ export function buildContent(node) {
  */
 export function getRelativeScopePath(fullPath) {
     // Extract the meaningful part of the path after "program.body"
-    const parts = fullPath.split(".");
-    const bodyIndex = parts.findIndex((part) => part === "body");
-    if (bodyIndex !== -1 && parts[bodyIndex - 1] === "program") {
+    const parts = fullPath.split('.');
+    const bodyIndex = parts.findIndex((part) => part === 'body');
+    if (bodyIndex !== -1 && parts[bodyIndex - 1] === 'program') {
         // Take everything after "program.body"
         const relativeParts = parts.slice(bodyIndex + 1);
-        return relativeParts.join("/").replace(/\[(\d+)\]/g, "$1");
+        return relativeParts.join('/').replace(/\[(\d+)\]/g, '$1');
     }
     // Fallback: use the full path but clean it up
-    return fullPath.replace(/\[(\d+)\]/g, "$1").replace(/\./g, "/");
+    return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
 }
