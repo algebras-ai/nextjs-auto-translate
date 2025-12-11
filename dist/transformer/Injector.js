@@ -1,33 +1,33 @@
-import generateDefault from "@babel/generator";
-import { parse } from "@babel/parser";
-import traverseDefault from "@babel/traverse";
-import * as t from "@babel/types";
-import path from "path";
+import generateDefault from '@babel/generator';
+import { parse } from '@babel/parser';
+import traverseDefault from '@babel/traverse';
+import * as t from '@babel/types';
+import path from 'path';
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = traverseDefault.default || traverseDefault;
 const generate = generateDefault.default || generateDefault;
 // Injects <Translated tKey="scope" /> in place of JSXText
 export function injectTranslated(scope) {
-    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("Translated"), [t.jsxAttribute(t.jsxIdentifier("tKey"), t.stringLiteral(scope))], true // self-closing
+    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
     ), null, [], true);
 }
-// Ensures import Translated from 'algebras-auto-intl/runtime/client/components/Translated' exists
+// Ensures import Translated from 'nextjs-auto-intl/runtime/client/components/Translated' exists
 export function ensureImportTranslated(ast) {
     let hasImport = false;
     traverse(ast, {
         ImportDeclaration(path) {
             if (path.node.source.value ===
-                "algebras-auto-intl/runtime/client/components/Translated" &&
+                'nextjs-auto-intl/runtime/client/components/Translated' &&
                 path.node.specifiers.some((s) => t.isImportDefaultSpecifier(s) &&
                     t.isIdentifier(s.local) &&
-                    s.local.name === "Translated")) {
+                    s.local.name === 'Translated')) {
                 hasImport = true;
                 path.stop();
             }
-        }
+        },
     });
     if (!hasImport) {
-        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier("Translated"))], t.stringLiteral("algebras-auto-intl/runtime/client/components/Translated"));
+        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Translated'))], t.stringLiteral('nextjs-auto-intl/runtime/client/components/Translated'));
         ast.program.body.unshift(importDecl);
     }
 }
@@ -37,28 +37,28 @@ export function ensureImportLocalesSwitcher(ast) {
     traverse(ast, {
         ImportDeclaration(path) {
             if (path.node.source.value ===
-                "algebras-auto-intl/runtime/client/components/LocaleSwitcher" &&
+                'nextjs-auto-intl/runtime/client/components/LocaleSwitcher' &&
                 path.node.specifiers.some((s) => t.isImportDefaultSpecifier(s) &&
                     t.isIdentifier(s.local) &&
-                    s.local.name === "LocalesSwitcher")) {
+                    s.local.name === 'LocalesSwitcher')) {
                 hasImport = true;
                 path.stop();
             }
-        }
+        },
     });
     if (!hasImport) {
-        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier("LocalesSwitcher"))], t.stringLiteral("algebras-auto-intl/runtime/client/components/LocaleSwitcher"));
+        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))], t.stringLiteral('nextjs-auto-intl/runtime/client/components/LocaleSwitcher'));
         ast.program.body.unshift(importDecl);
     }
 }
 // Create the language switcher element
 function createSwitcherElement() {
-    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("div"), [
-        t.jsxAttribute(t.jsxIdentifier("className"), t.stringLiteral("fixed top-4 right-4 z-[9999]")),
-    ], false), t.jsxClosingElement(t.jsxIdentifier("div")), [
-        t.jsxText("\n          "),
-        t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier("LocalesSwitcher"), [], true), null, [], true),
-        t.jsxText("\n        ")
+    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('div'), [
+        t.jsxAttribute(t.jsxIdentifier('className'), t.stringLiteral('fixed top-4 right-4 z-[9999]')),
+    ], false), t.jsxClosingElement(t.jsxIdentifier('div')), [
+        t.jsxText('\n          '),
+        t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('LocalesSwitcher'), [], true), null, [], true),
+        t.jsxText('\n        '),
     ], false);
 }
 // Inject LocalesSwitcher into the page component's return statement
@@ -75,7 +75,7 @@ export function injectLocaleSwitcher(ast) {
                 const switcherElement = createSwitcherElement();
                 // Try to inject as first child
                 if (Array.isArray(returnArg.children)) {
-                    returnArg.children.unshift(t.jsxText("\n        "), switcherElement);
+                    returnArg.children.unshift(t.jsxText('\n        '), switcherElement);
                     injected = true;
                     path.stop();
                 }
@@ -84,22 +84,23 @@ export function injectLocaleSwitcher(ast) {
             else if (t.isJSXFragment(returnArg)) {
                 const switcherElement = createSwitcherElement();
                 if (Array.isArray(returnArg.children)) {
-                    returnArg.children.unshift(t.jsxText("\n        "), switcherElement);
+                    returnArg.children.unshift(t.jsxText('\n        '), switcherElement);
                     injected = true;
                     path.stop();
                 }
             }
             // If return has a parenthesized expression (common in JSX), unwrap and try again
-            else if (t.isParenthesizedExpression(returnArg) && t.isJSXElement(returnArg.expression)) {
+            else if (t.isParenthesizedExpression(returnArg) &&
+                t.isJSXElement(returnArg.expression)) {
                 const jsxElement = returnArg.expression;
                 const switcherElement = createSwitcherElement();
                 if (Array.isArray(jsxElement.children)) {
-                    jsxElement.children.unshift(t.jsxText("\n        "), switcherElement);
+                    jsxElement.children.unshift(t.jsxText('\n        '), switcherElement);
                     injected = true;
                     path.stop();
                 }
             }
-        }
+        },
     });
     // Strategy 2: Handle arrow function expressions (common in Next.js pages)
     if (!injected) {
@@ -112,7 +113,7 @@ export function injectLocaleSwitcher(ast) {
                 if (t.isJSXElement(body)) {
                     const switcherElement = createSwitcherElement();
                     if (Array.isArray(body.children)) {
-                        body.children.unshift(t.jsxText("\n        "), switcherElement);
+                        body.children.unshift(t.jsxText('\n        '), switcherElement);
                         injected = true;
                         path.stop();
                     }
@@ -121,22 +122,23 @@ export function injectLocaleSwitcher(ast) {
                 else if (t.isJSXFragment(body)) {
                     const switcherElement = createSwitcherElement();
                     if (Array.isArray(body.children)) {
-                        body.children.unshift(t.jsxText("\n        "), switcherElement);
+                        body.children.unshift(t.jsxText('\n        '), switcherElement);
                         injected = true;
                         path.stop();
                     }
                 }
                 // If arrow function returns parenthesized JSX
-                else if (t.isParenthesizedExpression(body) && t.isJSXElement(body.expression)) {
+                else if (t.isParenthesizedExpression(body) &&
+                    t.isJSXElement(body.expression)) {
                     const jsxElement = body.expression;
                     const switcherElement = createSwitcherElement();
                     if (Array.isArray(jsxElement.children)) {
-                        jsxElement.children.unshift(t.jsxText("\n        "), switcherElement);
+                        jsxElement.children.unshift(t.jsxText('\n        '), switcherElement);
                         injected = true;
                         path.stop();
                     }
                 }
-            }
+            },
         });
     }
     // Strategy 3: If we didn't find a return statement, try to find any JSX element
@@ -150,19 +152,19 @@ export function injectLocaleSwitcher(ast) {
                 const tagName = openingElement.name;
                 // Look for common container elements: main, section, div, article
                 if (t.isJSXIdentifier(tagName) &&
-                    (tagName.name === "main" ||
-                        tagName.name === "section" ||
-                        tagName.name === "div" ||
-                        tagName.name === "article")) {
+                    (tagName.name === 'main' ||
+                        tagName.name === 'section' ||
+                        tagName.name === 'div' ||
+                        tagName.name === 'article')) {
                     const switcherElement = createSwitcherElement();
                     // Inject as first child
                     if (Array.isArray(path.node.children)) {
-                        path.node.children.unshift(t.jsxText("\n        "), switcherElement);
+                        path.node.children.unshift(t.jsxText('\n        '), switcherElement);
                         injected = true;
                         path.stop();
                     }
                 }
-            }
+            },
         });
     }
     // Strategy 4: If still not injected, wrap the entire return in a fragment
@@ -174,20 +176,16 @@ export function injectLocaleSwitcher(ast) {
                 const returnArg = path.node.argument;
                 const switcherElement = createSwitcherElement();
                 // Wrap return value in a fragment with the switcher
-                const fragment = t.jsxFragment(t.jsxOpeningFragment(), t.jsxClosingFragment(), [
-                    switcherElement,
-                    t.jsxText("\n        "),
-                    returnArg
-                ]);
+                const fragment = t.jsxFragment(t.jsxOpeningFragment(), t.jsxClosingFragment(), [switcherElement, t.jsxText('\n        '), returnArg]);
                 path.node.argument = fragment;
                 injected = true;
                 path.stop();
-            }
+            },
         });
     }
     // Log if injection failed (for debugging)
     if (!injected) {
-        console.warn("[AutoIntl] Failed to inject LocaleSwitcher - no suitable injection point found");
+        console.warn('[AutoIntl] Failed to inject LocaleSwitcher - no suitable injection point found');
     }
 }
 // Transforms the specified file, injecting t() calls
@@ -197,8 +195,8 @@ export function transformProject(code, options) {
     const relativePath = path
         .relative(process.cwd(), filePath)
         .split(path.sep)
-        .join("/");
-    const isPageFile = relativePath.includes("page.tsx") || relativePath.includes("page.jsx");
+        .join('/');
+    const isPageFile = relativePath.includes('page.tsx') || relativePath.includes('page.jsx');
     const isInSourceMap = options.sourceMap.files && options.sourceMap.files[relativePath];
     // For page files, always parse AST to inject language switcher
     // For other files, only process if they exist in sourceMap
@@ -208,8 +206,8 @@ export function transformProject(code, options) {
     let ast;
     try {
         ast = parse(code, {
-            sourceType: "module",
-            plugins: ["jsx", "typescript"]
+            sourceType: 'module',
+            plugins: ['jsx', 'typescript'],
         });
     }
     catch (e) {
@@ -227,8 +225,8 @@ export function transformProject(code, options) {
             JSXElement(path) {
                 const scopePath = path
                     .getPathLocation()
-                    .replace(/\[(\d+)\]/g, "$1")
-                    .replace(/\./g, "/");
+                    .replace(/\[(\d+)\]/g, '$1')
+                    .replace(/\./g, '/');
                 if (!fileScopes[scopePath])
                     return;
                 if (processedElements.has(scopePath))
@@ -240,8 +238,8 @@ export function transformProject(code, options) {
                     if (parentPath.isJSXElement && parentPath.isJSXElement()) {
                         const parentScopePath = parentPath
                             .getPathLocation()
-                            .replace(/\[(\d+)\]/g, "$1")
-                            .replace(/\./g, "/");
+                            .replace(/\[(\d+)\]/g, '$1')
+                            .replace(/\./g, '/');
                         if (fileScopes[parentScopePath]) {
                             return;
                         }
@@ -252,11 +250,13 @@ export function transformProject(code, options) {
                 const hasText = path.node.children.some((child) => t.isJSXText(child) && child.value.trim());
                 if (hasText) {
                     // Replace all children with a single Translated component
-                    path.node.children = [injectTranslated(`${relativePath}::${scopePath}`)];
+                    path.node.children = [
+                        injectTranslated(`${relativePath}::${scopePath}`),
+                    ];
                     processedElements.add(scopePath);
                     changed = true;
                 }
-            }
+            },
         });
         // Second pass: Handle any remaining JSXText nodes that weren't part of replaced elements
         traverse(ast, {
@@ -271,8 +271,8 @@ export function transformProject(code, options) {
                 // Find the scope for this element
                 const scopePath = jsxElement
                     .getPathLocation()
-                    .replace(/\[(\d+)\]/g, "$1")
-                    .replace(/\./g, "/");
+                    .replace(/\[(\d+)\]/g, '$1')
+                    .replace(/\./g, '/');
                 // Skip if this element was already processed in the first pass
                 if (processedElements.has(scopePath))
                     return;
@@ -284,8 +284,8 @@ export function transformProject(code, options) {
                     if (parentPath.isJSXElement && parentPath.isJSXElement()) {
                         const parentScopePath = parentPath
                             .getPathLocation()
-                            .replace(/\[(\d+)\]/g, "$1")
-                            .replace(/\./g, "/");
+                            .replace(/\[(\d+)\]/g, '$1')
+                            .replace(/\./g, '/');
                         if (fileScopes[parentScopePath]) {
                             return;
                         }
@@ -295,7 +295,7 @@ export function transformProject(code, options) {
                 // Replace text with <Translated tKey="scope" />
                 path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`));
                 changed = true;
-            }
+            },
         });
         // Add Translated import if we made text changes
         if (changed) {
@@ -312,7 +312,7 @@ export function transformProject(code, options) {
     if (changed || isPageFile) {
         const output = generate(ast, {
             retainLines: true,
-            retainFunctionParens: true
+            retainFunctionParens: true,
         });
         return output.code;
     }

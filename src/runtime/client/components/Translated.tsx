@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { createElement, ReactNode } from "react";
-import { useAlgebrasIntl } from "../Provider.js";
+import { createElement, ReactNode } from 'react';
+import { useAlgebrasIntl } from '../Provider.js';
 
 interface TranslatedProps {
   tKey: string;
@@ -9,7 +9,7 @@ interface TranslatedProps {
 
 const Translated = (props: TranslatedProps) => {
   const { tKey } = props;
-  const [fileKey, entryKey] = tKey.split("::");
+  const [fileKey, entryKey] = tKey.split('::');
 
   const { dictionary, locale } = useAlgebrasIntl();
 
@@ -60,10 +60,12 @@ const Translated = (props: TranslatedProps) => {
       // Add the element
       const tagName = match[1];
       const innerContent = match[2];
-      parts.push(createElement(tagName, { key: match.index }, parseContent(innerContent)));
+      parts.push(
+        createElement(tagName, { key: match.index }, parseContent(innerContent))
+      );
 
       lastIndex = elementRegex.lastIndex;
-      
+
       // Safety check: if we're not advancing, break to prevent infinite loop
       if (lastIndex <= match.index) {
         console.error('Regex not advancing, breaking to prevent infinite loop');

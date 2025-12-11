@@ -1,5 +1,5 @@
-import { ScopeMap } from "../types.js";
-import { AlgebrasTranslationProvider } from "./AlgebrasTranslationProvider.js";
+import { ScopeMap } from '../types.js';
+import { AlgebrasTranslationProvider } from './AlgebrasTranslationProvider.js';
 export interface DictionaryGeneratorOptions {
     defaultLocale: string;
     targetLocales: string[];

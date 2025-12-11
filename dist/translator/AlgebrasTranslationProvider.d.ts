@@ -1,4 +1,4 @@
-import { ITranslateProvider } from "./Translator.js";
+import { ITranslateProvider } from './Translator.js';
 export interface AlgebrasTranslationOptions {
     apiKey: string;
     apiUrl?: string;

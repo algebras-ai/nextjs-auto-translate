@@ -1,8 +1,8 @@
 // src/webpack/auto-intl-loader.ts
-import fs from "fs";
-import path from "path";
-import { transformProject } from "../transformer/Injector.js";
-import { wrapLayoutWithIntl } from "../transformer/LayoutWrapper.js";
+import fs from 'fs';
+import path from 'path';
+import { transformProject } from '../transformer/Injector.js';
+import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper.js';
 export default function loader(source) {
     const options = this.getOptions() || {};
     const callback = this.async();
@@ -13,24 +13,28 @@ export default function loader(source) {
             const relativeFilePath = path
                 .relative(projectRoot, this.resourcePath)
                 .split(path.sep)
-                .join("/"); // Normalize to forward slashes to match sourceMap format
+                .join('/'); // Normalize to forward slashes to match sourceMap format
             // First, automatically wrap layout with AlgebrasIntlProvider
             let result = wrapLayoutWithIntl(source, this.resourcePath);
             // Load source map - try from options first, then from disk
             let sourceMap = options.sourceMap || null;
-            if (!sourceMap || !sourceMap.files || Object.keys(sourceMap.files).length === 0) {
+            if (!sourceMap ||
+                !sourceMap.files ||
+                Object.keys(sourceMap.files).length === 0) {
                 // Try to load from disk (similar to turbopack transformer)
-                const outputDir = options.outputDir || process.env.ALGEBRAS_INTL_OUTPUT_DIR || "./src/intl";
+                const outputDir = options.outputDir ||
+                    process.env.ALGEBRAS_INTL_OUTPUT_DIR ||
+                    './src/intl';
                 const possibleSourceMapPaths = [
-                    path.resolve(projectRoot, outputDir, "source.json"),
-                    path.resolve(projectRoot, "src/intl/source.json"),
-                    path.resolve(projectRoot, ".intl/source.json"),
-                    path.resolve(projectRoot, "source.json")
+                    path.resolve(projectRoot, outputDir, 'source.json'),
+                    path.resolve(projectRoot, 'src/intl/source.json'),
+                    path.resolve(projectRoot, '.intl/source.json'),
+                    path.resolve(projectRoot, 'source.json'),
                 ];
                 for (const sourceMapPath of possibleSourceMapPaths) {
                     if (fs.existsSync(sourceMapPath)) {
                         try {
-                            const sourceMapContent = fs.readFileSync(sourceMapPath, "utf-8");
+                            const sourceMapContent = fs.readFileSync(sourceMapPath, 'utf-8');
                             sourceMap = JSON.parse(sourceMapContent);
                             break;
                         }
@@ -49,12 +53,12 @@ export default function loader(source) {
             // Use the normalized relative path for matching
             result = transformProject(result, {
                 sourceMap,
-                filePath: path.resolve(projectRoot, relativeFilePath)
+                filePath: path.resolve(projectRoot, relativeFilePath),
             });
             callback(null, result);
         }
         catch (err) {
-            console.error("🔴 Auto-intl plugin error:", err);
+            console.error('🔴 Auto-intl plugin error:', err);
             // Return original source on error to prevent build failure
             callback(null, source);
         }

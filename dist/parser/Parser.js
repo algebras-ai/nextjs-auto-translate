@@ -1,12 +1,12 @@
 // src/parser/Parser.ts
-import { parse } from "@babel/parser";
-import traverseDefault from "@babel/traverse";
-import * as t from "@babel/types";
-import crypto from "crypto";
-import fs from "fs";
-import path from "path";
-import { SourceStore } from "../storage/SourceStore.js";
-import { buildContent, getRelativeScopePath } from "./utils.js";
+import { parse } from '@babel/parser';
+import traverseDefault from '@babel/traverse';
+import * as t from '@babel/types';
+import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+import { SourceStore } from '../storage/SourceStore.js';
+import { buildContent, getRelativeScopePath } from './utils.js';
 // @babel/traverse has different exports for ESM vs CommonJS
 const traverse = traverseDefault.default || traverseDefault;
 export class Parser {
@@ -15,8 +15,8 @@ export class Parser {
     sourceStore;
     constructor(options = {}) {
         this.options = options;
-        const outputDir = options.outputDir || ".intl";
-        this.lockPath = path.resolve(process.cwd(), outputDir, ".lock");
+        const outputDir = options.outputDir || '.intl';
+        this.lockPath = path.resolve(process.cwd(), outputDir, '.lock');
         this.sourceStore = new SourceStore(outputDir);
     }
     findFilesSync(dir, extensions, ignorePatterns) {
@@ -25,9 +25,9 @@ export class Parser {
             return ignorePatterns.some((pattern) => {
                 // Convert glob pattern to regex-like matching
                 const regexPattern = pattern
-                    .replace(/\*\*/g, ".*")
-                    .replace(/\*/g, "[^/]*")
-                    .replace(/\//g, "\\/");
+                    .replace(/\*\*/g, '.*')
+                    .replace(/\*/g, '[^/]*')
+                    .replace(/\//g, '\\/');
                 const regex = new RegExp(regexPattern);
                 return regex.test(filePath);
             });
@@ -62,35 +62,35 @@ export class Parser {
     }
     parseProject() {
         // Ensure .intl directory exists
-        const intlDir = path.dirname(this.sourceStore["path"]);
+        const intlDir = path.dirname(this.sourceStore['path']);
         fs.mkdirSync(intlDir, { recursive: true });
         // Lock file check
         if (fs.existsSync(this.lockPath)) {
-            console.log("🟡 Skipping parse: lock file present.");
+            console.log('🟡 Skipping parse: lock file present.');
             return this.sourceStore.load();
         }
         // Create lock file
-        fs.writeFileSync(this.lockPath, "");
+        fs.writeFileSync(this.lockPath, '');
         try {
-            console.log("[Parser] Scanning project for translatable strings...");
-            const ignore = ["**/.next/**", "**/dist/**"];
+            console.log('[Parser] Scanning project for translatable strings...');
+            const ignore = ['**/.next/**', '**/dist/**'];
             if (!this.options.includeNodeModules) {
-                ignore.push("**/node_modules/**");
+                ignore.push('**/node_modules/**');
             }
-            const files = this.findFilesSync(process.cwd(), [".tsx", ".jsx"], ignore);
+            const files = this.findFilesSync(process.cwd(), ['.tsx', '.jsx'], ignore);
             console.log(`[Parser] Found ${files.length} files to scan.`);
             const scopeMap = {
                 version: 0.1,
-                files: {}
+                files: {},
             };
             const projectRoot = process.cwd();
             for (const file of files) {
-                const code = fs.readFileSync(file, "utf-8");
+                const code = fs.readFileSync(file, 'utf-8');
                 let ast;
                 try {
                     ast = parse(code, {
-                        sourceType: "module",
-                        plugins: ["jsx", "typescript"]
+                        sourceType: 'module',
+                        plugins: ['jsx', 'typescript'],
                     });
                 }
                 catch {
@@ -104,7 +104,7 @@ export class Parser {
                     JSXElement(path) {
                         // Get the element name
                         const elementName = path.node.openingElement.name;
-                        let tagName = "Unknown";
+                        let tagName = 'Unknown';
                         if (t.isJSXIdentifier(elementName)) {
                             tagName = elementName.name;
                         }
@@ -117,7 +117,7 @@ export class Parser {
                         while (parentPath) {
                             if (parentPath.isJSXElement && parentPath.isJSXElement()) {
                                 const parentElementName = parentPath.node.openingElement.name;
-                                let parentTagName = "Unknown";
+                                let parentTagName = 'Unknown';
                                 if (t.isJSXIdentifier(parentElementName)) {
                                     parentTagName = parentElementName.name;
                                 }
@@ -142,27 +142,27 @@ export class Parser {
                                     continue;
                                 const content = buildContent(path.node);
                                 const hash = crypto
-                                    .createHash("md5")
+                                    .createHash('md5')
                                     .update(content)
-                                    .digest("hex");
+                                    .digest('hex');
                                 const fullScopePath = path.getPathLocation();
                                 const relativeScopePath = getRelativeScopePath(fullScopePath);
                                 fileScopes[relativeScopePath] = {
-                                    type: "element",
+                                    type: 'element',
                                     hash,
-                                    context: "",
+                                    context: '',
                                     skip: false,
                                     overrides: {},
-                                    content
+                                    content,
                                 };
                             }
                         }
-                    }
+                    },
                 });
                 // Only add files that have scopes
                 if (Object.keys(fileScopes).length > 0) {
                     scopeMap.files[relativeFilePath] = {
-                        scopes: fileScopes
+                        scopes: fileScopes,
                     };
                 }
             }
@@ -172,7 +172,7 @@ export class Parser {
             const newFiles = scopeMap.files;
             const changed = this.hasChanges(prevFiles, newFiles);
             if (!changed) {
-                console.log("🟢 Skipping parse: no changes detected.");
+                console.log('🟢 Skipping parse: no changes detected.');
                 return prev;
             }
             const totalEntries = Object.values(newFiles).reduce((count, file) => count + Object.keys(file.scopes).length, 0);

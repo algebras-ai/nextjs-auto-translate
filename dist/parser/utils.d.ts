@@ -1,4 +1,4 @@
-import * as t from "@babel/types";
+import * as t from '@babel/types';
 /**
  * Builds a readable content string from a JSXElement node,
  * using pseudo-tags for JSXElements and trimmed text for JSXText.
