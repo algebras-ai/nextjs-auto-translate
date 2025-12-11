@@ -265,7 +265,7 @@ export function transformProject(code, options) {
                 if (!text)
                     return;
                 // Find the closest JSXElement ancestor
-                const jsxElement = path.findParent((p) => p.isJSXElement());
+                const jsxElement = path.findParent(p => p.isJSXElement());
                 if (!jsxElement)
                     return;
                 // Find the scope for this element

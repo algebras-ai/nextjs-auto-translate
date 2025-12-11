@@ -6,8 +6,8 @@ import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper.js';
 import { ScopeMap } from '../types.js';
 
 interface TransformerOptions {
-  sourceMap?: ScopeMap;
-  outputDir?: string;
+	sourceMap?: ScopeMap
+	outputDir?: string
 }
 
 /**
@@ -24,9 +24,9 @@ interface TransformerOptions {
  */
 // Support both webpack loader and Turbopack transformer interfaces
 function transformerImpl(
-  source: string,
-  filePath: string,
-  options: TransformerOptions = {}
+	source: string,
+	filePath: string,
+	options: TransformerOptions = {}
 ): string {
   // Log that transformer is being called
   if (process.env.NODE_ENV === 'development') {
@@ -142,9 +142,9 @@ function transformerImpl(
 // When used as a webpack loader, 'this' is bound to the loader context
 // When used as a Turbopack transformer, context is passed as second parameter
 function transformerWrapper(
-  this: any,
-  source: string,
-  contextOrMap?: any
+	this: any,
+	source: string,
+	contextOrMap?: any
 ): string {
   let filePath: string;
   let options: TransformerOptions = {};

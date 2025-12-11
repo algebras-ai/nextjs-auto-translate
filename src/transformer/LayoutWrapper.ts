@@ -4,8 +4,8 @@ import { parse } from '@babel/parser';
 import traverseDefault from '@babel/traverse';
 import * as t from '@babel/types';
 
-const traverse = (traverseDefault as any).default || traverseDefault;
-const generate = (generateDefault as any).default || generateDefault;
+const traverse = (traverseDefault as any).default || traverseDefault
+const generate = (generateDefault as any).default || generateDefault
 
 export function wrapLayoutWithIntl(code: string, filePath: string): string {
   // Only process app/layout.tsx or app/layout.jsx
