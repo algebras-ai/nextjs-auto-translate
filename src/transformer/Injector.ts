@@ -23,14 +23,14 @@ export function injectTranslated(scope: string): t.JSXElement {
   );
 }
 
-// Ensures import Translated from 'algebras-auto-intl/runtime/client/components/Translated' exists
+// Ensures import Translated from 'nextjs-auto-intl/runtime/client/components/Translated' exists
 export function ensureImportTranslated(ast: t.File) {
   let hasImport = false;
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
         path.node.source.value ===
-          'algebras-auto-intl/runtime/client/components/Translated' &&
+          'nextjs-auto-intl/runtime/client/components/Translated' &&
         path.node.specifiers.some(
           (s: any) =>
             t.isImportDefaultSpecifier(s) &&
@@ -46,7 +46,7 @@ export function ensureImportTranslated(ast: t.File) {
   if (!hasImport) {
     const importDecl = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier('Translated'))],
-      t.stringLiteral('algebras-auto-intl/runtime/client/components/Translated')
+      t.stringLiteral('nextjs-auto-intl/runtime/client/components/Translated')
     );
     ast.program.body.unshift(importDecl);
   }
@@ -59,7 +59,7 @@ export function ensureImportLocalesSwitcher(ast: t.File) {
     ImportDeclaration(path: any) {
       if (
         path.node.source.value ===
-          'algebras-auto-intl/runtime/client/components/LocaleSwitcher' &&
+          'nextjs-auto-intl/runtime/client/components/LocaleSwitcher' &&
         path.node.specifiers.some(
           (s: any) =>
             t.isImportDefaultSpecifier(s) &&
@@ -76,7 +76,7 @@ export function ensureImportLocalesSwitcher(ast: t.File) {
     const importDecl = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))],
       t.stringLiteral(
-        'algebras-auto-intl/runtime/client/components/LocaleSwitcher'
+        'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
       )
     );
     ast.program.body.unshift(importDecl);

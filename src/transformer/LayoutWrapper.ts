@@ -39,9 +39,9 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
       const sourceValue = path.node.source.value;
       // Check for various import paths that might be used
       const isIntlWrapperImport =
-        sourceValue === 'algebras-auto-intl/runtime/server/IntlWrapper' ||
         sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
-        sourceValue === 'algebras-auto-intl/runtime/server' ||
+        sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
+        sourceValue === 'nextjs-auto-intl/runtime/server' ||
         sourceValue === 'nextjs-auto-intl/runtime/server';
 
       if (
@@ -75,7 +75,7 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   // Add IntlWrapper import
   const intlWrapperImport = t.importDeclaration(
     [t.importDefaultSpecifier(t.identifier('IntlWrapper'))],
-    t.stringLiteral('algebras-auto-intl/runtime/server/IntlWrapper')
+    t.stringLiteral('nextjs-auto-intl/runtime/server/IntlWrapper')
   );
   ast.program.body.unshift(intlWrapperImport);
 
