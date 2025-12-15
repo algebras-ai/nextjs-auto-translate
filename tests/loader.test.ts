@@ -206,7 +206,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   });
 
   describe('page file handling', () => {
-    it('injects locale switcher into page.tsx files', async () => {
+    it('does not inject locale switcher into page.tsx files (manual import only)', async () => {
       const code = `export default function Page() {
   return <main><h1>Hello</h1></main>;
 }`;
@@ -217,13 +217,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         resourcePath
       );
 
-      expect(out).toContain('LocalesSwitcher');
-      expect(out).toContain(
+      expect(out).not.toContain('LocalesSwitcher');
+      expect(out).not.toContain(
         'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
       );
     });
 
-    it('injects locale switcher even when no sourceMap', async () => {
+    it('does not inject locale switcher even when no sourceMap (manual import only)', async () => {
       const code = `export default function Page() {
   return <main><h1>Hello</h1></main>;
 }`;
@@ -234,7 +234,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         resourcePath
       );
 
-      expect(out).toContain('LocalesSwitcher');
+      expect(out).not.toContain('LocalesSwitcher');
     });
 
     it('does not inject locale switcher into non-page files', async () => {
