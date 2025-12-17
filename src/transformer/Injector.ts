@@ -6,8 +6,8 @@ import path from 'path';
 import { ScopeMap } from '../types.js';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
-const traverse = (traverseDefault as any).default || traverseDefault
-const generate = (generateDefault as any).default || generateDefault
+const traverse = (traverseDefault as any).default || traverseDefault;
+const generate = (generateDefault as any).default || generateDefault;
 
 // Injects <Translated tKey="scope" /> in place of JSXText
 export function injectTranslated(scope: string): t.JSXElement {
@@ -273,11 +273,11 @@ export function injectLocaleSwitcher(ast: t.File) {
 
 // Transforms the specified file, injecting t() calls
 export function transformProject(
-	code: string,
-	options: {
-		sourceMap: ScopeMap
-		filePath: string
-	}
+  code: string,
+  options: {
+    sourceMap: ScopeMap;
+    filePath: string;
+  }
 ) {
   const { filePath } = options;
 
@@ -409,15 +409,7 @@ export function transformProject(
     }
   }
 
-  // Always inject language switcher for page files, regardless of text changes or sourceMap
-  if (isPageFile) {
-    ensureImportLocalesSwitcher(ast);
-    injectLocaleSwitcher(ast);
-  }
-
-  // Only regenerate code if we made changes (text transformation or language switcher injection)
-  // For page files, we always inject the switcher, so we always need to regenerate
-  if (changed || isPageFile) {
+  if (changed) {
     const output = generate(ast, {
       retainLines: true,
       retainFunctionParens: true,

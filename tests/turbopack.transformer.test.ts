@@ -420,7 +420,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   });
 
   describe('page file handling', () => {
-    it('injects locale switcher into page.tsx files', () => {
+    it('does not inject locale switcher into page.tsx files (manual import only)', () => {
       const code = `export default function Page() {
   return <main><h1>Hello</h1></main>;
 }`;
@@ -430,25 +430,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         options: { sourceMap: { files: {} } },
       });
 
-      expect(result).toContain('LocalesSwitcher');
-      expect(result).toContain(
+      expect(result).not.toContain('LocalesSwitcher');
+      expect(result).not.toContain(
         'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
       );
     });
 
-    it('injects locale switcher when sourceMap is provided (even if empty)', () => {
+    it('does not inject locale switcher when sourceMap is provided (manual import only)', () => {
       const code = `export default function Page() {
   return <main><h1>Hello</h1></main>;
 }`;
       const filePath = `${tempDir}/app/page.tsx`;
-      // Page files need a sourceMap (even if empty) to trigger transformProject
-      // which injects the locale switcher
       const result = transformer(code, {
         path: filePath,
         options: { sourceMap: { files: {} } },
       });
 
-      expect(result).toContain('LocalesSwitcher');
+      expect(result).not.toContain('LocalesSwitcher');
     });
 
     it('does not inject locale switcher into non-page files', () => {
