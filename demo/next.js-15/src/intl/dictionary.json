@@ -1,0 +1,72 @@
+{
+  "version": 0.1,
+  "files": {
+    "app/page.tsx": {
+      "entries": {
+        "program/body1/declaration/body/body0/argument/children1/children3/children1": {
+          "content": {
+            "en": "Get started by editing \n            <element:code>app/page.tsx</element:code>\n            .",
+            "es": "Comienza editando \n            <element:code>app/page.tsx</element:code>\n            .",
+            "fr": "Commencez par modifier \n            <element:code>app/page.tsx</element:code>\n            .",
+            "de": "Beginnen Sie mit der Bearbeitung von \n            <element:code>app/page.tsx</element:code>\n            ."
+          },
+          "hash": "c796613b4ef8c6a0c37c510f23169553"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children3": {
+          "content": {
+            "en": "Save and see your changes instantly.",
+            "es": "Guarda y ve tus cambios al instante.",
+            "fr": "Enregistrez et voyez vos modifications instantanément.",
+            "de": "Speichern Sie und sehen Sie Ihre Änderungen sofort."
+          },
+          "hash": "2607755c4ddbc775d069493771b09537"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children5/children1": {
+          "content": {
+            "en": "<element:Image></element:Image>\n            Deploy now",
+            "es": "<element:Image></element:Image>\n            Implementar ahora",
+            "fr": "<element:Image></element:Image>\n            Déployer maintenant",
+            "de": "<element:Image></element:Image>\n            Jetzt bereitstellen"
+          },
+          "hash": "8698aaaeb5ce0aba5aee9b06fcbb383b"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children5/children3": {
+          "content": {
+            "en": "Read our docs",
+            "es": "Lee nuestra documentación",
+            "fr": "Consultez notre documentation",
+            "de": "Unsere Dokumentation lesen"
+          },
+          "hash": "e6fea0df9c3eed26b518a5db6d04c1e1"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "<element:Image></element:Image>\n          Learn",
+            "es": "<element:Image></element:Image>\n          Aprender",
+            "fr": "<element:Image></element:Image>\n          Apprendre",
+            "de": "<element:Image></element:Image>\n          Lernen"
+          },
+          "hash": "c8afb52bd3e9a656961977023daf6c9f"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children3": {
+          "content": {
+            "en": "<element:Image></element:Image>\n          Examples",
+            "es": "<element:Image></element:Image>\n          Ejemplos",
+            "fr": "<element:Image></element:Image>\n          Exemples",
+            "de": "<element:Image></element:Image>\n          Beispiele"
+          },
+          "hash": "32ec4c2f6362ebb44d30d8601db6caea"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children5": {
+          "content": {
+            "en": "<element:Image></element:Image>\n          Go to nextjs.org →",
+            "es": "<element:Image></element:Image>\n          Ir a nextjs.org →",
+            "fr": "<element:Image></element:Image>\n          Aller sur nextjs.org →",
+            "de": "<element:Image></element:Image>\n          Zu nextjs.org gehen →"
+          },
+          "hash": "4157373099e225bb0c6f5ee7fce62de3"
+        }
+      }
+    }
+  }
+}

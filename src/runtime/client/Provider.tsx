@@ -9,8 +9,8 @@ import {
   useCallback,
   useMemo,
 } from 'react';
-import { DictStructure } from '../types.js';
-import { LanguageCode } from '../../data/languageMap.js';
+import { DictStructure } from '../types';
+import { LanguageCode } from '../../data/languageMap';
 
 const context = createContext<{
   dictionary: DictStructure;

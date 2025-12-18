@@ -1,0 +1,65 @@
+{
+  "version": 0.1,
+  "files": {
+    "app/page.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children3/children1": {
+          "type": "element",
+          "hash": "c796613b4ef8c6a0c37c510f23169553",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Get started by editing \n            <element:code>app/page.tsx</element:code>\n            ."
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children3": {
+          "type": "element",
+          "hash": "2607755c4ddbc775d069493771b09537",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Save and see your changes instantly."
+        },
+        "program/body1/declaration/body/body0/argument/children1/children5/children1": {
+          "type": "element",
+          "hash": "8698aaaeb5ce0aba5aee9b06fcbb383b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Image></element:Image>\n            Deploy now"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children5/children3": {
+          "type": "element",
+          "hash": "e6fea0df9c3eed26b518a5db6d04c1e1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Read our docs"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "c8afb52bd3e9a656961977023daf6c9f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Image></element:Image>\n          Learn"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children3": {
+          "type": "element",
+          "hash": "32ec4c2f6362ebb44d30d8601db6caea",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Image></element:Image>\n          Examples"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children5": {
+          "type": "element",
+          "hash": "4157373099e225bb0c6f5ee7fce62de3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Image></element:Image>\n          Go to nextjs.org →"
+        }
+      }
+    }
+  }
+}

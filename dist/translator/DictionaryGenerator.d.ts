@@ -1,5 +1,5 @@
-import { ScopeMap } from '../types.js';
-import { AlgebrasTranslationProvider } from './AlgebrasTranslationProvider.js';
+import { ScopeMap } from '../types';
+import { AlgebrasTranslationProvider } from './AlgebrasTranslationProvider';
 export interface DictionaryGeneratorOptions {
     defaultLocale: string;
     targetLocales: string[];
@@ -22,7 +22,17 @@ export declare class DictionaryGenerator {
     private translationService;
     private translationProvider?;
     constructor(options: DictionaryGeneratorOptions);
+    /**
+     * Try to load existing dictionary.json from outputDir.
+     * Returns null if file doesn't exist or cannot be parsed.
+     */
+    private loadExistingDictionary;
     generateDictionary(sourceMap: ScopeMap): Promise<string>;
+    /**
+     * Generate dictionary using Algebras AI with incremental behavior:
+     * - reuse existing translations when hash matches
+     * - call API only for new/changed scopes or for locales that are missing
+     */
     private generateWithAlgebrasAI;
     private generateWithMockTranslation;
     private writeDictionaryFiles;

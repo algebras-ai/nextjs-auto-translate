@@ -1,13 +1,13 @@
 // src/turbopack/auto-intl-transformer.ts
 import fs from 'fs';
 import path from 'path';
-import { transformProject } from '../transformer/Injector.js';
-import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper.js';
-import { ScopeMap } from '../types.js';
+import { transformProject } from '../transformer/Injector';
+import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper';
+import { ScopeMap } from '../types';
 
 interface TransformerOptions {
-	sourceMap?: ScopeMap
-	outputDir?: string
+  sourceMap?: ScopeMap;
+  outputDir?: string;
 }
 
 /**
@@ -24,22 +24,12 @@ interface TransformerOptions {
  */
 // Support both webpack loader and Turbopack transformer interfaces
 function transformerImpl(
-	source: string,
-	filePath: string,
-	options: TransformerOptions = {}
+  source: string,
+  filePath: string,
+  options: TransformerOptions = {}
 ): string {
-  // Log that transformer is being called
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[AutoIntlTransformer] 🔄 Processing: ${filePath}`);
-  }
-
   // Exclude node_modules files (matching webpack loader behavior)
   if (filePath.includes('node_modules')) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(
-        `[AutoIntlTransformer] ⏭️  Skipping node_modules: ${filePath}`
-      );
-    }
     return source;
   }
 
@@ -93,29 +83,7 @@ function transformerImpl(
 
     if (!sourceMap || !sourceMap.files) {
       // No source map found, return layout-wrapped code (if applicable)
-      if (process.env.NODE_ENV === 'development') {
-        console.log(
-          `[AutoIntlTransformer] No source map found for ${relativeFilePath}`
-        );
-      }
       return result;
-    }
-
-    // Remove the check for file in sourceMap - let transformProject handle it
-    // transformProject will check if it's a page file or if file is in sourceMap
-    if (process.env.NODE_ENV === 'development') {
-      const isInSourceMap = sourceMap.files[relativeFilePath] !== undefined;
-      if (isInSourceMap) {
-        console.log(
-          `[AutoIntlTransformer] Processing ${relativeFilePath} with ${
-            Object.keys(sourceMap.files[relativeFilePath]?.scopes || {}).length
-          } scopes`
-        );
-      } else {
-        console.log(
-          `[AutoIntlTransformer] Processing ${relativeFilePath} (may be a page file)`
-        );
-      }
     }
 
     // Then, transform the project with translation injections
@@ -125,10 +93,6 @@ function transformerImpl(
       sourceMap,
       filePath: path.resolve(projectRoot, relativeFilePath),
     });
-
-    if (process.env.NODE_ENV === 'development' && result !== source) {
-      console.log(`[AutoIntlTransformer] ✅ Transformed ${relativeFilePath}`);
-    }
 
     return result;
   } catch (err) {
@@ -142,9 +106,9 @@ function transformerImpl(
 // When used as a webpack loader, 'this' is bound to the loader context
 // When used as a Turbopack transformer, context is passed as second parameter
 function transformerWrapper(
-	this: any,
-	source: string,
-	contextOrMap?: any
+  this: any,
+  source: string,
+  contextOrMap?: any
 ): string {
   let filePath: string;
   let options: TransformerOptions = {};

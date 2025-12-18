@@ -1,28 +1,30 @@
+"use strict";
 'use client';
-import { Fragment as _Fragment, jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
-import { createElement } from 'react';
-import { useAlgebrasIntl } from '../Provider.js';
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_runtime_1 = require("react/jsx-runtime");
+const react_1 = require("react");
+const Provider_1 = require("../Provider");
 const Translated = (props) => {
     const { tKey } = props;
     const [fileKey, entryKey] = tKey.split('::');
-    const { dictionary, locale } = useAlgebrasIntl();
+    const { dictionary, locale } = (0, Provider_1.useAlgebrasIntl)();
     // Check if the file exists in dictionary
     if (!dictionary.files[fileKey]) {
         console.error(`File "${fileKey}" not found in dictionary`);
         console.error(`Available files:`, Object.keys(dictionary.files));
         console.error(`tKey was:`, tKey);
-        return _jsxs(_Fragment, { children: ["\uD83D\uDEAB File not found: ", fileKey] });
+        return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: ["\uD83D\uDEAB File not found: ", fileKey] });
     }
     // Check if the entry exists in the file
     if (!dictionary.files[fileKey].entries[entryKey]) {
         console.error(`Entry "${entryKey}" not found in file "${fileKey}"`);
-        return _jsxs(_Fragment, { children: ["\uD83D\uDEAB Entry not found: ", entryKey] });
+        return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: ["\uD83D\uDEAB Entry not found: ", entryKey] });
     }
     // Check if the locale content exists
     const content = dictionary.files[fileKey].entries[entryKey].content[locale];
     if (!content) {
         console.error(`Content for locale "${locale}" not found in "${fileKey}::${entryKey}"`);
-        return _jsxs(_Fragment, { children: ["\uD83D\uDEAB Content not found for locale: ", locale] });
+        return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: ["\uD83D\uDEAB Content not found for locale: ", locale] });
     }
     // Parse content with <element:tag> syntax back into React elements
     const parseContent = (text) => {
@@ -45,7 +47,7 @@ const Translated = (props) => {
             // Add the element
             const tagName = match[1];
             const innerContent = match[2];
-            parts.push(createElement(tagName, { key: match.index }, parseContent(innerContent)));
+            parts.push((0, react_1.createElement)(tagName, { key: match.index }, parseContent(innerContent)));
             lastIndex = elementRegex.lastIndex;
             // Safety check: if we're not advancing, break to prevent infinite loop
             if (lastIndex <= match.index) {
@@ -59,6 +61,6 @@ const Translated = (props) => {
         }
         return parts.length > 0 ? parts : text;
     };
-    return _jsx(_Fragment, { children: parseContent(content) });
+    return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: parseContent(content) });
 };
-export default Translated;
+exports.default = Translated;
