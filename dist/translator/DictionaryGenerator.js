@@ -19,19 +19,45 @@ export class DictionaryGenerator {
         this.options = options;
         this.translationProvider = options.translationProvider;
     }
+    /**
+     * Try to load existing dictionary.json from outputDir.
+     * Returns null if file doesn't exist or cannot be parsed.
+     */
+    loadExistingDictionary() {
+        try {
+            const outputPath = path.resolve(process.cwd(), this.options.outputDir);
+            const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
+            if (!fs.existsSync(dictionaryJsonPath)) {
+                return null;
+            }
+            const content = fs.readFileSync(dictionaryJsonPath, 'utf-8');
+            const parsed = JSON.parse(content);
+            console.log('[DictionaryGenerator] Loaded existing dictionary from:', dictionaryJsonPath);
+            return parsed;
+        }
+        catch (error) {
+            console.warn('[DictionaryGenerator] Failed to load existing dictionary, starting fresh:', error);
+            return null;
+        }
+    }
     async generateDictionary(sourceMap) {
         const allLocales = [
             this.options.defaultLocale,
             ...this.options.targetLocales,
         ];
         console.log(`[DictionaryGenerator] Generating dictionary for locales: ${allLocales.join(', ')}`);
+        const existingDictionary = this.loadExistingDictionary();
         const dictionary = {
-            version: 0.1,
+            // preserve existing version if present, otherwise start with 0.1
+            version: existingDictionary &&
+                typeof existingDictionary.version === 'number'
+                ? existingDictionary.version
+                : 0.1,
             files: {},
         };
         // Use Algebras AI translation if provider is available
         if (this.translationProvider && this.options.targetLocales.length > 0) {
-            await this.generateWithAlgebrasAI(sourceMap, dictionary, allLocales);
+            await this.generateWithAlgebrasAI(sourceMap, dictionary, existingDictionary || undefined);
         }
         else {
             // Fallback to mock translation
@@ -42,38 +68,95 @@ export class DictionaryGenerator {
         const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
         return dictionaryJsonPath;
     }
-    async generateWithAlgebrasAI(sourceMap, dictionary, allLocales) {
+    /**
+     * Generate dictionary using Algebras AI with incremental behavior:
+     * - reuse existing translations when hash matches
+     * - call API only for new/changed scopes or for locales that are missing
+     */
+    async generateWithAlgebrasAI(sourceMap, dictionary, existingDictionary) {
         console.log('[DictionaryGenerator] Using Algebras AI for translation...');
-        // Collect all texts to translate
-        const textsMap = new Map();
-        const keyToFileScope = new Map();
+        const defaultLocale = this.options.defaultLocale;
+        const targetLocales = this.options.targetLocales;
+        // For each locale, collect only texts that actually need translation
+        const requestsByLocale = {};
+        for (const locale of targetLocales) {
+            requestsByLocale[locale] = { texts: [], keys: [] };
+        }
+        // First pass: build dictionary structure and decide what needs translation
         for (const [filePath, fileData] of Object.entries(sourceMap.files)) {
             dictionary.files[filePath] = { entries: {} };
+            const existingFile = existingDictionary && existingDictionary.files
+                ? existingDictionary.files[filePath]
+                : undefined;
             for (const [scopePath, scopeData] of Object.entries(fileData.scopes)) {
                 const key = `${filePath}::${scopePath}`;
-                textsMap.set(key, scopeData.content);
-                keyToFileScope.set(key, { filePath, scopePath });
+                const existingEntry = existingFile && existingFile.entries
+                    ? existingFile.entries[scopePath]
+                    : undefined;
+                const isSameHash = existingEntry && existingEntry.hash === scopeData.hash;
+                const content = {};
+                // default locale is always original text
+                content[defaultLocale] = scopeData.content;
+                // For each target locale: either reuse or schedule for translation
+                for (const locale of targetLocales) {
+                    if (isSameHash &&
+                        existingEntry &&
+                        existingEntry.content &&
+                        existingEntry.content[locale]) {
+                        // Reuse existing translation
+                        content[locale] = existingEntry.content[locale];
+                    }
+                    else {
+                        // Need translation for this locale/scope
+                        requestsByLocale[locale].texts.push(scopeData.content);
+                        requestsByLocale[locale].keys.push(key);
+                    }
+                }
+                // Optionally keep any extra locales from existing entry when hash matches
+                if (isSameHash && existingEntry && existingEntry.content) {
+                    for (const [locale, value] of Object.entries(existingEntry.content)) {
+                        if (locale !== defaultLocale &&
+                            !targetLocales.includes(locale) &&
+                            content[locale] === undefined) {
+                            content[locale] = value;
+                        }
+                    }
+                }
+                dictionary.files[filePath].entries[scopePath] = {
+                    content,
+                    hash: scopeData.hash,
+                };
             }
         }
-        // Translate all texts at once (optimized batch translation)
-        const targetLocales = this.options.targetLocales;
-        const translationResults = await this.translationProvider.translateAll(textsMap, targetLocales, this.options.defaultLocale);
-        // Build dictionary from translation results
-        for (const [key, translations] of translationResults.entries()) {
-            const { filePath, scopePath } = keyToFileScope.get(key);
-            const scopeData = sourceMap.files[filePath].scopes[scopePath];
-            const translationRecord = {
-                [this.options.defaultLocale]: scopeData.content, // Original text in default locale
-            };
-            // Add all target locale translations
-            for (const locale of targetLocales) {
-                translationRecord[locale] =
-                    translations.get(locale) || scopeData.content;
+        // Second pass: perform translations only for scheduled texts
+        const batchSize = 20; // API limit per batch
+        for (const locale of targetLocales) {
+            const { texts, keys } = requestsByLocale[locale];
+            if (texts.length === 0) {
+                console.log(`[DictionaryGenerator] No new texts to translate for locale ${locale}, reusing existing translations`);
+                continue;
             }
-            dictionary.files[filePath].entries[scopePath] = {
-                content: translationRecord,
-                hash: scopeData.hash,
-            };
+            console.log(`[DictionaryGenerator] Translating ${texts.length} new/changed texts to ${locale}...`);
+            for (let i = 0; i < texts.length; i += batchSize) {
+                const batchTexts = texts.slice(i, i + batchSize);
+                const batchKeys = keys.slice(i, i + batchSize);
+                const batchResult = await this.translationProvider.translateBatch(batchTexts, locale, defaultLocale);
+                // Map translations back into dictionary
+                for (let j = 0; j < batchKeys.length; j++) {
+                    const key = batchKeys[j];
+                    const translated = batchResult.translations[j] !== undefined
+                        ? batchResult.translations[j]
+                        : batchTexts[j]; // fallback to original text if something is missing
+                    const [filePath, scopePath] = key.split('::');
+                    const file = dictionary.files[filePath];
+                    if (!file)
+                        continue;
+                    const entry = file.entries[scopePath];
+                    if (!entry)
+                        continue;
+                    entry.content[locale] = translated;
+                }
+            }
         }
     }
     generateWithMockTranslation(sourceMap, dictionary, allLocales) {
