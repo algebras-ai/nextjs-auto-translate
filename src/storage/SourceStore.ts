@@ -1,7 +1,7 @@
 // src/storage/SourceStore.ts
 import fs from 'fs';
 import path from 'path';
-import { ScopeMap } from '../types.js';
+import { ScopeMap } from '../types';
 
 export class SourceStore {
   public path: string;

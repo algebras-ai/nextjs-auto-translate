@@ -2,22 +2,18 @@
 import fs from 'fs';
 import type { NextConfig } from 'next';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { Parser } from './parser/Parser.js';
-import { DictionaryGenerator } from './translator/DictionaryGenerator.js';
-import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
-import { ScopeMap } from './types.js';
-import { LanguageCode } from './data/languageMap.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { Parser } from './parser/Parser';
+import { DictionaryGenerator } from './translator/DictionaryGenerator';
+import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider';
+import { ScopeMap } from './types';
+import { LanguageCode } from './data/languageMap';
 
 // Re-export commonly used types and components
-export { LanguageCode } from './data/languageMap.js';
-export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
-export { DictionaryGenerator } from './translator/DictionaryGenerator.js';
+export { LanguageCode } from './data/languageMap';
+export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider';
+export { DictionaryGenerator } from './translator/DictionaryGenerator';
 // Note: AlgebrasIntlProvider should be imported directly from the runtime path
-// export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
+// export { default as AlgebrasIntlProvider } from "./runtime/server/Provider";
 
 let hasScheduled = false;
 let cachedSourceMap: ScopeMap | null = null;

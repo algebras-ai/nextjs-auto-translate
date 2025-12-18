@@ -1,0 +1,45 @@
+{
+  "version": 0.1,
+  "files": {
+    "app/page.tsx": {
+      "entries": {
+        "program/body2/declaration/body/body0/argument/children1/children3/children1": {
+          "content": {
+            "en": "To get started, edit the page.tsx file.",
+            "es": "Para comenzar, edita el archivo page.tsx.",
+            "fr": "Pour commencer, modifiez le fichier page.tsx.",
+            "de": "Um zu beginnen, bearbeite die page.tsx Datei."
+          },
+          "hash": "bdff3fcf8d61c130ed99cb03802d4309"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children3/children3": {
+          "content": {
+            "en": "Looking for a starting point or more instructions? Head over to \n            <element:a>Templates</element:a> \n            or the \n            <element:a>Learning</element:a> \n            center.",
+            "es": "¿Buscas un punto de partida o más instrucciones? Dirígete a \n            <element:a>Plantillas</element:a> \n            o al \n            <element:a>Centro de aprendizaje</element:a>.",
+            "fr": "Vous cherchez un point de départ ou plus d'instructions ? Consultez les \n            <element:a>Modèles</element:a> \n            ou le \n            <element:a>Centre d'apprentissage</element:a>.",
+            "de": "Suchst du einen Ausgangspunkt oder weitere Anweisungen? Schau dir die \n            <element:a>Vorlagen</element:a> \n            oder das \n            <element:a>Lernzentrum</element:a> \n            an."
+          },
+          "hash": "f1eb6e28241ddcc0816cb42e83ec7916"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children1": {
+          "content": {
+            "en": "<element:Image></element:Image>\n            Deploy Now",
+            "es": "<element:Image></element:Image>\n            Implementar ahora",
+            "fr": "<element:Image></element:Image>\n            Déployer maintenant",
+            "de": "<element:Image></element:Image>\n            Jetzt Bereitstellen"
+          },
+          "hash": "aa0de4f9a2633a20879ae75c87adf6d0"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children3": {
+          "content": {
+            "en": "Documentation",
+            "es": "Documentación",
+            "fr": "Documentation",
+            "de": "Dokumentation"
+          },
+          "hash": "5b6cf869265c13af8566f192b4ab3d2a"
+        }
+      }
+    }
+  }
+}

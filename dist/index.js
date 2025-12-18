@@ -1,18 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DictionaryGenerator = exports.AlgebrasTranslationProvider = exports.LanguageCode = void 0;
+exports.default = myPlugin;
 // src/index.ts
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { Parser } from './parser/Parser.js';
-import { DictionaryGenerator } from './translator/DictionaryGenerator.js';
-import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const Parser_1 = require("./parser/Parser");
+const DictionaryGenerator_1 = require("./translator/DictionaryGenerator");
+const AlgebrasTranslationProvider_1 = require("./translator/AlgebrasTranslationProvider");
 // Re-export commonly used types and components
-export { LanguageCode } from './data/languageMap.js';
-export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
-export { DictionaryGenerator } from './translator/DictionaryGenerator.js';
+var languageMap_1 = require("./data/languageMap");
+Object.defineProperty(exports, "LanguageCode", { enumerable: true, get: function () { return languageMap_1.LanguageCode; } });
+var AlgebrasTranslationProvider_2 = require("./translator/AlgebrasTranslationProvider");
+Object.defineProperty(exports, "AlgebrasTranslationProvider", { enumerable: true, get: function () { return AlgebrasTranslationProvider_2.AlgebrasTranslationProvider; } });
+var DictionaryGenerator_2 = require("./translator/DictionaryGenerator");
+Object.defineProperty(exports, "DictionaryGenerator", { enumerable: true, get: function () { return DictionaryGenerator_2.DictionaryGenerator; } });
 // Note: AlgebrasIntlProvider should be imported directly from the runtime path
-// export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
+// export { default as AlgebrasIntlProvider } from "./runtime/server/Provider";
 let hasScheduled = false;
 let cachedSourceMap = null;
 function isProcessAlive(pid) {
@@ -24,14 +31,14 @@ function isProcessAlive(pid) {
         return false;
     }
 }
-export default function myPlugin(options) {
+function myPlugin(options) {
     const { defaultLocale = 'en', targetLocales, includeNodeModules = false, outputDir = './src/intl', } = options;
     process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
-    const scheduledFlagPath = path.resolve(process.cwd(), outputDir, '.scheduled');
-    const parserLockPath = path.resolve(process.cwd(), outputDir, '.lock');
+    const scheduledFlagPath = path_1.default.resolve(process.cwd(), outputDir, '.scheduled');
+    const parserLockPath = path_1.default.resolve(process.cwd(), outputDir, '.lock');
     async function prepareSourceMap() {
         try {
-            const parser = new Parser({ includeNodeModules, outputDir });
+            const parser = new Parser_1.Parser({ includeNodeModules, outputDir });
             const sourceMap = parser.parseProject();
             cachedSourceMap = sourceMap;
             // Create translation provider if API key is provided
@@ -39,7 +46,7 @@ export default function myPlugin(options) {
             const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
             const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
             if (apiKey) {
-                translationProvider = new AlgebrasTranslationProvider({
+                translationProvider = new AlgebrasTranslationProvider_1.AlgebrasTranslationProvider({
                     apiKey,
                     apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
                 });
@@ -49,14 +56,14 @@ export default function myPlugin(options) {
                 console.warn('[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config');
                 console.warn('[AlgebrasIntl] Falling back to mock translations...\n');
             }
-            const dictionaryGenerator = new DictionaryGenerator({
+            const dictionaryGenerator = new DictionaryGenerator_1.DictionaryGenerator({
                 defaultLocale,
                 targetLocales,
                 outputDir,
                 translationProvider,
             });
             await dictionaryGenerator.generateDictionary(sourceMap);
-            fs.writeFileSync(path.resolve(outputDir, 'source.json'), JSON.stringify(sourceMap, null, 2), 'utf-8');
+            fs_1.default.writeFileSync(path_1.default.resolve(outputDir, 'source.json'), JSON.stringify(sourceMap, null, 2), 'utf-8');
         }
         catch (err) {
             console.error('❌ Failed to parse/generate source map:', err);
@@ -74,7 +81,7 @@ export default function myPlugin(options) {
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader: path.resolve(__dirname, './webpack/auto-intl-loader.js'),
+                        loader: path_1.default.resolve(__dirname, './webpack/auto-intl-loader.js'),
                         options: {
                             sourceMap: cachedSourceMap ?? {},
                             outputDir,
@@ -148,21 +155,21 @@ export default function myPlugin(options) {
             applyConfigs();
             return config;
         }
-        if (fs.existsSync(scheduledFlagPath)) {
-            const flagPid = parseInt(fs.readFileSync(scheduledFlagPath, 'utf-8'));
+        if (fs_1.default.existsSync(scheduledFlagPath)) {
+            const flagPid = parseInt(fs_1.default.readFileSync(scheduledFlagPath, 'utf-8'));
             if (isProcessAlive(flagPid)) {
                 applyConfigs();
                 return config;
             }
             else {
-                fs.unlinkSync(scheduledFlagPath);
+                fs_1.default.unlinkSync(scheduledFlagPath);
             }
         }
         hasScheduled = true;
-        fs.mkdirSync(path.dirname(scheduledFlagPath), { recursive: true });
-        fs.writeFileSync(scheduledFlagPath, process.pid.toString());
-        if (fs.existsSync(parserLockPath))
-            fs.unlinkSync(parserLockPath);
+        fs_1.default.mkdirSync(path_1.default.dirname(scheduledFlagPath), { recursive: true });
+        fs_1.default.writeFileSync(scheduledFlagPath, process.pid.toString());
+        if (fs_1.default.existsSync(parserLockPath))
+            fs_1.default.unlinkSync(parserLockPath);
         applyConfigs();
         return config;
     };

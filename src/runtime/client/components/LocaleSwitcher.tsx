@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { languageMap, LanguageCode } from '../../../data/languageMap.js';
-import { useAlgebrasIntl } from '../Provider.js';
+import { languageMap, LanguageCode } from '../../../data/languageMap';
+import { useAlgebrasIntl } from '../Provider';
 
 interface DropdownTriggerProps {
   currentLocale: string;

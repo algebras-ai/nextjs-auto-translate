@@ -1,4 +1,7 @@
-export class Translator {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Translator = void 0;
+class Translator {
     provider;
     constructor(provider) {
         this.provider = provider;
@@ -20,3 +23,4 @@ export class Translator {
         return result;
     }
 }
+exports.Translator = Translator;

@@ -1,9 +1,9 @@
 // src/webpack/auto-intl-loader.ts
 import fs from 'fs';
 import path from 'path';
-import { transformProject } from '../transformer/Injector.js';
-import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper.js';
-import { ScopeMap } from '../types.js';
+import { transformProject } from '../transformer/Injector';
+import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper';
+import { ScopeMap } from '../types';
 
 interface LoaderOptions {
   sourceMap?: ScopeMap;

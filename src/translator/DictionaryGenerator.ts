@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { ScopeMap } from '../types.js';
-import { AlgebrasTranslationProvider } from './AlgebrasTranslationProvider.js';
+import { ScopeMap } from '../types';
+import { AlgebrasTranslationProvider } from './AlgebrasTranslationProvider';
 
 export interface DictionaryGeneratorOptions {
   defaultLocale: string;
@@ -60,10 +60,6 @@ export class DictionaryGenerator {
       const content = fs.readFileSync(dictionaryJsonPath, 'utf-8');
       const parsed = JSON.parse(content) as Dictionary;
 
-      console.log(
-        '[DictionaryGenerator] Loaded existing dictionary from:',
-        dictionaryJsonPath
-      );
       return parsed;
     } catch (error) {
       console.warn(
@@ -79,11 +75,6 @@ export class DictionaryGenerator {
       this.options.defaultLocale,
       ...this.options.targetLocales,
     ];
-    console.log(
-      `[DictionaryGenerator] Generating dictionary for locales: ${allLocales.join(
-        ', '
-      )}`
-    );
 
     const existingDictionary = this.loadExistingDictionary();
 
@@ -126,8 +117,6 @@ export class DictionaryGenerator {
     dictionary: Dictionary,
     existingDictionary?: Dictionary
   ): Promise<void> {
-    console.log('[DictionaryGenerator] Using Algebras AI for translation...');
-
     const defaultLocale = this.options.defaultLocale;
     const targetLocales = this.options.targetLocales;
 
@@ -211,15 +200,8 @@ export class DictionaryGenerator {
       const { texts, keys } = requestsByLocale[locale];
 
       if (texts.length === 0) {
-        console.log(
-          `[DictionaryGenerator] No new texts to translate for locale ${locale}, reusing existing translations`
-        );
         continue;
       }
-
-      console.log(
-        `[DictionaryGenerator] Translating ${texts.length} new/changed texts to ${locale}...`
-      );
 
       for (let i = 0; i < texts.length; i += batchSize) {
         const batchTexts = texts.slice(i, i + batchSize);
@@ -257,8 +239,6 @@ export class DictionaryGenerator {
     dictionary: Dictionary,
     allLocales: string[]
   ): void {
-    console.log('[DictionaryGenerator] Using mock translation...');
-
     // Process each file
     for (const [filePath, fileData] of Object.entries(sourceMap.files)) {
       dictionary.files[filePath] = {
@@ -311,15 +291,6 @@ export class DictionaryGenerator {
     const totalEntries = Object.values(dictionary.files).reduce(
       (count, file) => count + Object.keys(file.entries).length,
       0
-    );
-
-    console.log(
-      `[DictionaryGenerator] Generated dictionary with ${totalEntries} entries across ${
-        Object.keys(dictionary.files).length
-      } files`
-    );
-    console.log(
-      `[DictionaryGenerator] Dictionary files written to: ${outputPath}`
     );
 
     return outputPath;

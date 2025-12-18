@@ -1,4 +1,4 @@
-import { ParserOptions, ScopeMap } from '../types.js';
+import { ParserOptions, ScopeMap } from '../types';
 export declare class Parser {
     private options;
     private lockPath;

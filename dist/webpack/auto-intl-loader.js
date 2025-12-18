@@ -1,21 +1,27 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = loader;
 // src/webpack/auto-intl-loader.ts
-import fs from 'fs';
-import path from 'path';
-import { transformProject } from '../transformer/Injector.js';
-import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper.js';
-export default function loader(source) {
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const Injector_1 = require("../transformer/Injector");
+const LayoutWrapper_1 = require("../transformer/LayoutWrapper");
+function loader(source) {
     const options = this.getOptions() || {};
     const callback = this.async();
     const processFile = async () => {
         try {
             // Get the file path relative to the project root and normalize it
             const projectRoot = this.rootContext || process.cwd();
-            const relativeFilePath = path
+            const relativeFilePath = path_1.default
                 .relative(projectRoot, this.resourcePath)
-                .split(path.sep)
+                .split(path_1.default.sep)
                 .join('/'); // Normalize to forward slashes to match sourceMap format
             // First, automatically wrap layout with AlgebrasIntlProvider
-            let result = wrapLayoutWithIntl(source, this.resourcePath);
+            let result = (0, LayoutWrapper_1.wrapLayoutWithIntl)(source, this.resourcePath);
             // Load source map - try from options first, then from disk
             let sourceMap = options.sourceMap || null;
             if (!sourceMap ||
@@ -26,15 +32,15 @@ export default function loader(source) {
                     process.env.ALGEBRAS_INTL_OUTPUT_DIR ||
                     './src/intl';
                 const possibleSourceMapPaths = [
-                    path.resolve(projectRoot, outputDir, 'source.json'),
-                    path.resolve(projectRoot, 'src/intl/source.json'),
-                    path.resolve(projectRoot, '.intl/source.json'),
-                    path.resolve(projectRoot, 'source.json'),
+                    path_1.default.resolve(projectRoot, outputDir, 'source.json'),
+                    path_1.default.resolve(projectRoot, 'src/intl/source.json'),
+                    path_1.default.resolve(projectRoot, '.intl/source.json'),
+                    path_1.default.resolve(projectRoot, 'source.json'),
                 ];
                 for (const sourceMapPath of possibleSourceMapPaths) {
-                    if (fs.existsSync(sourceMapPath)) {
+                    if (fs_1.default.existsSync(sourceMapPath)) {
                         try {
-                            const sourceMapContent = fs.readFileSync(sourceMapPath, 'utf-8');
+                            const sourceMapContent = fs_1.default.readFileSync(sourceMapPath, 'utf-8');
                             sourceMap = JSON.parse(sourceMapContent);
                             break;
                         }
@@ -51,9 +57,9 @@ export default function loader(source) {
             }
             // Then, transform the project with translation injections
             // Use the normalized relative path for matching
-            result = transformProject(result, {
+            result = (0, Injector_1.transformProject)(result, {
                 sourceMap,
-                filePath: path.resolve(projectRoot, relativeFilePath),
+                filePath: path_1.default.resolve(projectRoot, relativeFilePath),
             });
             callback(null, result);
         }

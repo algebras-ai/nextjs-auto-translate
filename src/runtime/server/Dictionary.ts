@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs/promises';
-import { DictStructure } from '../types.js';
+import { DictStructure } from '../types';
 
 class Dictionary {
   private locale: string;

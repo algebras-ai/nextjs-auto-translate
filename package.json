@@ -1,7 +1,8 @@
 {
   "name": "nextjs-auto-intl",
   "version": "1.0.4",
-  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
     "./runtime": "./dist/runtime/index.js",
@@ -9,7 +10,8 @@
     "./runtime/server/IntlWrapper": "./dist/runtime/server/IntlWrapper.js",
     "./runtime/client/components/Translated": "./dist/runtime/client/components/Translated.js",
     "./runtime/client/components/LocaleSwitcher": "./dist/runtime/client/components/LocaleSwitcher.js",
-    "./webpack/auto-intl-loader": "./dist/webpack/auto-intl-loader.js"
+    "./webpack/auto-intl-loader": "./dist/webpack/auto-intl-loader.js",
+    "./turbopack/auto-intl-transformer": "./dist/turbopack/auto-intl-transformer.js"
   },
   "scripts": {
     "prebuild": "tsx scripts/generateLanguageMap.ts",

@@ -2,9 +2,9 @@ import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 import fs from 'fs/promises';
 import path from 'path';
-import AlgebrasIntlClientProvider from '../client/Provider.js';
-import { LanguageCode } from '../../data/languageMap.js';
-import { DictStructure } from '../types.js';
+import AlgebrasIntlClientProvider from '../client/Provider';
+import { LanguageCode } from '../../data/languageMap';
+import { DictStructure } from '../types';
 
 interface IntlWrapperProps {
   children: ReactNode;

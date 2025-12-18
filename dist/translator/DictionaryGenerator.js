@@ -1,5 +1,11 @@
-import fs from 'fs';
-import path from 'path';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DictionaryGenerator = void 0;
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 // Fake translation service - returns original text as placeholder
 class MockTranslationService {
     translate(text, targetLocale) {
@@ -11,7 +17,7 @@ class MockTranslationService {
         return `[${targetLocale.toUpperCase()}] ${text}`;
     }
 }
-export class DictionaryGenerator {
+class DictionaryGenerator {
     options;
     translationService = new MockTranslationService();
     translationProvider;
@@ -25,14 +31,13 @@ export class DictionaryGenerator {
      */
     loadExistingDictionary() {
         try {
-            const outputPath = path.resolve(process.cwd(), this.options.outputDir);
-            const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
-            if (!fs.existsSync(dictionaryJsonPath)) {
+            const outputPath = path_1.default.resolve(process.cwd(), this.options.outputDir);
+            const dictionaryJsonPath = path_1.default.join(outputPath, 'dictionary.json');
+            if (!fs_1.default.existsSync(dictionaryJsonPath)) {
                 return null;
             }
-            const content = fs.readFileSync(dictionaryJsonPath, 'utf-8');
+            const content = fs_1.default.readFileSync(dictionaryJsonPath, 'utf-8');
             const parsed = JSON.parse(content);
-            console.log('[DictionaryGenerator] Loaded existing dictionary from:', dictionaryJsonPath);
             return parsed;
         }
         catch (error) {
@@ -45,7 +50,6 @@ export class DictionaryGenerator {
             this.options.defaultLocale,
             ...this.options.targetLocales,
         ];
-        console.log(`[DictionaryGenerator] Generating dictionary for locales: ${allLocales.join(', ')}`);
         const existingDictionary = this.loadExistingDictionary();
         const dictionary = {
             // preserve existing version if present, otherwise start with 0.1
@@ -65,7 +69,7 @@ export class DictionaryGenerator {
         }
         // Write dictionary files
         const outputPath = this.writeDictionaryFiles(dictionary);
-        const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
+        const dictionaryJsonPath = path_1.default.join(outputPath, 'dictionary.json');
         return dictionaryJsonPath;
     }
     /**
@@ -74,7 +78,6 @@ export class DictionaryGenerator {
      * - call API only for new/changed scopes or for locales that are missing
      */
     async generateWithAlgebrasAI(sourceMap, dictionary, existingDictionary) {
-        console.log('[DictionaryGenerator] Using Algebras AI for translation...');
         const defaultLocale = this.options.defaultLocale;
         const targetLocales = this.options.targetLocales;
         // For each locale, collect only texts that actually need translation
@@ -133,10 +136,8 @@ export class DictionaryGenerator {
         for (const locale of targetLocales) {
             const { texts, keys } = requestsByLocale[locale];
             if (texts.length === 0) {
-                console.log(`[DictionaryGenerator] No new texts to translate for locale ${locale}, reusing existing translations`);
                 continue;
             }
-            console.log(`[DictionaryGenerator] Translating ${texts.length} new/changed texts to ${locale}...`);
             for (let i = 0; i < texts.length; i += batchSize) {
                 const batchTexts = texts.slice(i, i + batchSize);
                 const batchKeys = keys.slice(i, i + batchSize);
@@ -160,7 +161,6 @@ export class DictionaryGenerator {
         }
     }
     generateWithMockTranslation(sourceMap, dictionary, allLocales) {
-        console.log('[DictionaryGenerator] Using mock translation...');
         // Process each file
         for (const [filePath, fileData] of Object.entries(sourceMap.files)) {
             dictionary.files[filePath] = {
@@ -188,15 +188,14 @@ export class DictionaryGenerator {
         }
     }
     writeDictionaryFiles(dictionary) {
-        const outputPath = path.resolve(process.cwd(), this.options.outputDir);
+        const outputPath = path_1.default.resolve(process.cwd(), this.options.outputDir);
         // Ensure output directory exists
-        fs.mkdirSync(outputPath, { recursive: true });
+        fs_1.default.mkdirSync(outputPath, { recursive: true });
         // Write dictionary.json file (for debugging/inspection)
-        const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
-        fs.writeFileSync(dictionaryJsonPath, JSON.stringify(dictionary, null, 2), 'utf-8');
+        const dictionaryJsonPath = path_1.default.join(outputPath, 'dictionary.json');
+        fs_1.default.writeFileSync(dictionaryJsonPath, JSON.stringify(dictionary, null, 2), 'utf-8');
         const totalEntries = Object.values(dictionary.files).reduce((count, file) => count + Object.keys(file.entries).length, 0);
-        console.log(`[DictionaryGenerator] Generated dictionary with ${totalEntries} entries across ${Object.keys(dictionary.files).length} files`);
-        console.log(`[DictionaryGenerator] Dictionary files written to: ${outputPath}`);
         return outputPath;
     }
 }
+exports.DictionaryGenerator = DictionaryGenerator;

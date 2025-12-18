@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { DictStructure } from '../types.js';
+import { DictStructure } from '../types';
 export declare const useAlgebrasIntl: () => {
     getLocales: () => string[];
     dictionary: DictStructure;

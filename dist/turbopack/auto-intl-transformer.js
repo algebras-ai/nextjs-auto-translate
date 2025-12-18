@@ -1,8 +1,13 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // src/turbopack/auto-intl-transformer.ts
-import fs from 'fs';
-import path from 'path';
-import { transformProject } from '../transformer/Injector.js';
-import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper.js';
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const Injector_1 = require("../transformer/Injector");
+const LayoutWrapper_1 = require("../transformer/LayoutWrapper");
 /**
  * Turbopack transformer for auto-intl
  * Transforms JSX files to inject Translated components and wrap layouts with AlgebrasIntlProvider
@@ -17,26 +22,19 @@ import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper.js';
  */
 // Support both webpack loader and Turbopack transformer interfaces
 function transformerImpl(source, filePath, options = {}) {
-    // Log that transformer is being called
-    if (process.env.NODE_ENV === 'development') {
-        console.log(`[AutoIntlTransformer] 🔄 Processing: ${filePath}`);
-    }
     // Exclude node_modules files (matching webpack loader behavior)
     if (filePath.includes('node_modules')) {
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`[AutoIntlTransformer] ⏭️  Skipping node_modules: ${filePath}`);
-        }
         return source;
     }
     try {
         // Get the file path relative to the project root and normalize it
         const projectRoot = process.cwd();
-        const relativeFilePath = path
+        const relativeFilePath = path_1.default
             .relative(projectRoot, filePath)
-            .split(path.sep)
+            .split(path_1.default.sep)
             .join('/'); // Normalize to forward slashes to match sourceMap format
         // First, automatically wrap layout with AlgebrasIntlProvider
-        let result = wrapLayoutWithIntl(source, filePath);
+        let result = (0, LayoutWrapper_1.wrapLayoutWithIntl)(source, filePath);
         // Load source map - try from options first, then from disk
         let sourceMap = options.sourceMap || null;
         if (!sourceMap ||
@@ -47,15 +45,15 @@ function transformerImpl(source, filePath, options = {}) {
                 process.env.ALGEBRAS_INTL_OUTPUT_DIR ||
                 './src/intl';
             const possibleSourceMapPaths = [
-                path.resolve(projectRoot, outputDir, 'source.json'),
-                path.resolve(projectRoot, 'src/intl/source.json'),
-                path.resolve(projectRoot, '.intl/source.json'),
-                path.resolve(projectRoot, 'source.json'),
+                path_1.default.resolve(projectRoot, outputDir, 'source.json'),
+                path_1.default.resolve(projectRoot, 'src/intl/source.json'),
+                path_1.default.resolve(projectRoot, '.intl/source.json'),
+                path_1.default.resolve(projectRoot, 'source.json'),
             ];
             for (const sourceMapPath of possibleSourceMapPaths) {
-                if (fs.existsSync(sourceMapPath)) {
+                if (fs_1.default.existsSync(sourceMapPath)) {
                     try {
-                        const sourceMapContent = fs.readFileSync(sourceMapPath, 'utf-8');
+                        const sourceMapContent = fs_1.default.readFileSync(sourceMapPath, 'utf-8');
                         sourceMap = JSON.parse(sourceMapContent);
                         break;
                     }
@@ -67,32 +65,15 @@ function transformerImpl(source, filePath, options = {}) {
         }
         if (!sourceMap || !sourceMap.files) {
             // No source map found, return layout-wrapped code (if applicable)
-            if (process.env.NODE_ENV === 'development') {
-                console.log(`[AutoIntlTransformer] No source map found for ${relativeFilePath}`);
-            }
             return result;
-        }
-        // Remove the check for file in sourceMap - let transformProject handle it
-        // transformProject will check if it's a page file or if file is in sourceMap
-        if (process.env.NODE_ENV === 'development') {
-            const isInSourceMap = sourceMap.files[relativeFilePath] !== undefined;
-            if (isInSourceMap) {
-                console.log(`[AutoIntlTransformer] Processing ${relativeFilePath} with ${Object.keys(sourceMap.files[relativeFilePath]?.scopes || {}).length} scopes`);
-            }
-            else {
-                console.log(`[AutoIntlTransformer] Processing ${relativeFilePath} (may be a page file)`);
-            }
         }
         // Then, transform the project with translation injections
         // transformProject will handle page files and sourceMap files correctly
         // Use the absolute path for transformProject (it will normalize internally)
-        result = transformProject(result, {
+        result = (0, Injector_1.transformProject)(result, {
             sourceMap,
-            filePath: path.resolve(projectRoot, relativeFilePath),
+            filePath: path_1.default.resolve(projectRoot, relativeFilePath),
         });
-        if (process.env.NODE_ENV === 'development' && result !== source) {
-            console.log(`[AutoIntlTransformer] ✅ Transformed ${relativeFilePath}`);
-        }
         return result;
     }
     catch (err) {
@@ -153,4 +134,4 @@ function transformerWrapper(source, contextOrMap) {
     return transformerImpl(source, filePath, options);
 }
 // Export as default - works for both webpack loader and Turbopack transformer
-export default transformerWrapper;
+exports.default = transformerWrapper;

@@ -3,7 +3,7 @@ import { parse } from '@babel/parser';
 import traverseDefault, { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
 import path from 'path';
-import { ScopeMap } from '../types.js';
+import { ScopeMap } from '../types';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = (traverseDefault as any).default || traverseDefault;

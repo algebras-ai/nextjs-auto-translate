@@ -1,7 +1,10 @@
+"use strict";
 'use client';
-import { jsx as _jsx } from "react/jsx-runtime";
-import { createContext, useContext, useEffect, useState, useCallback, useMemo, } from 'react';
-const context = createContext({
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.useAlgebrasIntl = void 0;
+const jsx_runtime_1 = require("react/jsx-runtime");
+const react_1 = require("react");
+const context = (0, react_1.createContext)({
     dictionary: {
         version: '',
         files: {},
@@ -9,8 +12,8 @@ const context = createContext({
     locale: 'en',
     setLocale: () => { },
 });
-export const useAlgebrasIntl = () => {
-    const ctx = useContext(context);
+const useAlgebrasIntl = () => {
+    const ctx = (0, react_1.useContext)(context);
     const getLocales = () => {
         // Collect all unique locales from all files and entries
         const localeSet = new Set();
@@ -47,11 +50,12 @@ export const useAlgebrasIntl = () => {
         getLocales,
     };
 };
+exports.useAlgebrasIntl = useAlgebrasIntl;
 const AlgebrasIntlClientProvider = (props) => {
-    const [dictionary] = useState(() => JSON.parse(props.dictJson));
-    const [locale, setLocaleState] = useState(props.initialLocale);
+    const [dictionary] = (0, react_1.useState)(() => JSON.parse(props.dictJson));
+    const [locale, setLocaleState] = (0, react_1.useState)(props.initialLocale);
     // Update cookie when locale changes (skip initial mount to prevent hydration mismatch)
-    useEffect(() => {
+    (0, react_1.useEffect)(() => {
         // Skip cookie update on initial mount - server already set the correct locale
         // Only update if locale actually changed from user interaction
         if (typeof document !== 'undefined' && locale !== props.initialLocale) {
@@ -59,18 +63,18 @@ const AlgebrasIntlClientProvider = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [locale]); // Intentionally exclude props.initialLocale to only run on locale changes
-    const setLocale = useCallback((newLocale) => {
+    const setLocale = (0, react_1.useCallback)((newLocale) => {
         setLocaleState(newLocale);
         // Update cookie immediately when user changes locale
         if (typeof document !== 'undefined') {
             document.cookie = `locale=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
         }
     }, []);
-    const contextValue = useMemo(() => ({
+    const contextValue = (0, react_1.useMemo)(() => ({
         dictionary,
         locale,
         setLocale,
     }), [dictionary, locale, setLocale]);
-    return (_jsx(context.Provider, { value: contextValue, children: props.children }));
+    return ((0, jsx_runtime_1.jsx)(context.Provider, { value: contextValue, children: props.children }));
 };
-export default AlgebrasIntlClientProvider;
+exports.default = AlgebrasIntlClientProvider;

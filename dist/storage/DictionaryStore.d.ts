@@ -1,4 +1,4 @@
-import { Dictionary } from '../types.js';
+import { Dictionary } from '../types';
 export declare class DictionaryStore {
     private path;
     save(data: Dictionary): void;
