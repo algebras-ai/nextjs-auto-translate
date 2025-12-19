@@ -1,5 +1,5 @@
 // src/translator/AlgebrasTranslationProvider.ts
-import { ITranslateProvider } from './Translator.js';
+import { ITranslateProvider } from './Translator';
 
 export interface AlgebrasTranslationOptions {
   apiKey: string;

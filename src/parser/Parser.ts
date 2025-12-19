@@ -5,9 +5,9 @@ import * as t from '@babel/types';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import { SourceStore } from '../storage/SourceStore.js';
-import { ParserOptions, ScopeData, ScopeMap } from '../types.js';
-import { buildContent, getRelativeScopePath } from './utils.js';
+import { SourceStore } from '../storage/SourceStore';
+import { ParserOptions, ScopeData, ScopeMap } from '../types';
+import { buildContent, getRelativeScopePath } from './utils';
 
 // @babel/traverse has different exports for ESM vs CommonJS
 const traverse = (traverseDefault as any).default || traverseDefault;

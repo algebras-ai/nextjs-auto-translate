@@ -1,24 +1,25 @@
 {
-	"compilerOptions": {
-	  /* ESM va Node 20+ uchun */
-	  "target": "ES2022",
-	  "module": "ESNext",
-	  "moduleResolution": "bundler",
-  
-	  "outDir": "dist",
-	  "rootDir": "src",
-  
-  "declaration": true,
-  "esModuleInterop": true,
-  "allowSyntheticDefaultImports": true,
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
 
-  "strict": true,
-	  "skipLibCheck": true,
-  
-	  "jsx": "react-jsx"
-	},
-	"include": [
-	  "src",
-	  "src/webpack"
-	]
-  }
+    "outDir": "dist",
+    "rootDir": "src",
+
+    "declaration": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    "strict": true,
+    "skipLibCheck": true,
+
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/index.cjs.ts"
+  ]
+}

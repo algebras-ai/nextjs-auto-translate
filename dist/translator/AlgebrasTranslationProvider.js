@@ -1,4 +1,7 @@
-export class AlgebrasTranslationProvider {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AlgebrasTranslationProvider = void 0;
+class AlgebrasTranslationProvider {
     apiKey;
     apiUrl;
     glossaryId;
@@ -253,3 +256,4 @@ export class AlgebrasTranslationProvider {
         return results;
     }
 }
+exports.AlgebrasTranslationProvider = AlgebrasTranslationProvider;

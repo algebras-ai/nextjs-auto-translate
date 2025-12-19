@@ -1,10 +1,12 @@
+"use strict";
 'use client';
-import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { languageMap } from '../../../data/languageMap.js';
-import { useAlgebrasIntl } from '../Provider.js';
-const DropdownTrigger = ({ currentLocale, isOpen, onClick, }) => (_jsxs("button", { onClick: onClick, style: {
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_runtime_1 = require("react/jsx-runtime");
+const react_1 = require("react");
+const navigation_1 = require("next/navigation");
+const languageMap_1 = require("../../../data/languageMap");
+const Provider_1 = require("../Provider");
+const DropdownTrigger = ({ currentLocale, isOpen, onClick, }) => ((0, jsx_runtime_1.jsxs)("button", { onClick: onClick, style: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
@@ -26,12 +28,12 @@ const DropdownTrigger = ({ currentLocale, isOpen, onClick, }) => (_jsxs("button"
     }, onMouseLeave: (e) => {
         e.currentTarget.style.borderColor = '#e5e7eb';
         e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
-    }, children: [_jsxs("span", { style: { display: 'flex', alignItems: 'center', gap: '8px' }, children: ["\uD83C\uDF10", languageMap[currentLocale]] }), _jsx("span", { style: {
+    }, children: [(0, jsx_runtime_1.jsxs)("span", { style: { display: 'flex', alignItems: 'center', gap: '8px' }, children: ["\uD83C\uDF10", languageMap_1.languageMap[currentLocale]] }), (0, jsx_runtime_1.jsx)("span", { style: {
                 transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                 transition: 'transform 0.2s ease',
                 fontSize: '12px',
             }, children: "\u25BC" })] }));
-const DropdownOption = ({ locale, isSelected, onClick, }) => (_jsxs("button", { onClick: () => onClick(locale), disabled: isSelected, style: {
+const DropdownOption = ({ locale, isSelected, onClick, }) => ((0, jsx_runtime_1.jsxs)("button", { onClick: () => onClick(locale), disabled: isSelected, style: {
         width: '100%',
         padding: '12px 16px',
         backgroundColor: isSelected ? '#f3f4f6' : '#ffffff',
@@ -56,11 +58,11 @@ const DropdownOption = ({ locale, isSelected, onClick, }) => (_jsxs("button", { 
             e.currentTarget.style.backgroundColor = '#ffffff';
             e.currentTarget.style.color = '#374151';
         }
-    }, children: [isSelected && (_jsx("span", { style: { color: '#10b981', fontSize: '12px' }, children: "\u2713" })), languageMap[locale]] }));
+    }, children: [isSelected && ((0, jsx_runtime_1.jsx)("span", { style: { color: '#10b981', fontSize: '12px' }, children: "\u2713" })), languageMap_1.languageMap[locale]] }));
 const LocaleSwitcher = () => {
-    const { locale: currentLocale, setLocale, getLocales } = useAlgebrasIntl();
-    const router = useRouter();
-    const [isOpen, setIsOpen] = useState(false);
+    const { locale: currentLocale, setLocale, getLocales } = (0, Provider_1.useAlgebrasIntl)();
+    const router = (0, navigation_1.useRouter)();
+    const [isOpen, setIsOpen] = (0, react_1.useState)(false);
     const availableLocales = getLocales();
     const toggleDropdown = () => setIsOpen(!isOpen);
     const handleLocaleChange = (locale) => {
@@ -69,7 +71,7 @@ const LocaleSwitcher = () => {
         // Refresh the page to update server components with new locale
         router.refresh();
     };
-    return (_jsxs("div", { style: { position: 'relative', display: 'inline-block' }, children: [_jsx(DropdownTrigger, { currentLocale: currentLocale, isOpen: isOpen, onClick: toggleDropdown }), isOpen && (_jsx("div", { style: {
+    return ((0, jsx_runtime_1.jsxs)("div", { style: { position: 'relative', display: 'inline-block' }, children: [(0, jsx_runtime_1.jsx)(DropdownTrigger, { currentLocale: currentLocale, isOpen: isOpen, onClick: toggleDropdown }), isOpen && ((0, jsx_runtime_1.jsx)("div", { style: {
                     position: 'absolute',
                     top: '100%',
                     left: '0',
@@ -82,14 +84,14 @@ const LocaleSwitcher = () => {
                     zIndex: 1000,
                     overflow: 'hidden',
                     animation: 'fadeIn 0.15s ease-out',
-                }, children: availableLocales.map((locale) => (_jsx(DropdownOption, { locale: locale, isSelected: locale === currentLocale, onClick: handleLocaleChange }, locale))) })), isOpen && (_jsx("div", { onClick: () => setIsOpen(false), style: {
+                }, children: availableLocales.map((locale) => ((0, jsx_runtime_1.jsx)(DropdownOption, { locale: locale, isSelected: locale === currentLocale, onClick: handleLocaleChange }, locale))) })), isOpen && ((0, jsx_runtime_1.jsx)("div", { onClick: () => setIsOpen(false), style: {
                     position: 'fixed',
                     top: '0',
                     left: '0',
                     right: '0',
                     bottom: '0',
                     zIndex: 999,
-                } })), _jsx("style", { children: `
+                } })), (0, jsx_runtime_1.jsx)("style", { children: `
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -102,4 +104,4 @@ const LocaleSwitcher = () => {
         }
       ` })] }));
 };
-export default LocaleSwitcher;
+exports.default = LocaleSwitcher;

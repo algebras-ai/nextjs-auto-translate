@@ -1,0 +1,41 @@
+{
+  "version": 0.1,
+  "files": {
+    "app/page.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body0/argument/children1/children3/children1": {
+          "type": "element",
+          "hash": "bdff3fcf8d61c130ed99cb03802d4309",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "To get started, edit the page.tsx file."
+        },
+        "program/body2/declaration/body/body0/argument/children1/children3/children3": {
+          "type": "element",
+          "hash": "f1eb6e28241ddcc0816cb42e83ec7916",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Looking for a starting point or more instructions? Head over to \n            <element:a>Templates</element:a> \n            or the \n            <element:a>Learning</element:a> \n            center."
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children1": {
+          "type": "element",
+          "hash": "aa0de4f9a2633a20879ae75c87adf6d0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Image></element:Image>\n            Deploy Now"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children3": {
+          "type": "element",
+          "hash": "5b6cf869265c13af8566f192b4ab3d2a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Documentation"
+        }
+      }
+    }
+  }
+}

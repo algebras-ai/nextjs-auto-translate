@@ -418,15 +418,7 @@ export function transformProject(
     }
   }
 
-  // Always inject language switcher for page files, regardless of text changes or sourceMap
-  if (isPageFile) {
-    ensureImportLocalesSwitcher(ast);
-    injectLocaleSwitcher(ast);
-  }
-
-  // Only regenerate code if we made changes (text transformation or language switcher injection)
-  // For page files, we always inject the switcher, so we always need to regenerate
-  if (changed || isPageFile) {
+  if (changed) {
     const output = generate(ast, {
       retainLines: true,
       retainFunctionParens: true,

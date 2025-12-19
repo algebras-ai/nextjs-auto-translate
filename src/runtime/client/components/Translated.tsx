@@ -1,7 +1,7 @@
 'use client';
 
 import { createElement, ReactNode } from 'react';
-import { useAlgebrasIntl } from '../Provider.js';
+import { useAlgebrasIntl } from '../Provider';
 
 interface TranslatedProps {
   tKey: string;

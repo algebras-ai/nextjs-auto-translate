@@ -1,1 +1,1 @@
-export { default } from './IntlWrapper.js';
+export { default } from './IntlWrapper';

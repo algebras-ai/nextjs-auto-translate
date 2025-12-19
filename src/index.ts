@@ -14,11 +14,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Re-export commonly used types and components
-export { LanguageCode } from './data/languageMap.js';
-export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
-export { DictionaryGenerator } from './translator/DictionaryGenerator.js';
+export { LanguageCode } from './data/languageMap';
+export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider';
+export { DictionaryGenerator } from './translator/DictionaryGenerator';
 // Note: AlgebrasIntlProvider should be imported directly from the runtime path
-// export { default as AlgebrasIntlProvider } from "./runtime/server/Provider.js";
+// export { default as AlgebrasIntlProvider } from "./runtime/server/Provider";
 
 let hasScheduled = false;
 let cachedSourceMap: ScopeMap | null = null;
@@ -69,18 +69,7 @@ export default function myPlugin(options: PluginOptions) {
       const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
       const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
 
-      console.log('\n========================================');
-      console.log('[AlgebrasIntl] Translation Configuration:');
-      console.log(
-        '  API Key:',
-        apiKey ? `${apiKey.substring(0, 10)}...` : 'NOT FOUND'
-      );
-      console.log('  API URL:', apiUrl || 'https://beta.algebras.ai/api/v1');
-      console.log('  Target Locales:', targetLocales.join(', '));
-      console.log('========================================\n');
-
       if (apiKey) {
-        console.log('[AlgebrasIntl] ✅ Using Algebras AI translation service');
         translationProvider = new AlgebrasTranslationProvider({
           apiKey,
           apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
@@ -151,14 +140,6 @@ export default function myPlugin(options: PluginOptions) {
     // Turbopack needs a serializable module specifier, so we reference ourselves by package name.
     const transformerPath = `${PACKAGE_NAME}/turbopack/auto-intl-transformer`;
 
-    console.log(
-      `[AutoIntl] 🔧 Configuring Turbopack transformer: ${transformerPath}`
-    );
-    console.log(`[AutoIntl] 📁 Output dir: ${outputDir}`);
-    console.log(
-      `[AutoIntl] 📊 SourceMap cached: ${cachedSourceMap ? Object.keys(cachedSourceMap.files || {}).length + ' files' : 'not loaded yet'}`
-    );
-
     // Turbopack rules format for Next.js 16
     // Options must be JSON-serializable, so we only pass outputDir
     // The transformer will load sourceMap from disk
@@ -190,47 +171,30 @@ export default function myPlugin(options: PluginOptions) {
       };
     }
 
-    console.log(
-      `[AutoIntl] ✅ Configured ${patterns.length} Turbopack patterns`
-    );
-    console.log(
-      `[AutoIntl] 📋 Sample rule for *.{js,jsx,ts,tsx}:`,
-      JSON.stringify(rules['*.{js,jsx,ts,tsx}'] || {}, null, 2)
-    );
-
     // Return config with rules - Next.js 16 format
     const result = {
       ...nextTurbopack,
       rules,
     };
 
-    console.log(`[AutoIntl] 🔍 Turbopack config keys:`, Object.keys(result));
-
     return result;
   }
 
   return function wrapNextConfig(nextConfig: Partial<Record<string, any>>) {
-    console.log(`[AutoIntl] 🚀 Wrapping Next.js config...`);
     const config: Partial<Record<string, any>> = { ...nextConfig };
 
     // Helper to set both webpack and turbopack configs
     const applyConfigs = () => {
-      console.log(`[AutoIntl] ⚙️  Applying configs (webpack + turbopack)...`);
       // Always configure webpack (for webpack builds)
       config.webpack = wrapWebpack(nextConfig.webpack);
 
       // Always configure turbopack (for Turbopack builds)
       // Next.js 16 uses `turbopack` directly at the top level
       const existingTurbopack = (config as any).turbopack;
-      console.log(
-        `[AutoIntl] 📦 Existing turbopack config:`,
-        existingTurbopack ? 'found' : 'none'
-      );
       const wrappedTurbopack = wrapTurbopack(existingTurbopack);
 
       // Set turbopack directly (Next.js 16)
       (config as any).turbopack = wrappedTurbopack;
-      console.log(`[AutoIntl] ✅ Set config.turbopack`);
     };
 
     if (hasScheduled) {

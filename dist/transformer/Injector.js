@@ -1,21 +1,64 @@
-import generateDefault from '@babel/generator';
-import { parse } from '@babel/parser';
-import traverseDefault from '@babel/traverse';
-import * as t from '@babel/types';
-import path from 'path';
-import { runtimeImportPath } from '../utils/packageInfo.js';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.injectTranslated = injectTranslated;
+exports.ensureImportTranslated = ensureImportTranslated;
+exports.ensureImportLocalesSwitcher = ensureImportLocalesSwitcher;
+exports.injectLocaleSwitcher = injectLocaleSwitcher;
+exports.transformProject = transformProject;
+const generator_1 = __importDefault(require("@babel/generator"));
+const parser_1 = require("@babel/parser");
+const traverse_1 = __importDefault(require("@babel/traverse"));
+const t = __importStar(require("@babel/types"));
+const path_1 = __importDefault(require("path"));
+const packageInfo_js_1 = require("../utils/packageInfo.js");
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
-const traverse = traverseDefault.default || traverseDefault;
-const generate = generateDefault.default || generateDefault;
+const traverse = traverse_1.default.default || traverse_1.default;
+const generate = generator_1.default.default || generator_1.default;
 // Injects <Translated tKey="scope" /> in place of JSXText
-export function injectTranslated(scope) {
+function injectTranslated(scope) {
     return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
     ), null, [], true);
 }
 // Ensures import Translated from '<package>/runtime/client/components/Translated' exists
-export function ensureImportTranslated(ast) {
+function ensureImportTranslated(ast) {
     let hasImport = false;
-    const translatedImport = runtimeImportPath('runtime/client/components/Translated');
+    const translatedImport = (0, packageInfo_js_1.runtimeImportPath)('runtime/client/components/Translated');
     traverse(ast, {
         ImportDeclaration(path) {
             if (typeof path.node.source.value === 'string' &&
@@ -34,9 +77,9 @@ export function ensureImportTranslated(ast) {
     }
 }
 // Ensures import LocalesSwitcher exists
-export function ensureImportLocalesSwitcher(ast) {
+function ensureImportLocalesSwitcher(ast) {
     let hasImport = false;
-    const localeSwitcherImport = runtimeImportPath('runtime/client/components/LocaleSwitcher');
+    const localeSwitcherImport = (0, packageInfo_js_1.runtimeImportPath)('runtime/client/components/LocaleSwitcher');
     traverse(ast, {
         ImportDeclaration(path) {
             if (typeof path.node.source.value === 'string' &&
@@ -65,7 +108,7 @@ function createSwitcherElement() {
     ], false);
 }
 // Inject LocalesSwitcher into the page component's return statement
-export function injectLocaleSwitcher(ast) {
+function injectLocaleSwitcher(ast) {
     let injected = false;
     // Strategy 1: Find return statement and inject into its JSX
     traverse(ast, {
@@ -192,12 +235,12 @@ export function injectLocaleSwitcher(ast) {
     }
 }
 // Transforms the specified file, injecting t() calls
-export function transformProject(code, options) {
+function transformProject(code, options) {
     const { filePath } = options;
     // Normalize path to match sourceMap format (forward slashes)
-    const relativePath = path
+    const relativePath = path_1.default
         .relative(process.cwd(), filePath)
-        .split(path.sep)
+        .split(path_1.default.sep)
         .join('/');
     const isPageFile = relativePath.includes('page.tsx') || relativePath.includes('page.jsx');
     const isInSourceMap = options.sourceMap.files && options.sourceMap.files[relativePath];
@@ -208,7 +251,7 @@ export function transformProject(code, options) {
     }
     let ast;
     try {
-        ast = parse(code, {
+        ast = (0, parser_1.parse)(code, {
             sourceType: 'module',
             plugins: ['jsx', 'typescript'],
         });
@@ -305,14 +348,7 @@ export function transformProject(code, options) {
             ensureImportTranslated(ast);
         }
     }
-    // Always inject language switcher for page files, regardless of text changes or sourceMap
-    if (isPageFile) {
-        ensureImportLocalesSwitcher(ast);
-        injectLocaleSwitcher(ast);
-    }
-    // Only regenerate code if we made changes (text transformation or language switcher injection)
-    // For page files, we always inject the switcher, so we always need to regenerate
-    if (changed || isPageFile) {
+    if (changed) {
         const output = generate(ast, {
             retainLines: true,
             retainFunctionParens: true,
