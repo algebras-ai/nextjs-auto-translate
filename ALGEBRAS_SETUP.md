@@ -98,7 +98,7 @@ The integration uses the Algebras AI Batch Translation API:
     "ignoreCache": false
   }
   ```
-
+  
   **Note**: All fields except `texts`, `sourceLanguage`, and `targetLanguage` are optional and can be customized in the provider configuration.
 
 - **Response Format**:

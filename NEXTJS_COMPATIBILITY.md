@@ -22,7 +22,7 @@ This document outlines the compatibility and testing coverage for `algebras-auto
 
 ```
 ✅ nextjs.compatibility.test.ts      - 22 tests
-✅ nextjs.async-apis.test.ts         - 17 tests
+✅ nextjs.async-apis.test.ts         - 17 tests  
 ✅ runtime.translated.test.tsx        - 10 tests
 ✅ translator.generator.test.ts       - 10 tests
 ✅ loader.test.ts                     - 5 tests
@@ -85,10 +85,10 @@ it('should support async cookies() API (Next.js 14+)', async () => {
   const mockCookies = async () => ({
     get: (name: string) => ({ value: 'en' }),
   });
-
+  
   const cookieStore = await mockCookies();
   const locale = cookieStore.get('locale');
-
+  
   expect(locale?.value).toBe('en');
 });
 ```
@@ -266,7 +266,7 @@ import LocaleSwitcher from "algebras-auto-intl/runtime/client/components/LocaleS
 
 export default function Header() {
   const { locale } = useAlgebrasIntl();
-
+  
   return (
     <header>
       <h1>Current Locale: {locale}</h1>

@@ -45,16 +45,16 @@ In `app/layout.tsx`:
 import IntlWrapper from 'algebras-auto-intl/runtime/server/IntlWrapper';
 
 export default function RootLayout({
-  children,
+	children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
+	return (
     <html lang="en">
-      <IntlWrapper>
-        <body>{children}</body>
-      </IntlWrapper>
-    </html>
+			<IntlWrapper>
+				<body>{children}</body>
+			</IntlWrapper>
+		</html>
   );
 }
 ```
@@ -69,10 +69,10 @@ In any client component:
 import LocaleSwitcher from 'algebras-auto-intl/runtime/client/components/LocaleSwitcher';
 
 export function Header() {
-  return (
-    <header>
-      <LocaleSwitcher />
-    </header>
+	return (
+		<header>
+			<LocaleSwitcher />
+		</header>
   );
 }
 ```
