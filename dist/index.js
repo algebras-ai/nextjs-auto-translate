@@ -3,8 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Parser } from './parser/Parser.js';
-import { DictionaryGenerator } from './translator/DictionaryGenerator.js';
 import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
+import { DictionaryGenerator } from './translator/DictionaryGenerator.js';
+import { PACKAGE_NAME } from './utils/packageInfo.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Re-export commonly used types and components
@@ -100,9 +101,8 @@ export default function myPlugin(options) {
         prepareSourceMap().catch((err) => {
             console.error('❌ Background source map preparation failed:', err);
         });
-        // Use relative path from node_modules - Turbopack needs serializable paths
-        // The transformer will be resolved from node_modules/nextjs-auto-intl
-        const transformerPath = 'nextjs-auto-intl/turbopack/auto-intl-transformer';
+        // Turbopack needs a serializable module specifier, so we reference ourselves by package name.
+        const transformerPath = `${PACKAGE_NAME}/turbopack/auto-intl-transformer`;
         console.log(`[AutoIntl] 🔧 Configuring Turbopack transformer: ${transformerPath}`);
         console.log(`[AutoIntl] 📁 Output dir: ${outputDir}`);
         console.log(`[AutoIntl] 📊 SourceMap cached: ${cachedSourceMap ? Object.keys(cachedSourceMap.files || {}).length + ' files' : 'not loaded yet'}`);

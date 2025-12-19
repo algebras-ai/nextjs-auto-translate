@@ -4,6 +4,7 @@ import path from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import transformer from '../src/turbopack/auto-intl-transformer';
 import type { ScopeMap } from '../src/types';
+import { PACKAGE_NAME } from '../src/utils/packageInfo';
 
 // Helper to get relative path matching what transformProject uses
 const getRelativePath = (filePath: string): string => {
@@ -287,7 +288,7 @@ describe('turbopack transformer', () => {
       });
 
       expect(result).toContain('IntlWrapper');
-      expect(result).toContain('nextjs-auto-intl/runtime/server/IntlWrapper');
+      expect(result).toContain(`${PACKAGE_NAME}/runtime/server/IntlWrapper`);
       expect(result).toContain('<IntlWrapper>');
     });
 
@@ -304,7 +305,7 @@ describe('turbopack transformer', () => {
     });
 
     it('does not double-wrap if IntlWrapper already exists', () => {
-      const layoutCode = `import IntlWrapper from "algebras-auto-intl/runtime/server/IntlWrapper";
+      const layoutCode = `import IntlWrapper from "${PACKAGE_NAME}/runtime/server/IntlWrapper";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html>
@@ -341,7 +342,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       expect(result).toContain('<Translated');
       expect(result).toContain(`tKey="${relativePath}::${scopePath}"`);
       expect(result).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
+        `${PACKAGE_NAME}/runtime/client/components/Translated`
       );
     });
 
@@ -360,7 +361,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       expect(result).toContain('import Translated');
       expect(result).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
+        `${PACKAGE_NAME}/runtime/client/components/Translated`
       );
     });
 
@@ -432,7 +433,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       expect(result).toContain('LocalesSwitcher');
       expect(result).toContain(
-        'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
+        `${PACKAGE_NAME}/runtime/client/components/LocaleSwitcher`
       );
     });
 

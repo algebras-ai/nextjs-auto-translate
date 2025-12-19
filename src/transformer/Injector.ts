@@ -4,10 +4,11 @@ import traverseDefault, { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
 import path from 'path';
 import { ScopeMap } from '../types.js';
+import { runtimeImportPath } from '../utils/packageInfo.js';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
-const traverse = (traverseDefault as any).default || traverseDefault
-const generate = (generateDefault as any).default || generateDefault
+const traverse = (traverseDefault as any).default || traverseDefault;
+const generate = (generateDefault as any).default || generateDefault;
 
 // Injects <Translated tKey="scope" /> in place of JSXText
 export function injectTranslated(scope: string): t.JSXElement {
@@ -23,14 +24,19 @@ export function injectTranslated(scope: string): t.JSXElement {
   );
 }
 
-// Ensures import Translated from 'nextjs-auto-intl/runtime/client/components/Translated' exists
+// Ensures import Translated from '<package>/runtime/client/components/Translated' exists
 export function ensureImportTranslated(ast: t.File) {
   let hasImport = false;
+  const translatedImport = runtimeImportPath(
+    'runtime/client/components/Translated'
+  );
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
-        path.node.source.value ===
-          'nextjs-auto-intl/runtime/client/components/Translated' &&
+        typeof path.node.source.value === 'string' &&
+        (path.node.source.value as string).endsWith(
+          '/runtime/client/components/Translated'
+        ) &&
         path.node.specifiers.some(
           (s: any) =>
             t.isImportDefaultSpecifier(s) &&
@@ -46,7 +52,7 @@ export function ensureImportTranslated(ast: t.File) {
   if (!hasImport) {
     const importDecl = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier('Translated'))],
-      t.stringLiteral('nextjs-auto-intl/runtime/client/components/Translated')
+      t.stringLiteral(translatedImport)
     );
     ast.program.body.unshift(importDecl);
   }
@@ -55,11 +61,16 @@ export function ensureImportTranslated(ast: t.File) {
 // Ensures import LocalesSwitcher exists
 export function ensureImportLocalesSwitcher(ast: t.File) {
   let hasImport = false;
+  const localeSwitcherImport = runtimeImportPath(
+    'runtime/client/components/LocaleSwitcher'
+  );
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
-        path.node.source.value ===
-          'nextjs-auto-intl/runtime/client/components/LocaleSwitcher' &&
+        typeof path.node.source.value === 'string' &&
+        (path.node.source.value as string).endsWith(
+          '/runtime/client/components/LocaleSwitcher'
+        ) &&
         path.node.specifiers.some(
           (s: any) =>
             t.isImportDefaultSpecifier(s) &&
@@ -75,9 +86,7 @@ export function ensureImportLocalesSwitcher(ast: t.File) {
   if (!hasImport) {
     const importDecl = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))],
-      t.stringLiteral(
-        'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
-      )
+      t.stringLiteral(localeSwitcherImport)
     );
     ast.program.body.unshift(importDecl);
   }
@@ -273,11 +282,11 @@ export function injectLocaleSwitcher(ast: t.File) {
 
 // Transforms the specified file, injecting t() calls
 export function transformProject(
-	code: string,
-	options: {
-		sourceMap: ScopeMap
-		filePath: string
-	}
+  code: string,
+  options: {
+    sourceMap: ScopeMap;
+    filePath: string;
+  }
 ) {
   const { filePath } = options;
 

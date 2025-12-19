@@ -18,8 +18,7 @@ ALGEBRAS_API_URL=https://platform.algebras.ai/api/v1
 Here's how to use the Algebras AI translation provider:
 
 ```typescript
-import { DictionaryGenerator } from "algebras-auto-intl";
-import { AlgebrasTranslationProvider } from "algebras-auto-intl/translator/AlgebrasTranslationProvider";
+import { AlgebrasTranslationProvider, DictionaryGenerator } from "algebras-auto-intl";
 
 // Load environment variables
 const apiKey = process.env.ALGEBRAS_API_KEY!;
@@ -64,6 +63,7 @@ The Algebras provider automatically batches translations to minimize API calls:
 ### Fallback Behavior
 
 If the API is unavailable or an error occurs:
+
 - Falls back to mock translations (prefixed with language code)
 - Logs detailed error messages
 - Continues processing without crashing
@@ -86,6 +86,7 @@ The integration uses the Algebras AI Batch Translation API:
 - **Authentication**: Uses `X-Api-Key` header (not `Authorization: Bearer`)
 - **Response Format**: Returns translations with index, content, word count, and credit usage
 - **Request Format**:
+
   ```json
   {
     "texts": ["Hello world", "How are you?"],
@@ -97,8 +98,9 @@ The integration uses the Algebras AI Batch Translation API:
     "ignoreCache": false
   }
   ```
-  
+
   **Note**: All fields except `texts`, `sourceLanguage`, and `targetLanguage` are optional and can be customized in the provider configuration.
+
 - **Response Format**:
   ```json
   {
@@ -107,6 +109,7 @@ The integration uses the Algebras AI Batch Translation API:
   ```
 
 The provider automatically:
+
 - Batches up to 20 texts per API call (API maximum)
 - Processes each target language separately
 - Adds rate limiting delays between batches
@@ -118,6 +121,7 @@ For more information, visit [Algebras AI Platform](https://platform.algebras.ai/
 ### API Key Issues
 
 If you get authentication errors:
+
 1. Verify your API key is correct in `.env`
 2. Check that the key is properly loaded (not undefined)
 3. Ensure there are no extra spaces or quotes in the `.env` file
@@ -125,12 +129,13 @@ If you get authentication errors:
 ### Translation Quality
 
 To improve translation quality:
+
 - **Use custom prompts**: Pass a `prompt` parameter to add context or tone instructions
   ```typescript
   new AlgebrasTranslationProvider({
-    apiKey: "...",
-    prompt: "Translate in a professional, formal tone"
-  })
+    apiKey: '...',
+    prompt: 'Translate in a professional, formal tone',
+  });
   ```
 - **Use glossaries**: Pass a `glossaryId` for domain-specific terminology
 - **Keep source texts clear**: Avoid mixing languages in a single text
@@ -140,6 +145,7 @@ To improve translation quality:
 ### Rate Limiting
 
 If you hit rate limits:
+
 - The provider automatically adds 1-second delays between batches
 - Reduce the `batchSize` in `translateAll` method if needed
 - Consider implementing exponential backoff for retries
@@ -147,6 +153,6 @@ If you hit rate limits:
 ## Support
 
 For issues with the Algebras AI API:
+
 - Status Page: [https://status.algebras.ai](https://status.algebras.ai)
 - API Documentation: [https://beta.algebras.ai/api/v1](https://beta.algebras.ai/api/v1)
-

@@ -14,17 +14,24 @@ ALGEBRAS_API_URL=https://platform.algebras.ai/api/v1
 Update your `next.config.ts`:
 
 ```typescript
-import algebrasAutoIntl from 'algebras-auto-intl'
+import type { NextConfig } from 'next'
+import autoIntl, { LanguageCode } from 'algebras-auto-intl'
 
-const nextConfig = algebrasAutoIntl({
-	defaultLocale: 'en',
-	targetLocales: ['es', 'fr', 'de', 'zh', 'ja'],
-	outputDir: './src/intl',
-})({
+const nextConfig: NextConfig = {
 	// your existing Next.js config
-})
+}
 
-export default nextConfig
+export default autoIntl({
+	defaultLocale: LanguageCode.en,
+	targetLocales: [
+		LanguageCode.es,
+		LanguageCode.fr,
+		LanguageCode.de,
+		LanguageCode.zh,
+		LanguageCode.ja,
+	],
+	outputDir: './src/intl',
+})(nextConfig)
 ```
 
 ## Step 3: Run your build

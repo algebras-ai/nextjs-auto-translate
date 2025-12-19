@@ -1,6 +1,6 @@
 # Next.js 15 Example Project
 
-This is a simple Next.js 15 example project. Follow the steps below to add automatic internationalization with `nextjs-auto-intl`.
+This is a simple Next.js 15 example project. Follow the steps below to add automatic internationalization with `algebras-auto-intl`.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ This is a simple Next.js 15 example project. Follow the steps below to add autom
 
 ### 1. Build the Parent Package
 
-First, build the `nextjs-auto-intl` package from the repository root:
+First, build the `algebras-auto-intl` package from the repository root:
 
 ```bash
 cd ../../
@@ -32,7 +32,7 @@ pnpm install
 **Note:** The example uses a local file reference to the parent package. If you want to use the published package instead, update `package.json`:
 
 ```json
-"nextjs-auto-intl": "^1.0.3"
+"algebras-auto-intl": "^1.0.3"
 ```
 
 ### 3. Run the Development Server
@@ -59,7 +59,7 @@ Open `next.config.ts` and wrap your config with the `autoIntl` plugin:
 
 ```typescript
 import type { NextConfig } from "next";
-import autoIntl, { LanguageCode } from "nextjs-auto-intl";
+import autoIntl, { LanguageCode } from "algebras-auto-intl";
 
 const nextConfig: NextConfig = autoIntl({
   defaultLocale: LanguageCode.en,
@@ -87,7 +87,7 @@ Open `app/components/Header.tsx` and add the `LocaleSwitcher` component:
 "use client";
 
 import Link from "next/link";
-import LocaleSwitcher from "nextjs-auto-intl/runtime/client/components/LocaleSwitcher";
+import LocaleSwitcher from "algebras-auto-intl/runtime/client/components/LocaleSwitcher";
 
 export default function Header() {
   return (
@@ -259,5 +259,5 @@ With an API key, the plugin uses Algebras AI for high-quality translations:
 ## Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)
-- [nextjs-auto-intl Documentation](../../README.md)
+- [algebras-auto-intl Documentation](../../README.md)
 - [Algebras AI Platform](https://platform.algebras.ai)

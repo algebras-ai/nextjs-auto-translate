@@ -9,9 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "algebras-auto-intl": "file:../../",
     "next": "^15.0.0",
-    "nextjs-auto-intl": "file:../..",
+    "algebras-auto-intl": "file:../..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -22,4 +21,3 @@
     "typescript": "^5.8.3"
   }
 }
-

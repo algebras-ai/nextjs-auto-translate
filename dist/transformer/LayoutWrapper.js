@@ -3,6 +3,7 @@ import generateDefault from '@babel/generator';
 import { parse } from '@babel/parser';
 import traverseDefault from '@babel/traverse';
 import * as t from '@babel/types';
+import { runtimeImportPath } from '../utils/packageInfo.js';
 const traverse = traverseDefault.default || traverseDefault;
 const generate = generateDefault.default || generateDefault;
 export function wrapLayoutWithIntl(code, filePath) {
@@ -31,10 +32,9 @@ export function wrapLayoutWithIntl(code, filePath) {
         ImportDeclaration(path) {
             const sourceValue = path.node.source.value;
             // Check for various import paths that might be used
-            const isIntlWrapperImport = sourceValue === 'algebras-auto-intl/runtime/server/IntlWrapper' ||
-                sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
-                sourceValue === 'algebras-auto-intl/runtime/server' ||
-                sourceValue === 'nextjs-auto-intl/runtime/server';
+            const isIntlWrapperImport = typeof sourceValue === 'string' &&
+                (sourceValue.endsWith('/runtime/server/IntlWrapper') ||
+                    sourceValue.endsWith('/runtime/server'));
             if (isIntlWrapperImport &&
                 path.node.specifiers.some((s) => (t.isImportDefaultSpecifier(s) &&
                     t.isIdentifier(s.local) &&
@@ -55,7 +55,7 @@ export function wrapLayoutWithIntl(code, filePath) {
         return code;
     }
     // Add IntlWrapper import
-    const intlWrapperImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier('IntlWrapper'))], t.stringLiteral('nextjs-auto-intl/runtime/server/IntlWrapper'));
+    const intlWrapperImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier('IntlWrapper'))], t.stringLiteral(runtimeImportPath('runtime/server/IntlWrapper')));
     ast.program.body.unshift(intlWrapperImport);
     // Wrap the layout's children with IntlWrapper
     traverse(ast, {

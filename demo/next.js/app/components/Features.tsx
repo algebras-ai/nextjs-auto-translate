@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
 export default function Features() {
   return (
     <section className="section">
       <h2>Key Features</h2>
       <p>
-        Here are some of the powerful features that make{" "}
+        Here are some of the powerful features that make{' '}
         <strong>algebras-auto-intl</strong> easy to use:
       </p>
       <div className="features-grid">
@@ -26,12 +26,11 @@ export default function Features() {
         <div className="feature-card">
           <h3>Zero Configuration</h3>
           <p>
-            Works out of the box with Next.js 14 and 15. Supports both
-            Webpack and Turbopack automatically.
+            Works out of the box with Next.js 14 and 15. Supports both Webpack
+            and Turbopack automatically.
           </p>
         </div>
       </div>
     </section>
   );
 }
-

@@ -4,17 +4,17 @@ This document outlines the compatibility and testing coverage for `algebras-auto
 
 ## ✅ Compatibility Status
 
-| Feature | Next.js 14 | Next.js 15 | Next.js 16 | Status |
-|---------|-----------|-----------|-----------|---------|
-| Async `cookies()` API | ✅ | ✅ | ✅ | **Supported** |
-| Server Components | ✅ | ✅ | ✅ | **Supported** |
-| Client Components | ✅ | ✅ | ✅ | **Supported** |
-| App Router | ✅ | ✅ | ✅ | **Supported** |
-| React 18 | ✅ | ✅ | ✅ | **Supported** |
-| React 19 | ✅ | ✅ | ✅ | **Supported** |
-| Webpack 5 | ✅ | ✅ | ✅ | **Supported** |
-| TypeScript 5.x | ✅ | ✅ | ✅ | **Supported** |
-| Edge Runtime | ✅ | ✅ | ✅ | **Supported** |
+| Feature               | Next.js 14 | Next.js 15 | Next.js 16 | Status        |
+| --------------------- | ---------- | ---------- | ---------- | ------------- |
+| Async `cookies()` API | ✅         | ✅         | ✅         | **Supported** |
+| Server Components     | ✅         | ✅         | ✅         | **Supported** |
+| Client Components     | ✅         | ✅         | ✅         | **Supported** |
+| App Router            | ✅         | ✅         | ✅         | **Supported** |
+| React 18              | ✅         | ✅         | ✅         | **Supported** |
+| React 19              | ✅         | ✅         | ✅         | **Supported** |
+| Webpack 5             | ✅         | ✅         | ✅         | **Supported** |
+| TypeScript 5.x        | ✅         | ✅         | ✅         | **Supported** |
+| Edge Runtime          | ✅         | ✅         | ✅         | **Supported** |
 
 ## 📋 Test Coverage
 
@@ -22,7 +22,7 @@ This document outlines the compatibility and testing coverage for `algebras-auto
 
 ```
 ✅ nextjs.compatibility.test.ts      - 22 tests
-✅ nextjs.async-apis.test.ts         - 17 tests  
+✅ nextjs.async-apis.test.ts         - 17 tests
 ✅ runtime.translated.test.tsx        - 10 tests
 ✅ translator.generator.test.ts       - 10 tests
 ✅ loader.test.ts                     - 5 tests
@@ -35,6 +35,7 @@ This document outlines the compatibility and testing coverage for `algebras-auto
 ### 1. Async `cookies()` API
 
 **Before (Next.js 13 and earlier):**
+
 ```typescript
 import { cookies } from "next/headers";
 
@@ -46,6 +47,7 @@ export default function Page() {
 ```
 
 **After (Next.js 14+):**
+
 ```typescript
 import { cookies } from "next/headers";
 
@@ -59,6 +61,7 @@ export default async function Page() {
 ### 2. Our Implementation
 
 **Server Provider (Fully Compatible):**
+
 ```typescript:15:15:src/runtime/server/Provider.tsx
 const cookieStore = await cookies();
 ```
@@ -68,6 +71,7 @@ This line properly awaits the async `cookies()` API, making it compatible with N
 ## 🧪 Test Categories
 
 ### 1. Server Component Compatibility Tests
+
 - ✅ Async `cookies()` API support
 - ✅ Missing cookie handling
 - ✅ Locale validation
@@ -75,20 +79,22 @@ This line properly awaits the async `cookies()` API, making it compatible with N
 - ✅ Error handling
 
 **Example Test:**
+
 ```typescript
-it("should support async cookies() API (Next.js 14+)", async () => {
+it('should support async cookies() API (Next.js 14+)', async () => {
   const mockCookies = async () => ({
-    get: (name: string) => ({ value: "en" })
+    get: (name: string) => ({ value: 'en' }),
   });
-  
+
   const cookieStore = await mockCookies();
-  const locale = cookieStore.get("locale");
-  
-  expect(locale?.value).toBe("en");
+  const locale = cookieStore.get('locale');
+
+  expect(locale?.value).toBe('en');
 });
 ```
 
 ### 2. Client Component Compatibility Tests
+
 - ✅ "use client" directive support
 - ✅ React Context API
 - ✅ Cookie updates from client
@@ -96,6 +102,7 @@ it("should support async cookies() API (Next.js 14+)", async () => {
 - ✅ Hydration consistency
 
 ### 3. React 18/19 Compatibility Tests
+
 - ✅ Concurrent rendering
 - ✅ Suspense boundaries
 - ✅ Server Components
@@ -103,30 +110,35 @@ it("should support async cookies() API (Next.js 14+)", async () => {
 - ✅ Streaming SSR
 
 ### 4. Module Exports Tests
+
 - ✅ ESM module format
 - ✅ Named exports
 - ✅ Subpath exports
 - ✅ TypeScript definitions
 
 ### 5. Webpack 5 Compatibility Tests
+
 - ✅ Loader API v5
 - ✅ Module federation
 - ✅ Tree shaking
 - ✅ Code splitting
 
 ### 6. App Router Tests
+
 - ✅ Layout hierarchy
 - ✅ Nested layouts
 - ✅ Server/Client composition
 - ✅ Route segments
 
 ### 7. Performance Tests
+
 - ✅ Non-blocking dictionary loads
 - ✅ Memory caching
 - ✅ Parallel data fetching
 - ✅ Response time < 100ms
 
 ### 8. Edge Runtime Tests
+
 - ✅ Edge-compatible APIs only
 - ✅ Environment detection
 - ✅ No Node.js-only APIs in client code
@@ -191,7 +203,7 @@ export default function Layout({ children }) {
 
 ```typescript
 // ✅ GOOD - Validate and provide fallback
-const locale = cookieStore.get("locale")?.value;
+const locale = cookieStore.get('locale')?.value;
 if (!Object.values(LanguageCode).includes(locale as LanguageCode)) {
   locale = LanguageCode.en; // Fallback
 }
@@ -201,7 +213,7 @@ if (!Object.values(LanguageCode).includes(locale as LanguageCode)) {
 
 ```typescript
 // ✅ GOOD - Handle undefined
-const cookieValue = cookieStore.get("locale")?.value || "en";
+const cookieValue = cookieStore.get('locale')?.value || 'en';
 ```
 
 ## 📦 Package.json Configuration
@@ -217,6 +229,7 @@ const cookieValue = cookieStore.get("locale")?.value || "en";
 ```
 
 This ensures:
+
 - ✅ Next.js 14.x, 15.x, 16.x support
 - ✅ React 18.x and 19.x support
 - ✅ Webpack 5.x support
@@ -253,7 +266,7 @@ import LocaleSwitcher from "algebras-auto-intl/runtime/client/components/LocaleS
 
 export default function Header() {
   const { locale } = useAlgebrasIntl();
-  
+
   return (
     <header>
       <h1>Current Locale: {locale}</h1>
@@ -266,16 +279,19 @@ export default function Header() {
 ## 🔍 Testing Strategy
 
 ### Unit Tests
+
 - Individual component testing
 - Mock Next.js APIs
 - Isolated functionality
 
 ### Integration Tests
+
 - Server/Client component interaction
 - Cookie flow testing
 - Dictionary loading
 
 ### Compatibility Tests
+
 - Version-specific API usage
 - Breaking change detection
 - Migration path validation
@@ -285,6 +301,7 @@ export default function Header() {
 All tests passing: **✅ 89/89 (100%)**
 
 ### Breakdown by Category:
+
 - **Server Component Tests**: 22/22 ✅
 - **Async API Tests**: 17/17 ✅
 - **Runtime Tests**: 10/10 ✅
@@ -366,6 +383,7 @@ export default async function Layout() {
 ## ✨ Summary
 
 `algebras-auto-intl` is **fully compatible** with Next.js 14, 15, and 16, with:
+
 - ✅ **89 passing tests** covering all critical paths
 - ✅ **Zero breaking changes** across versions
 - ✅ **Modern async patterns** for optimal performance
@@ -373,4 +391,3 @@ export default async function Layout() {
 - ✅ **Edge Runtime compatible** for global deployment
 
 The library is production-ready and future-proof! 🚀
-

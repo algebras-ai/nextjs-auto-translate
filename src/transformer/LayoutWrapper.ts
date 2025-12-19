@@ -3,9 +3,10 @@ import generateDefault from '@babel/generator';
 import { parse } from '@babel/parser';
 import traverseDefault from '@babel/traverse';
 import * as t from '@babel/types';
+import { runtimeImportPath } from '../utils/packageInfo.js';
 
-const traverse = (traverseDefault as any).default || traverseDefault
-const generate = (generateDefault as any).default || generateDefault
+const traverse = (traverseDefault as any).default || traverseDefault;
+const generate = (generateDefault as any).default || generateDefault;
 
 export function wrapLayoutWithIntl(code: string, filePath: string): string {
   // Only process app/layout.tsx or app/layout.jsx
@@ -39,10 +40,9 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
       const sourceValue = path.node.source.value;
       // Check for various import paths that might be used
       const isIntlWrapperImport =
-        sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
-        sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
-        sourceValue === 'nextjs-auto-intl/runtime/server' ||
-        sourceValue === 'nextjs-auto-intl/runtime/server';
+        typeof sourceValue === 'string' &&
+        ((sourceValue as string).endsWith('/runtime/server/IntlWrapper') ||
+          (sourceValue as string).endsWith('/runtime/server'));
 
       if (
         isIntlWrapperImport &&
@@ -75,7 +75,7 @@ export function wrapLayoutWithIntl(code: string, filePath: string): string {
   // Add IntlWrapper import
   const intlWrapperImport = t.importDeclaration(
     [t.importDefaultSpecifier(t.identifier('IntlWrapper'))],
-    t.stringLiteral('nextjs-auto-intl/runtime/server/IntlWrapper')
+    t.stringLiteral(runtimeImportPath('runtime/server/IntlWrapper'))
   );
   ast.program.body.unshift(intlWrapperImport);
 

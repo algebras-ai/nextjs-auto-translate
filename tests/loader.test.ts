@@ -1,6 +1,7 @@
 import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
 import type { ScopeMap } from '../src/types';
+import { PACKAGE_NAME } from '../src/utils/packageInfo';
 import loader from '../src/webpack/auto-intl-loader';
 
 const runLoader = (code: string, opts: any, resourcePath?: string) =>
@@ -81,7 +82,7 @@ describe('webpack loader', () => {
       );
 
       expect(out).toContain('IntlWrapper');
-      expect(out).toContain('nextjs-auto-intl/runtime/server/IntlWrapper');
+      expect(out).toContain(`${PACKAGE_NAME}/runtime/server/IntlWrapper`);
       expect(out).toContain('<IntlWrapper>');
     });
 
@@ -100,7 +101,7 @@ describe('webpack loader', () => {
     });
 
     it('does not double-wrap if IntlWrapper already exists', async () => {
-      const layoutCode = `import IntlWrapper from "algebras-auto-intl/runtime/server/IntlWrapper";
+      const layoutCode = `import IntlWrapper from "${PACKAGE_NAME}/runtime/server/IntlWrapper";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html>
@@ -136,7 +137,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       expect(out).toContain('<Translated');
       expect(out).toContain(`tKey="${relativePath}::${scopePath}"`);
       expect(out).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
+        `${PACKAGE_NAME}/runtime/client/components/Translated`
       );
     });
 
@@ -152,7 +153,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       expect(out).toContain('import Translated');
       expect(out).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
+        `${PACKAGE_NAME}/runtime/client/components/Translated`
       );
     });
 
@@ -219,7 +220,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       expect(out).toContain('LocalesSwitcher');
       expect(out).toContain(
-        'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
+        `${PACKAGE_NAME}/runtime/client/components/LocaleSwitcher`
       );
     });
 

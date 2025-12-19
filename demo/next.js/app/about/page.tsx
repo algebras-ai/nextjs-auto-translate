@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header from '../components/Header';
 
 export default function About() {
   return (
@@ -8,12 +8,10 @@ export default function About() {
         <section className="section">
           <h1>About This Project</h1>
           <p>
-            This example demonstrates how <strong>algebras-auto-intl</strong> works
-            with Next.js 15.
+            This example demonstrates how <strong>algebras-auto-intl</strong>{' '}
+            works with Next.js 15.
           </p>
-          <p>
-            The plugin automatically:
-          </p>
+          <p>The plugin automatically:</p>
           <ul>
             <li>Extracts translatable strings from your JSX/TSX files</li>
             <li>Generates translation dictionaries during build</li>
@@ -29,4 +27,3 @@ export default function About() {
     </main>
   );
 }
-
