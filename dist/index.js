@@ -1,27 +1,17 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DictionaryGenerator = exports.AlgebrasTranslationProvider = exports.LanguageCode = void 0;
-exports.default = myPlugin;
 // src/index.ts
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const url_1 = require("url");
-const Parser_js_1 = require("./parser/Parser.js");
-const AlgebrasTranslationProvider_js_1 = require("./translator/AlgebrasTranslationProvider.js");
-const DictionaryGenerator_js_1 = require("./translator/DictionaryGenerator.js");
-const packageInfo_js_1 = require("./utils/packageInfo.js");
-const __filename = (0, url_1.fileURLToPath)(import.meta.url);
-const __dirname = path_1.default.dirname(__filename);
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { Parser } from './parser/Parser.js';
+import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider.js';
+import { DictionaryGenerator } from './translator/DictionaryGenerator.js';
+import { PACKAGE_NAME } from './utils/packageInfo.js';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // Re-export commonly used types and components
-var languageMap_1 = require("./data/languageMap");
-Object.defineProperty(exports, "LanguageCode", { enumerable: true, get: function () { return languageMap_1.LanguageCode; } });
-var AlgebrasTranslationProvider_1 = require("./translator/AlgebrasTranslationProvider");
-Object.defineProperty(exports, "AlgebrasTranslationProvider", { enumerable: true, get: function () { return AlgebrasTranslationProvider_1.AlgebrasTranslationProvider; } });
-var DictionaryGenerator_1 = require("./translator/DictionaryGenerator");
-Object.defineProperty(exports, "DictionaryGenerator", { enumerable: true, get: function () { return DictionaryGenerator_1.DictionaryGenerator; } });
+export { LanguageCode } from './data/languageMap';
+export { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider';
+export { DictionaryGenerator } from './translator/DictionaryGenerator';
 // Note: AlgebrasIntlProvider should be imported directly from the runtime path
 // export { default as AlgebrasIntlProvider } from "./runtime/server/Provider";
 let hasScheduled = false;
@@ -35,14 +25,14 @@ function isProcessAlive(pid) {
         return false;
     }
 }
-function myPlugin(options) {
+export default function myPlugin(options) {
     const { defaultLocale = 'en', targetLocales, includeNodeModules = false, outputDir = './src/intl', } = options;
     process.env.ALGEBRAS_INTL_OUTPUT_DIR = outputDir;
-    const scheduledFlagPath = path_1.default.resolve(process.cwd(), outputDir, '.scheduled');
-    const parserLockPath = path_1.default.resolve(process.cwd(), outputDir, '.lock');
+    const scheduledFlagPath = path.resolve(process.cwd(), outputDir, '.scheduled');
+    const parserLockPath = path.resolve(process.cwd(), outputDir, '.lock');
     async function prepareSourceMap() {
         try {
-            const parser = new Parser_js_1.Parser({ includeNodeModules, outputDir });
+            const parser = new Parser({ includeNodeModules, outputDir });
             const sourceMap = parser.parseProject();
             cachedSourceMap = sourceMap;
             // Create translation provider if API key is provided
@@ -50,7 +40,7 @@ function myPlugin(options) {
             const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
             const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
             if (apiKey) {
-                translationProvider = new AlgebrasTranslationProvider_js_1.AlgebrasTranslationProvider({
+                translationProvider = new AlgebrasTranslationProvider({
                     apiKey,
                     apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
                 });
@@ -60,14 +50,14 @@ function myPlugin(options) {
                 console.warn('[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config');
                 console.warn('[AlgebrasIntl] Falling back to mock translations...\n');
             }
-            const dictionaryGenerator = new DictionaryGenerator_js_1.DictionaryGenerator({
+            const dictionaryGenerator = new DictionaryGenerator({
                 defaultLocale,
                 targetLocales,
                 outputDir,
                 translationProvider,
             });
             await dictionaryGenerator.generateDictionary(sourceMap);
-            fs_1.default.writeFileSync(path_1.default.resolve(outputDir, 'source.json'), JSON.stringify(sourceMap, null, 2), 'utf-8');
+            fs.writeFileSync(path.resolve(outputDir, 'source.json'), JSON.stringify(sourceMap, null, 2), 'utf-8');
         }
         catch (err) {
             console.error('❌ Failed to parse/generate source map:', err);
@@ -85,7 +75,7 @@ function myPlugin(options) {
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader: path_1.default.resolve(__dirname, './webpack/auto-intl-loader.js'),
+                        loader: path.resolve(__dirname, './webpack/auto-intl-loader.js'),
                         options: {
                             sourceMap: cachedSourceMap ?? {},
                             outputDir,
@@ -105,7 +95,7 @@ function myPlugin(options) {
             console.error('❌ Background source map preparation failed:', err);
         });
         // Turbopack needs a serializable module specifier, so we reference ourselves by package name.
-        const transformerPath = `${packageInfo_js_1.PACKAGE_NAME}/turbopack/auto-intl-transformer`;
+        const transformerPath = `${PACKAGE_NAME}/turbopack/auto-intl-transformer`;
         // Turbopack rules format for Next.js 16
         // Options must be JSON-serializable, so we only pass outputDir
         // The transformer will load sourceMap from disk
@@ -158,21 +148,21 @@ function myPlugin(options) {
             applyConfigs();
             return config;
         }
-        if (fs_1.default.existsSync(scheduledFlagPath)) {
-            const flagPid = parseInt(fs_1.default.readFileSync(scheduledFlagPath, 'utf-8'));
+        if (fs.existsSync(scheduledFlagPath)) {
+            const flagPid = parseInt(fs.readFileSync(scheduledFlagPath, 'utf-8'));
             if (isProcessAlive(flagPid)) {
                 applyConfigs();
                 return config;
             }
             else {
-                fs_1.default.unlinkSync(scheduledFlagPath);
+                fs.unlinkSync(scheduledFlagPath);
             }
         }
         hasScheduled = true;
-        fs_1.default.mkdirSync(path_1.default.dirname(scheduledFlagPath), { recursive: true });
-        fs_1.default.writeFileSync(scheduledFlagPath, process.pid.toString());
-        if (fs_1.default.existsSync(parserLockPath))
-            fs_1.default.unlinkSync(parserLockPath);
+        fs.mkdirSync(path.dirname(scheduledFlagPath), { recursive: true });
+        fs.writeFileSync(scheduledFlagPath, process.pid.toString());
+        if (fs.existsSync(parserLockPath))
+            fs.unlinkSync(parserLockPath);
         applyConfigs();
         return config;
     };

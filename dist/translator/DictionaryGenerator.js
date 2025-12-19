@@ -1,11 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DictionaryGenerator = void 0;
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
+import fs from 'fs';
+import path from 'path';
 // Fake translation service - returns original text as placeholder
 class MockTranslationService {
     translate(text, targetLocale) {
@@ -17,7 +11,7 @@ class MockTranslationService {
         return `[${targetLocale.toUpperCase()}] ${text}`;
     }
 }
-class DictionaryGenerator {
+export class DictionaryGenerator {
     options;
     translationService = new MockTranslationService();
     translationProvider;
@@ -31,12 +25,12 @@ class DictionaryGenerator {
      */
     loadExistingDictionary() {
         try {
-            const outputPath = path_1.default.resolve(process.cwd(), this.options.outputDir);
-            const dictionaryJsonPath = path_1.default.join(outputPath, 'dictionary.json');
-            if (!fs_1.default.existsSync(dictionaryJsonPath)) {
+            const outputPath = path.resolve(process.cwd(), this.options.outputDir);
+            const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
+            if (!fs.existsSync(dictionaryJsonPath)) {
                 return null;
             }
-            const content = fs_1.default.readFileSync(dictionaryJsonPath, 'utf-8');
+            const content = fs.readFileSync(dictionaryJsonPath, 'utf-8');
             const parsed = JSON.parse(content);
             return parsed;
         }
@@ -69,7 +63,7 @@ class DictionaryGenerator {
         }
         // Write dictionary files
         const outputPath = this.writeDictionaryFiles(dictionary);
-        const dictionaryJsonPath = path_1.default.join(outputPath, 'dictionary.json');
+        const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
         return dictionaryJsonPath;
     }
     /**
@@ -188,14 +182,13 @@ class DictionaryGenerator {
         }
     }
     writeDictionaryFiles(dictionary) {
-        const outputPath = path_1.default.resolve(process.cwd(), this.options.outputDir);
+        const outputPath = path.resolve(process.cwd(), this.options.outputDir);
         // Ensure output directory exists
-        fs_1.default.mkdirSync(outputPath, { recursive: true });
+        fs.mkdirSync(outputPath, { recursive: true });
         // Write dictionary.json file (for debugging/inspection)
-        const dictionaryJsonPath = path_1.default.join(outputPath, 'dictionary.json');
-        fs_1.default.writeFileSync(dictionaryJsonPath, JSON.stringify(dictionary, null, 2), 'utf-8');
+        const dictionaryJsonPath = path.join(outputPath, 'dictionary.json');
+        fs.writeFileSync(dictionaryJsonPath, JSON.stringify(dictionary, null, 2), 'utf-8');
         const totalEntries = Object.values(dictionary.files).reduce((count, file) => count + Object.keys(file.entries).length, 0);
         return outputPath;
     }
 }
-exports.DictionaryGenerator = DictionaryGenerator;

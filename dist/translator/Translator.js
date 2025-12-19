@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Translator = void 0;
-class Translator {
+export class Translator {
     provider;
     constructor(provider) {
         this.provider = provider;
@@ -23,4 +20,3 @@ class Translator {
         return result;
     }
 }
-exports.Translator = Translator;

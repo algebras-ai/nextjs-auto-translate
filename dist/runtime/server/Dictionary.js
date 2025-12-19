@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(require("path"));
-const promises_1 = __importDefault(require("fs/promises"));
+import path from 'path';
+import fs from 'fs/promises';
 class Dictionary {
     locale;
     dictionary = {
@@ -19,9 +14,9 @@ class Dictionary {
         if (!outputDir) {
             throw new Error('ALGEBRAS_INTL_OUTPUT_DIR is not set');
         }
-        const dictionaryJsonPath = path_1.default.join(process.cwd(), outputDir, 'dictionary.json');
+        const dictionaryJsonPath = path.join(process.cwd(), outputDir, 'dictionary.json');
         console.log('[Dictionary] Loading from:', dictionaryJsonPath);
-        const dictionaryJson = await promises_1.default.readFile(dictionaryJsonPath, 'utf8');
+        const dictionaryJson = await fs.readFile(dictionaryJsonPath, 'utf8');
         const parsed = JSON.parse(dictionaryJson);
         console.log('[Dictionary] Loaded files:', Object.keys(parsed.files));
         // Return a completely new plain object without any class instance references
@@ -45,4 +40,4 @@ class Dictionary {
         this.locale = locale;
     };
 }
-exports.default = Dictionary;
+export default Dictionary;

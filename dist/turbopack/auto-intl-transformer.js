@@ -1,13 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 // src/turbopack/auto-intl-transformer.ts
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const Injector_1 = require("../transformer/Injector");
-const LayoutWrapper_1 = require("../transformer/LayoutWrapper");
+import fs from 'fs';
+import path from 'path';
+import { transformProject } from '../transformer/Injector';
+import { wrapLayoutWithIntl } from '../transformer/LayoutWrapper';
 /**
  * Turbopack transformer for auto-intl
  * Transforms JSX files to inject Translated components and wrap layouts with AlgebrasIntlProvider
@@ -29,12 +24,12 @@ function transformerImpl(source, filePath, options = {}) {
     try {
         // Get the file path relative to the project root and normalize it
         const projectRoot = process.cwd();
-        const relativeFilePath = path_1.default
+        const relativeFilePath = path
             .relative(projectRoot, filePath)
-            .split(path_1.default.sep)
+            .split(path.sep)
             .join('/'); // Normalize to forward slashes to match sourceMap format
         // First, automatically wrap layout with AlgebrasIntlProvider
-        let result = (0, LayoutWrapper_1.wrapLayoutWithIntl)(source, filePath);
+        let result = wrapLayoutWithIntl(source, filePath);
         // Load source map - try from options first, then from disk
         let sourceMap = options.sourceMap || null;
         if (!sourceMap ||
@@ -45,15 +40,15 @@ function transformerImpl(source, filePath, options = {}) {
                 process.env.ALGEBRAS_INTL_OUTPUT_DIR ||
                 './src/intl';
             const possibleSourceMapPaths = [
-                path_1.default.resolve(projectRoot, outputDir, 'source.json'),
-                path_1.default.resolve(projectRoot, 'src/intl/source.json'),
-                path_1.default.resolve(projectRoot, '.intl/source.json'),
-                path_1.default.resolve(projectRoot, 'source.json'),
+                path.resolve(projectRoot, outputDir, 'source.json'),
+                path.resolve(projectRoot, 'src/intl/source.json'),
+                path.resolve(projectRoot, '.intl/source.json'),
+                path.resolve(projectRoot, 'source.json'),
             ];
             for (const sourceMapPath of possibleSourceMapPaths) {
-                if (fs_1.default.existsSync(sourceMapPath)) {
+                if (fs.existsSync(sourceMapPath)) {
                     try {
-                        const sourceMapContent = fs_1.default.readFileSync(sourceMapPath, 'utf-8');
+                        const sourceMapContent = fs.readFileSync(sourceMapPath, 'utf-8');
                         sourceMap = JSON.parse(sourceMapContent);
                         break;
                     }
@@ -70,9 +65,9 @@ function transformerImpl(source, filePath, options = {}) {
         // Then, transform the project with translation injections
         // transformProject will handle page files and sourceMap files correctly
         // Use the absolute path for transformProject (it will normalize internally)
-        result = (0, Injector_1.transformProject)(result, {
+        result = transformProject(result, {
             sourceMap,
-            filePath: path_1.default.resolve(projectRoot, relativeFilePath),
+            filePath: path.resolve(projectRoot, relativeFilePath),
         });
         return result;
     }
@@ -134,4 +129,4 @@ function transformerWrapper(source, contextOrMap) {
     return transformerImpl(source, filePath, options);
 }
 // Export as default - works for both webpack loader and Turbopack transformer
-exports.default = transformerWrapper;
+export default transformerWrapper;

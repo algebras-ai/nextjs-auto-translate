@@ -1,10 +1,7 @@
-"use strict";
 // 🛑 GENERATED FILE — DO NOT EDIT MANUALLY
 // Run `npm run build` to regenerate
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.languageMap = exports.LanguageCode = void 0;
 /** Language codes */
-var LanguageCode;
+export var LanguageCode;
 (function (LanguageCode) {
     /** Abkhazian */
     LanguageCode["ab"] = "ab";
@@ -1222,8 +1219,8 @@ var LanguageCode;
     LanguageCode["zu"] = "zu";
     /** Zuni */
     LanguageCode["zun"] = "zun";
-})(LanguageCode || (exports.LanguageCode = LanguageCode = {}));
-exports.languageMap = {
+})(LanguageCode || (LanguageCode = {}));
+export const languageMap = {
     [LanguageCode.ab]: "Abkhazian",
     [LanguageCode.ace]: "Achinese",
     [LanguageCode.ach]: "Acoli",
