@@ -2,11 +2,12 @@
 import fs from 'fs';
 import type { NextConfig } from 'next';
 import path from 'path';
-import { Parser } from './parser/Parser';
-import { DictionaryGenerator } from './translator/DictionaryGenerator';
-import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider';
-import { ScopeMap } from './types';
 import { LanguageCode } from './data/languageMap';
+import { Parser } from './parser/Parser';
+import { AlgebrasTranslationProvider } from './translator/AlgebrasTranslationProvider';
+import { DictionaryGenerator } from './translator/DictionaryGenerator';
+import { ScopeMap } from './types';
+import { RUNTIME_PATHS } from './constants';
 
 // Re-export commonly used types and components
 export { LanguageCode } from './data/languageMap';
@@ -133,8 +134,8 @@ export default function myPlugin(options: PluginOptions) {
     });
 
     // Use relative path from node_modules - Turbopack needs serializable paths
-    // The transformer will be resolved from node_modules/nextjs-auto-intl
-    const transformerPath = 'nextjs-auto-intl/turbopack/auto-intl-transformer';
+    // The transformer will be resolved from node_modules
+    const transformerPath = RUNTIME_PATHS.TURBOPACK_TRANSFORMER;
 
     // Turbopack rules format for Next.js 16
     // Options must be JSON-serializable, so we only pass outputDir

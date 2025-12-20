@@ -1,0 +1,17 @@
+{
+  "version": 0.1,
+  "files": {
+    "src/C.tsx": {
+      "entries": {
+        "a/b/c": {
+          "content": {
+            "en": "Hello",
+            "es": "[ES] Hello",
+            "it": "[IT] Hello"
+          },
+          "hash": "h1"
+        }
+      }
+    }
+  }
+}

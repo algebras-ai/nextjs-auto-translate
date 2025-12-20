@@ -9,8 +9,9 @@ exports.default = myPlugin;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const Parser_1 = require("./parser/Parser");
-const DictionaryGenerator_1 = require("./translator/DictionaryGenerator");
 const AlgebrasTranslationProvider_1 = require("./translator/AlgebrasTranslationProvider");
+const DictionaryGenerator_1 = require("./translator/DictionaryGenerator");
+const constants_1 = require("./constants");
 // Re-export commonly used types and components
 var languageMap_1 = require("./data/languageMap");
 Object.defineProperty(exports, "LanguageCode", { enumerable: true, get: function () { return languageMap_1.LanguageCode; } });
@@ -101,8 +102,8 @@ function myPlugin(options) {
             console.error('❌ Background source map preparation failed:', err);
         });
         // Use relative path from node_modules - Turbopack needs serializable paths
-        // The transformer will be resolved from node_modules/nextjs-auto-intl
-        const transformerPath = 'nextjs-auto-intl/turbopack/auto-intl-transformer';
+        // The transformer will be resolved from node_modules
+        const transformerPath = constants_1.RUNTIME_PATHS.TURBOPACK_TRANSFORMER;
         // Turbopack rules format for Next.js 16
         // Options must be JSON-serializable, so we only pass outputDir
         // The transformer will load sourceMap from disk

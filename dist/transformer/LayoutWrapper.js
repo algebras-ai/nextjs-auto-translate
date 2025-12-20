@@ -42,6 +42,7 @@ const generator_1 = __importDefault(require("@babel/generator"));
 const parser_1 = require("@babel/parser");
 const traverse_1 = __importDefault(require("@babel/traverse"));
 const t = __importStar(require("@babel/types"));
+const constants_1 = require("../constants");
 const traverse = traverse_1.default.default || traverse_1.default;
 const generate = generator_1.default.default || generator_1.default;
 function wrapLayoutWithIntl(code, filePath) {
@@ -70,10 +71,8 @@ function wrapLayoutWithIntl(code, filePath) {
         ImportDeclaration(path) {
             const sourceValue = path.node.source.value;
             // Check for various import paths that might be used
-            const isIntlWrapperImport = sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
-                sourceValue === 'nextjs-auto-intl/runtime/server/IntlWrapper' ||
-                sourceValue === 'nextjs-auto-intl/runtime/server' ||
-                sourceValue === 'nextjs-auto-intl/runtime/server';
+            const isIntlWrapperImport = sourceValue === constants_1.RUNTIME_PATHS.SERVER_INTL_WRAPPER ||
+                sourceValue === `${constants_1.RUNTIME_PATHS.SERVER_INTL_WRAPPER.split('/').slice(0, -1).join('/')}`;
             if (isIntlWrapperImport &&
                 path.node.specifiers.some((s) => (t.isImportDefaultSpecifier(s) &&
                     t.isIdentifier(s.local) &&
@@ -94,7 +93,7 @@ function wrapLayoutWithIntl(code, filePath) {
         return code;
     }
     // Add IntlWrapper import
-    const intlWrapperImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier('IntlWrapper'))], t.stringLiteral('nextjs-auto-intl/runtime/server/IntlWrapper'));
+    const intlWrapperImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier('IntlWrapper'))], t.stringLiteral(constants_1.RUNTIME_PATHS.SERVER_INTL_WRAPPER));
     ast.program.body.unshift(intlWrapperImport);
     // Wrap the layout's children with IntlWrapper
     traverse(ast, {
