@@ -1,5 +1,6 @@
 import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
+import { RUNTIME_PATHS } from '../src/constants';
 import type { ScopeMap } from '../src/types';
 import loader from '../src/webpack/auto-intl-loader';
 
@@ -81,7 +82,7 @@ describe('webpack loader', () => {
       );
 
       expect(out).toContain('IntlWrapper');
-      expect(out).toContain('nextjs-auto-intl/runtime/server/IntlWrapper');
+      expect(out).toContain(RUNTIME_PATHS.SERVER_INTL_WRAPPER);
       expect(out).toContain('<IntlWrapper>');
     });
 
@@ -100,7 +101,7 @@ describe('webpack loader', () => {
     });
 
     it('does not double-wrap if IntlWrapper already exists', async () => {
-      const layoutCode = `import IntlWrapper from "algebras-auto-intl/runtime/server/IntlWrapper";
+      const layoutCode = `import IntlWrapper from "${RUNTIME_PATHS.SERVER_INTL_WRAPPER}";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html>
@@ -135,9 +136,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       expect(out).toContain('<Translated');
       expect(out).toContain(`tKey="${relativePath}::${scopePath}"`);
-      expect(out).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
-      );
+      expect(out).toContain(RUNTIME_PATHS.CLIENT_TRANSLATED);
     });
 
     it('adds Translated import when transforming text', async () => {
@@ -151,9 +150,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       const out = await runLoader(code, { sourceMap }, resourcePath);
 
       expect(out).toContain('import Translated');
-      expect(out).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
-      );
+      expect(out).toContain(RUNTIME_PATHS.CLIENT_TRANSLATED);
     });
 
     it('does not transform text when file not in sourceMap', async () => {
@@ -218,9 +215,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       );
 
       expect(out).not.toContain('LocalesSwitcher');
-      expect(out).not.toContain(
-        'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
-      );
+      expect(out).not.toContain(RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER);
     });
 
     it('does not inject locale switcher even when no sourceMap (manual import only)', async () => {

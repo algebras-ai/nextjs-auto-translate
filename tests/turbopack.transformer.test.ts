@@ -4,6 +4,7 @@ import path from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import transformer from '../src/turbopack/auto-intl-transformer';
 import type { ScopeMap } from '../src/types';
+import { RUNTIME_PATHS } from '../src/constants';
 
 // Helper to get relative path matching what transformProject uses
 const getRelativePath = (filePath: string): string => {
@@ -287,7 +288,7 @@ describe('turbopack transformer', () => {
       });
 
       expect(result).toContain('IntlWrapper');
-      expect(result).toContain('nextjs-auto-intl/runtime/server/IntlWrapper');
+      expect(result).toContain(RUNTIME_PATHS.SERVER_INTL_WRAPPER);
       expect(result).toContain('<IntlWrapper>');
     });
 
@@ -304,7 +305,7 @@ describe('turbopack transformer', () => {
     });
 
     it('does not double-wrap if IntlWrapper already exists', () => {
-      const layoutCode = `import IntlWrapper from "algebras-auto-intl/runtime/server/IntlWrapper";
+      const layoutCode = `import IntlWrapper from "${RUNTIME_PATHS.SERVER_INTL_WRAPPER}";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html>
@@ -340,9 +341,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       expect(result).toContain('<Translated');
       expect(result).toContain(`tKey="${relativePath}::${scopePath}"`);
-      expect(result).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
-      );
+      expect(result).toContain(RUNTIME_PATHS.CLIENT_TRANSLATED);
     });
 
     it('adds Translated import when transforming text', () => {
@@ -359,9 +358,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       });
 
       expect(result).toContain('import Translated');
-      expect(result).toContain(
-        'nextjs-auto-intl/runtime/client/components/Translated'
-      );
+      expect(result).toContain(RUNTIME_PATHS.CLIENT_TRANSLATED);
     });
 
     it('does not transform text when file not in sourceMap', () => {
@@ -431,9 +428,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       });
 
       expect(result).not.toContain('LocalesSwitcher');
-      expect(result).not.toContain(
-        'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
-      );
+      expect(result).not.toContain(RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER);
     });
 
     it('does not inject locale switcher when sourceMap is provided (manual import only)', () => {

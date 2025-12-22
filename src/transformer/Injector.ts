@@ -4,6 +4,7 @@ import traverseDefault, { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
 import path from 'path';
 import { ScopeMap } from '../types';
+import { RUNTIME_PATHS } from '../constants';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = (traverseDefault as any).default || traverseDefault;
@@ -23,14 +24,13 @@ export function injectTranslated(scope: string): t.JSXElement {
   );
 }
 
-// Ensures import Translated from 'nextjs-auto-intl/runtime/client/components/Translated' exists
+// Ensures import Translated from the package runtime path exists
 export function ensureImportTranslated(ast: t.File) {
   let hasImport = false;
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
-        path.node.source.value ===
-          'nextjs-auto-intl/runtime/client/components/Translated' &&
+        path.node.source.value === RUNTIME_PATHS.CLIENT_TRANSLATED &&
         path.node.specifiers.some(
           (s: any) =>
             t.isImportDefaultSpecifier(s) &&
@@ -46,7 +46,7 @@ export function ensureImportTranslated(ast: t.File) {
   if (!hasImport) {
     const importDecl = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier('Translated'))],
-      t.stringLiteral('nextjs-auto-intl/runtime/client/components/Translated')
+      t.stringLiteral(RUNTIME_PATHS.CLIENT_TRANSLATED)
     );
     ast.program.body.unshift(importDecl);
   }
@@ -58,8 +58,7 @@ export function ensureImportLocalesSwitcher(ast: t.File) {
   traverse(ast, {
     ImportDeclaration(path: any) {
       if (
-        path.node.source.value ===
-          'nextjs-auto-intl/runtime/client/components/LocaleSwitcher' &&
+        path.node.source.value === RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER &&
         path.node.specifiers.some(
           (s: any) =>
             t.isImportDefaultSpecifier(s) &&
@@ -75,9 +74,7 @@ export function ensureImportLocalesSwitcher(ast: t.File) {
   if (!hasImport) {
     const importDecl = t.importDeclaration(
       [t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))],
-      t.stringLiteral(
-        'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
-      )
+      t.stringLiteral(RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER)
     );
     ast.program.body.unshift(importDecl);
   }

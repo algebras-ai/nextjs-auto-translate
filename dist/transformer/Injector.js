@@ -46,6 +46,7 @@ const parser_1 = require("@babel/parser");
 const traverse_1 = __importDefault(require("@babel/traverse"));
 const t = __importStar(require("@babel/types"));
 const path_1 = __importDefault(require("path"));
+const constants_1 = require("../constants");
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = traverse_1.default.default || traverse_1.default;
 const generate = generator_1.default.default || generator_1.default;
@@ -54,13 +55,12 @@ function injectTranslated(scope) {
     return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
     ), null, [], true);
 }
-// Ensures import Translated from 'nextjs-auto-intl/runtime/client/components/Translated' exists
+// Ensures import Translated from the package runtime path exists
 function ensureImportTranslated(ast) {
     let hasImport = false;
     traverse(ast, {
         ImportDeclaration(path) {
-            if (path.node.source.value ===
-                'nextjs-auto-intl/runtime/client/components/Translated' &&
+            if (path.node.source.value === constants_1.RUNTIME_PATHS.CLIENT_TRANSLATED &&
                 path.node.specifiers.some((s) => t.isImportDefaultSpecifier(s) &&
                     t.isIdentifier(s.local) &&
                     s.local.name === 'Translated')) {
@@ -70,7 +70,7 @@ function ensureImportTranslated(ast) {
         },
     });
     if (!hasImport) {
-        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Translated'))], t.stringLiteral('nextjs-auto-intl/runtime/client/components/Translated'));
+        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Translated'))], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_TRANSLATED));
         ast.program.body.unshift(importDecl);
     }
 }
@@ -79,8 +79,7 @@ function ensureImportLocalesSwitcher(ast) {
     let hasImport = false;
     traverse(ast, {
         ImportDeclaration(path) {
-            if (path.node.source.value ===
-                'nextjs-auto-intl/runtime/client/components/LocaleSwitcher' &&
+            if (path.node.source.value === constants_1.RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER &&
                 path.node.specifiers.some((s) => t.isImportDefaultSpecifier(s) &&
                     t.isIdentifier(s.local) &&
                     s.local.name === 'LocalesSwitcher')) {
@@ -90,7 +89,7 @@ function ensureImportLocalesSwitcher(ast) {
         },
     });
     if (!hasImport) {
-        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))], t.stringLiteral('nextjs-auto-intl/runtime/client/components/LocaleSwitcher'));
+        const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER));
         ast.program.body.unshift(importDecl);
     }
 }
