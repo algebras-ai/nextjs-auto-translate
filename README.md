@@ -5,7 +5,7 @@ Automated i18n for React + Next.js that extracts JSX text and generates translat
 ## Installation
 
 ```bash
-npm install github:algebras-ai/nextjs-auto-translate
+npm install @dima-algebras/algebras-auto-intl
 ```
 
 ## Next.js usage
@@ -13,26 +13,26 @@ npm install github:algebras-ai/nextjs-auto-translate
 ### 1) Add the plugin to `next.config.ts`
 
 ```ts
-import type { NextConfig } from 'next'
-import autoIntl, { LanguageCode } from 'nextjs-auto-intl'
+import type { NextConfig } from 'next';
+import autoIntl, { LanguageCode } from '@dima-algebras/algebras-auto-intl';
 
 const nextConfig: NextConfig = {
-	reactStrictMode: true,
-}
+  reactStrictMode: true,
+};
 
 export default autoIntl({
-	defaultLocale: LanguageCode.en,
-	targetLocales: [LanguageCode.es, LanguageCode.fr],
-	outputDir: './src/intl', // optional (default: ./src/intl)
-	includeNodeModules: false, // optional (default: false)
-})(nextConfig)
+  defaultLocale: LanguageCode.en,
+  targetLocales: [LanguageCode.es, LanguageCode.fr],
+  outputDir: './src/intl', // optional (default: ./src/intl)
+  includeNodeModules: false, // optional (default: false)
+})(nextConfig);
 ```
 
 ### 2) Wrap your root layout with `IntlWrapper`
 
 ```ts
 import type { ReactNode } from 'react'
-import IntlWrapper from 'nextjs-auto-intl/runtime/server/IntlWrapper'
+import IntlWrapper from '@dima-algebras/algebras-auto-intl/runtime/server/IntlWrapper'
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 ```ts
 'use client'
 
-import LocaleSwitcher from 'nextjs-auto-intl/runtime/client/components/LocaleSwitcher'
+import LocaleSwitcher from '@dima-algebras/algebras-auto-intl/runtime/client/components/LocaleSwitcher'
 
 export function Header() {
 	return (
@@ -83,5 +83,3 @@ The plugin writes generated files to `outputDir`:
 ## Contributing / project structure
 
 See `CONTRIBUTING.md`.
-
-
