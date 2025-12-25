@@ -163,23 +163,55 @@ class Parser {
                                 else if (t.isJSXMemberExpression(parentElementName)) {
                                     parentTagName = parentElementName.property.name;
                                 }
-                                // Check if parent has JSXText children (meaning it will be extracted)
-                                const hasTextInParent = parentPath.node.children.some((child) => t.isJSXText(child) && child.value.trim());
-                                // If parent has text, this nested element's content is already included in parent's extraction
-                                // Skip extracting it separately to avoid duplication
-                                // This applies to all parents, including <p> tags
-                                if (hasTextInParent) {
+                                // Check if parent has JSXText or translatable expressions
+                                const hasContentInParent = parentPath.node.children.some((child) => {
+                                    if (t.isJSXText(child) && child.value.trim()) {
+                                        return true;
+                                    }
+                                    if (t.isJSXExpressionContainer(child)) {
+                                        const expr = child.expression;
+                                        // Check if it's a translatable expression
+                                        if (t.isStringLiteral(expr) ||
+                                            t.isTemplateLiteral(expr) ||
+                                            t.isConditionalExpression(expr) ||
+                                            t.isLogicalExpression(expr) ||
+                                            (t.isBinaryExpression(expr) && expr.operator === '+')) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                });
+                                // If parent has content, this nested element's content is already included
+                                if (hasContentInParent) {
                                     return;
                                 }
                             }
                             parentPath = parentPath.parentPath;
                         }
-                        for (const child of path.node.children) {
-                            if (t.isJSXText(child)) {
-                                const text = child.value.trim();
-                                if (!text)
-                                    continue;
-                                const content = (0, utils_1.buildContent)(path.node);
+                        // Check if element has translatable content
+                        const hasTranslatableContent = path.node.children.some((child) => {
+                            if (t.isJSXText(child) && child.value.trim()) {
+                                return true;
+                            }
+                            if (t.isJSXExpressionContainer(child)) {
+                                const expr = child.expression;
+                                // Check for translatable expressions
+                                if (t.isStringLiteral(expr) ||
+                                    t.isTemplateLiteral(expr) ||
+                                    t.isConditionalExpression(expr) ||
+                                    t.isLogicalExpression(expr) ||
+                                    (t.isBinaryExpression(expr) && expr.operator === '+') ||
+                                    t.isCallExpression(expr) ||
+                                    t.isIdentifier(expr) ||
+                                    t.isMemberExpression(expr)) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
+                        if (hasTranslatableContent) {
+                            const content = (0, utils_1.buildContent)(path.node);
+                            if (content.trim()) {
                                 const hash = crypto_1.default
                                     .createHash('md5')
                                     .update(content)

@@ -3,8 +3,8 @@ import { parse } from '@babel/parser';
 import traverseDefault, { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
 import path from 'path';
-import { ScopeMap } from '../types';
 import { RUNTIME_PATHS } from '../constants';
+import { ScopeMap } from '../types';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = (traverseDefault as any).default || traverseDefault;
@@ -342,12 +342,31 @@ export function transformProject(
           parentPath = parentPath.parentPath;
         }
 
-        // Check if this element has JSXText children (meaning it should be replaced)
-        const hasText = path.node.children.some(
-          (child: any) => t.isJSXText(child) && child.value.trim()
-        );
+        // Check if this element has translatable content (JSXText or JSXExpressionContainer)
+        const hasTranslatableContent = path.node.children.some((child: any) => {
+          if (t.isJSXText(child) && child.value.trim()) {
+            return true;
+          }
+          if (t.isJSXExpressionContainer(child)) {
+            const expr = child.expression;
+            // Check for translatable expressions
+            if (
+              t.isStringLiteral(expr) ||
+              t.isTemplateLiteral(expr) ||
+              t.isConditionalExpression(expr) ||
+              t.isLogicalExpression(expr) ||
+              (t.isBinaryExpression(expr) && expr.operator === '+') ||
+              t.isCallExpression(expr) ||
+              t.isIdentifier(expr) ||
+              t.isMemberExpression(expr)
+            ) {
+              return true;
+            }
+          }
+          return false;
+        });
 
-        if (hasText) {
+        if (hasTranslatableContent) {
           // Replace all children with a single Translated component
           path.node.children = [
             injectTranslated(`${relativePath}::${scopePath}`),

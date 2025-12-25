@@ -1,7 +1,7 @@
 import SimpleText from './components/SimpleText';
-import TextWithSpaces from './components/TextWithSpaces';
 import TextBetweenElements from './components/TextBetweenElements';
 import TextWithExplicitSpaces from './components/TextWithExplicitSpaces';
+import TextWithSpaces from './components/TextWithSpaces';
 
 export default function DirectRenderingPage() {
   return (
@@ -40,4 +40,3 @@ export default function DirectRenderingPage() {
     </div>
   );
 }
-

@@ -30,8 +30,8 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 The following scenarios need to be tested and modernized with `@nextjs-auto-translate`:
 
-- [ ] **Root Page** (`app/page.tsx`) - Main landing page with scenario overview
-- [ ] **1. Direct Rendering** (`app/1-direct-rendering/page.tsx`) - JSXText between tags (visible text)
+- [✅] **Root Page** (`app/page.tsx`) - Main landing page with scenario overview
+- [✅] **1. Direct Rendering** (`app/1-direct-rendering/page.tsx`) - JSXText between tags (visible text)
 - [ ] **2. Expressions** (`app/2-expressions/page.tsx`) - JSXExpressionContainer with various expression types returning strings
 - [ ] **3. Visible Attributes** (`app/3-visible-attributes/page.tsx`) - JSXAttribute with title, alt, aria-label, aria-describedby, aria-placeholder and other accessibility attributes
 - [ ] **4. Components** (`app/4-components/page.tsx`) - Through props and children that render visible text

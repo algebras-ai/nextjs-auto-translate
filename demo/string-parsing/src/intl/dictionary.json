@@ -181,19 +181,12 @@
           },
           "hash": "5543d17e5165044a48d00039d2e28f1a"
         },
-        "program/body2/declaration/body/body3/argument/children3/children1": {
+        "program/body2/declaration/body/body3/argument/children3": {
           "content": {
-            "en": "Portal content is rendered to document.body (check browser inspector)",
-            "es": "El contenido del portal se renderiza en document.body (revisa el inspector del navegador)"
+            "en": "Portal content is rendered to document.body (check browser inspector)\n        {condition && \"{createPortal()}\"}",
+            "es": "El contenido del portal se renderiza en document.body (revisa el inspector del navegador)\n        {condition && \"{createPortal()}\"}"
           },
-          "hash": "9ee36f412e40d0a93f09786bfd6b5be8"
-        },
-        "program/body2/declaration/body/body3/argument/children3/children3/expression/right/arguments0": {
-          "content": {
-            "en": "Content in portal",
-            "es": "Contenido en el portal"
-          },
-          "hash": "61b3f5aaf23c7603c6156c0bf50ec563"
+          "hash": "03b015b5cc598052f17d42bbbbcb7ecb"
         },
         "program/body2/declaration/body/body3/argument/children5": {
           "content": {
@@ -284,6 +277,13 @@
           },
           "hash": "b6e179cec630f45910cd3c506e3e8bc0"
         },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{condition ? \"Logout\" : \"Login\"}",
+            "es": "{condition ? \"Cerrar sesión\" : \"Iniciar sesión\"}"
+          },
+          "hash": "771c0ce34870cfbe7f09443aa4ea05cf"
+        },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered.",
@@ -301,6 +301,13 @@
             "es": "<div>{getGreeting()}</div>"
           },
           "hash": "069e50b211afbbcdce365cd589bd12cb"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "{getGreeting()}",
+            "es": "{getGreeting()}"
+          },
+          "hash": "81be6ec245d0a34beebeefd387d54a80"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -327,6 +334,13 @@
           },
           "hash": "923cf754dc998f7ecfca555db1fb1c36"
         },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{condition && \"Visible text\"}",
+            "es": "{condition && \"Texto visible\"}"
+          },
+          "hash": "127a0eb1d0a8be6ffd65a3a6e450c416"
+        },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> If the left part is true, the right part\n        (string) is rendered.",
@@ -345,6 +359,13 @@
           },
           "hash": "a21ddd774c79cee5d6243b01c7bd290b"
         },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "Hello World",
+            "es": "Hola, mundo"
+          },
+          "hash": "b10a8db164e0754105b7a99be72e3fe5"
+        },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with BinaryExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Result of string concatenation is rendered\n        as text.",
@@ -362,6 +383,13 @@
             "es": "<div>{\"Cadena en expresión\"}</div>"
           },
           "hash": "47b7e7e734a0472f6261097140ea842d"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "String in expression",
+            "es": "Cadena en expresión"
+          },
+          "hash": "426756fb39cb710b433b30c5058f9545"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
@@ -399,6 +427,13 @@
           },
           "hash": "81e283c524ff0d7529c36f5ff8d5d03a"
         },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "content": {
+            "en": "Hello, {name}!",
+            "es": "¡Hola, {name}!"
+          },
+          "hash": "613969df8ffc1c390f81917c0cddee77"
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with TemplateLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Template literal is evaluated and rendered\n        as a string.",
@@ -416,6 +451,13 @@
             "es": "const texto = \"Texto de una variable\"; <div>{texto}</div>"
           },
           "hash": "6c83d49b105d7b97dfeca1ec33a89040"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "content": {
+            "en": "{text}",
+            "es": "{texto}"
+          },
+          "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -616,6 +658,13 @@
     },
     "app/4-components/components/ChildAsString.tsx": {
       "entries": {
+        "program/body0/body/body0/argument": {
+          "content": {
+            "en": "{children}",
+            "es": "{hijos}"
+          },
+          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
+        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Component>Child element text</Component>",
@@ -641,6 +690,13 @@
     },
     "app/4-components/components/ChildrenProp.tsx": {
       "entries": {
+        "program/body0/body/body0/argument": {
+          "content": {
+            "en": "{children}",
+            "es": "{hijos}"
+          },
+          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
+        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Component>Text</Component>",
@@ -666,6 +722,20 @@
     },
     "app/4-components/components/PropsAsString.tsx": {
       "entries": {
+        "program/body0/body/body0/argument": {
+          "content": {
+            "en": "{label}",
+            "es": "{etiqueta}"
+          },
+          "hash": "dfa8040e56bc3a9b83f5c0a8160d8f33"
+        },
+        "program/body1/body/body0/argument": {
+          "content": {
+            "en": "{message}",
+            "es": "{mensaje}"
+          },
+          "hash": "f933e224b575d7014aed7bd26d621391"
+        },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Button label=\"Click me\" />",
@@ -684,6 +754,13 @@
     },
     "app/4-components/components/RenderingViaComponent.tsx": {
       "entries": {
+        "program/body0/body/body0/argument": {
+          "content": {
+            "en": "{text}",
+            "es": "{texto}"
+          },
+          "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
+        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<TextComponent text=\"Text\" />",
@@ -702,6 +779,13 @@
     },
     "app/4-components/components/WrapperComponent.tsx": {
       "entries": {
+        "program/body0/body/body0/argument": {
+          "content": {
+            "en": "{children}",
+            "es": "{hijos}"
+          },
+          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
+        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Bold>Bold text</Bold>",
@@ -780,6 +864,13 @@
           },
           "hash": "57c1dae78534c9411129ee54d6cae4eb"
         },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "{getText()}",
+            "es": "{obtenerTexto()}"
+          },
+          "hash": "698c1e3bf832f65bdb353dfd3b1bf1b6"
+        },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Arrow function returning a string.",
@@ -797,6 +888,13 @@
             "es": "<div>{getText()}</div>"
           },
           "hash": "c4829648dc5d7386f7d88426410e4f02"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "{getText()}",
+            "es": "{obtenerTexto()}"
+          },
+          "hash": "698c1e3bf832f65bdb353dfd3b1bf1b6"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -858,6 +956,13 @@
             "es": "import { formatDate } from './utils'; <div>{formatDate(date)}</div>"
           },
           "hash": "d11a0969fa8c8d6787c8a10d11cbd14f"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "{formatDate()}",
+            "es": "{formatearFecha()}"
+          },
+          "hash": "dd2376549efbea22bf3c7a7a78f0aee5"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -944,6 +1049,13 @@
           },
           "hash": "902b0d55fddef6f8d651fe1035b7d4bd"
         },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{getMessage()}",
+            "es": "{obtenerMensaje()}"
+          },
+          "hash": "5f7cdc1bd64d3cb7d017d4fcb98ac578"
+        },
         "program/body2/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional logic is extracted into a function.",
@@ -969,6 +1081,13 @@
           },
           "hash": "5f8511503a47eeef5ab3da61e3c0a873"
         },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{condition && \"Error: {error}\"}",
+            "es": "{condición && \"Error: {error}\"}"
+          },
+          "hash": "3a0f50888a3e8f0f4ca401e560f1d095"
+        },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is rendered only if the condition is true.",
@@ -993,6 +1112,13 @@
             "es": "Alternar mensaje"
           },
           "hash": "47be838012c368242e0a1e9651072e90"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{message}",
+            "es": "{mensaje}"
+          },
+          "hash": "f933e224b575d7014aed7bd26d621391"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
@@ -1033,6 +1159,13 @@
           },
           "hash": "88183b946cc5f0e8c96b2e66e1c74a7e"
         },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{getStatusText()}",
+            "es": "{obtenerTextoEstado()}"
+          },
+          "hash": "78fb9d9c61f9522c1b279f07b6426f8c"
+        },
         "program/body2/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function.",
@@ -1057,6 +1190,13 @@
             "es": "Alternar carga"
           },
           "hash": "7a2275aa440efd4d337688102ab9a6b3"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{condition ? \"Loading...\" : \"Ready\"}",
+            "es": "{condición ? \"Cargando...\" : \"Listo\"}"
+          },
+          "hash": "b5c29adee200a96d19373d6395b021c3"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
@@ -1122,6 +1262,13 @@
           },
           "hash": "36f260dbdecb7f8424c24d1d9d25bbed"
         },
+        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
+          "content": {
+            "en": "{item}",
+            "es": "{objeto}"
+          },
+          "hash": "e232d42269bb57ff0c0c0778cc43441a"
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with chain of CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Chain of methods for filtering and rendering strings.",
@@ -1158,6 +1305,13 @@
           },
           "hash": "b4a387a73ec71689484aacbc065e7cb7"
         },
+        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
+          "content": {
+            "en": "Number: {n}",
+            "es": "Número: {n}"
+          },
+          "hash": "e3b751801ae7824c7ce6e8177cc99638"
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are formed dynamically in map.",
@@ -1175,6 +1329,13 @@
             "es": "items.map((item, index) => <div key={index}>{item}</div>)"
           },
           "hash": "3f1459afe307d7c765931426a118eb3e"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
+          "content": {
+            "en": "{item}",
+            "es": "{objeto}"
+          },
+          "hash": "e232d42269bb57ff0c0c0778cc43441a"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -1258,6 +1419,13 @@
           },
           "hash": "869551a7f0a73d24bf74b893224d9a83"
         },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
+          "content": {
+            "en": "{text}",
+            "es": "{texto}"
+          },
+          "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
+        },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client.",
@@ -1286,7 +1454,7 @@
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> FunctionDeclaration with ReturnStatement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Dynamic metadata via function.",
-            "es": "<element:strong>Tipo de AST:</element:strong> FunctionDeclaration con ReturnStatement\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Metadatos dinámicos generados por función."
+            "es": "[ES] <element:strong>AST Type:</element:strong> FunctionDeclaration with ReturnStatement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Dynamic metadata via function."
           },
           "hash": "5c3e9936f25b7d80d60cca26d5525102"
         }
@@ -1297,21 +1465,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "export const metadata: Metadata = { \n          {title: \"Page title\", description: \"Page description\"}\n          };",
-            "es": "export const metadata: Metadata = { \n          title: \"Título de la página\", description: \"Descripción de la página\"\n          };"
+            "es": "[ES] export const metadata: Metadata = { \n          {title: \"Page title\", description: \"Page description\"}\n          };"
           },
           "hash": "d39dbec0bf55338b4a6c9d7f2e6ec69a"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Check the browser tab title - it should show \"8. Next.js Specifics\"",
-            "es": "Comprueba el título de la pestaña del navegador; debería mostrar \"8. Particularidades de Next.js\""
+            "es": "[ES] Check the browser tab title - it should show \"8. Next.js Specifics\""
           },
           "hash": "db494bdd412063b2fa72390a82de5522"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> ExportNamedDeclaration with ObjectExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings in Next.js App Router metadata.",
-            "es": "<element:strong>Tipo de AST:</element:strong> ExportNamedDeclaration con ObjectExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cadenas en los metadatos de Next.js App Router."
+            "es": "[ES] <element:strong>AST Type:</element:strong> ExportNamedDeclaration with ObjectExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings in Next.js App Router metadata."
           },
           "hash": "0d76c1f0e3b744b1e46991e9e6e1b109"
         }
@@ -1319,17 +1487,24 @@
     },
     "app/8-nextjs-specifics/components/ServerComponent.tsx": {
       "entries": {
+        "program/body1/body/body1/argument": {
+          "content": {
+            "en": "{variable.title()}",
+            "es": "[ES] {variable.title()}"
+          },
+          "hash": "49fa0401b23e77c4ec3d102089ca1fe9"
+        },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "async function ServerComponent() { \n          const data = await fetchData(); return <div>{data.title}</div> \n          }",
-            "es": "async function ServerComponent() { \n          const data = await fetchData(); return <div>{data.title}</div> \n          }"
+            "es": "[ES] async function ServerComponent() { \n          const data = await fetchData(); return <div>{data.title}</div> \n          }"
           },
           "hash": "ee999648e11f3e8deeb481fad34f3a68"
         },
         "program/body2/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the server in App Router.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con Identifier\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Las cadenas de texto se renderizan en el servidor en el App Router."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the server in App Router."
           },
           "hash": "e03ad61e5e140f52bb42df50f7a1c0dc"
         }
@@ -1340,35 +1515,35 @@
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "8. Next.js Specifics - metadata, Server/Client Components",
-            "es": "8. Especificaciones de Next.js: metadatos, componentes de servidor y de cliente"
+            "es": "[ES] 8. Next.js Specifics - metadata, Server/Client Components"
           },
           "hash": "4248fbf1b24f1347edb0faf54932f59a"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "8.1 Metadata",
-            "es": "8.1 Metadatos"
+            "es": "[ES] 8.1 Metadata"
           },
           "hash": "748db58fcca92c11915c66e8c0231d10"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "8.2 generateMetadata function",
-            "es": "8.2 Función generateMetadata"
+            "es": "[ES] 8.2 generateMetadata function"
           },
           "hash": "42e1d1fb35c42f04fc29238ff67175f9"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "8.3 Server Components",
-            "es": "8.3 Componentes de servidor"
+            "es": "[ES] 8.3 Server Components"
           },
           "hash": "272d3686a291ae16ea2ac8cb18d77c23"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "8.4 Client Components",
-            "es": "8.4 Componentes de cliente"
+            "es": "[ES] 8.4 Client Components"
           },
           "hash": "acc69a8497fea3f585e8f88a757cc316"
         }
@@ -1379,21 +1554,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<button>Submit</button>",
-            "es": "<button>Enviar</button>"
+            "es": "[ES] <button>Submit</button>"
           },
           "hash": "44f4e0c08652974bf5851ee2d3d5df73"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Submit",
-            "es": "Enviar"
+            "es": "[ES] Submit"
           },
           "hash": "a4d3b161ce1309df1c4e25df28694b7b"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText en JSXElement o JSXAttribute (valor para input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El texto del botón es visible para los usuarios. Para\n        <input type=\"submit\">, el texto se define mediante el atributo value."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute."
           },
           "hash": "1e7445e8ee01ea9199ab9821e4f94be2"
         }
@@ -1404,28 +1579,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<details> <summary>Click to expand</summary> ... </details>",
-            "es": "<details> <summary>Haz clic para expandir</summary> ... </details>"
+            "es": "[ES] <details> <summary>Click to expand</summary> ... </details>"
           },
           "hash": "934082ec72a734bc78f3c007d8b73fb8"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "Click to expand",
-            "es": "Haz clic para expandir"
+            "es": "[ES] Click to expand"
           },
           "hash": "e3cfcd8feda52c804ffcc02c85292337"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children3/children1": {
           "content": {
             "en": "Hidden content",
-            "es": "Contenido oculto"
+            "es": "[ES] Hidden content"
           },
           "hash": "e43df5de2cb14fa198c6349652d9cf4c"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <summary> is visible to users\n        as a clickable heading for an expandable block.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText en JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El texto en <summary> es visible para los usuarios\n        como un encabezado interactivo para un bloque desplegable."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <summary> is visible to users\n        as a clickable heading for an expandable block."
           },
           "hash": "2b37195da5276b0e7d6ff10c3f9f7c8a"
         }
@@ -1436,21 +1611,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<fieldset> <legend>Field group</legend> ... </fieldset>",
-            "es": "<fieldset> <legend>Grupo de campos</legend> ... </fieldset>"
+            "es": "[ES] <fieldset> <legend>Field group</legend> ... </fieldset>"
           },
           "hash": "a3c70e238e53deebada39355482930ca"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "Field group",
-            "es": "Grupo de campos"
+            "es": "[ES] Field group"
           },
           "hash": "52c11ee2036946f458575360d1021a34"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText en JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El texto en <legend> es visible para los usuarios\n        como el encabezado de un grupo de campos."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields."
           },
           "hash": "9da9f8bc456c2510227f2385760b6f28"
         }
@@ -1461,28 +1636,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<label htmlFor=\"input\">Field label</label>",
-            "es": "<label htmlFor=\"input\">Etiqueta del campo</label>"
+            "es": "[ES] <label htmlFor=\"input\">Field label</label>"
           },
           "hash": "7dfe3553871a577f84927d920d5a531d"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "Field label",
-            "es": "Etiqueta del campo"
+            "es": "[ES] Field label"
           },
           "hash": "d71675f75feb54ebb0bd3c94a7f1e755"
         },
         "program/body0/declaration/body/body0/argument/children3/children3/children1": {
           "content": {
             "en": "Email address\n            <element:input></element:input>",
-            "es": "Correo electrónico\n            <element:input></element:input>"
+            "es": "[ES] Email address\n            <element:input></element:input>"
           },
           "hash": "a6095e3ff3927c3782b96ec4844cfcf9"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Label text for input field is visible to\n        users. The htmlFor attribute (technical) is not localized, but text\n        inside <label> is subject to localization.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText en JSXElement\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El texto de la etiqueta para el campo de entrada es visible para los usuarios. El atributo htmlFor (técnico) no se localiza, pero el texto dentro de <label> debe localizarse."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Label text for input field is visible to\n        users. The htmlFor attribute (technical) is not localized, but text\n        inside <label> is subject to localization."
           },
           "hash": "d3a17f6a8281241bed64d311096204a9"
         }
@@ -1493,14 +1668,14 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<input placeholder=\"Enter text\" />",
-            "es": "<input placeholder=\"Ingresar texto\" />"
+            "es": "[ES] <input placeholder=\"Enter text\" />"
           },
           "hash": "34c98e1ce1ce5e23e50c8a9c0929c815"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXAttribute con StringLiteral o JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El texto de sugerencia en el campo de entrada es visible para los usuarios antes de ingresar texto."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
           },
           "hash": "a47f9ae133bb19c711b486ba2a597cb1"
         }
@@ -1511,28 +1686,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<option value=\"1\">First option</option>",
-            "es": "<option value=\"1\">Primera opción</option>"
+            "es": "[ES] <option value=\"1\">First option</option>"
           },
           "hash": "8b2f0774cd1edd692b9141b387946690"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "First option",
-            "es": "Primera opción"
+            "es": "[ES] First option"
           },
           "hash": "ff9cf53441647734b4e45fe8b4c14847"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children3": {
           "content": {
             "en": "Second option",
-            "es": "Segunda opción"
+            "es": "[ES] Second option"
           },
           "hash": "52217b6cfed9b47cd29ed284ca44a0c3"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Option text in select is visible to users\n        when opening the list. The value attribute (technical) is not localized.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText en JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El texto de la opción en el select es visible para los usuarios al desplegar la lista. El atributo value (técnico) no se localiza."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Option text in select is visible to users\n        when opening the list. The value attribute (technical) is not localized."
           },
           "hash": "10de309a6a9ee9ee4e7ab274a019cbae"
         }
@@ -1543,14 +1718,14 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<textarea placeholder=\"Enter your comment\" />",
-            "es": "<textarea placeholder=\"Escribe tu comentario\" />"
+            "es": "[ES] <textarea placeholder=\"Enter your comment\" />"
           },
           "hash": "9dcd4b20167997b8e29c5717b1bae2a3"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXAttribute con StringLiteral o JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El marcador de posición y el valor en el área de texto son visibles para los usuarios."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users."
           },
           "hash": "fcd8ac058eb5cfc77aef7080dbf60692"
         }
@@ -1561,14 +1736,14 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<input value={inputValue} />",
-            "es": "<input value={valorEntrada} />"
+            "es": "[ES] <input value={inputValue} />"
           },
           "hash": "f88c66a8224e127edfcab35d35ed6e16"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with JSXExpressionContainer or StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field value is visible to users in\n        the field. Used for pre-filled fields or controlled components.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXAttribute con JSXExpressionContainer o StringLiteral\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El valor del campo de entrada es visible para los usuarios en el campo. Se utiliza para campos precargados o componentes controlados."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXAttribute with JSXExpressionContainer or StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field value is visible to users in\n        the field. Used for pre-filled fields or controlled components."
           },
           "hash": "68925826615bc26889af5771322a121e"
         }
@@ -1579,65 +1754,76 @@
         "program/body8/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "9. Forms - placeholder, value, label, button, option",
-            "es": "9. Formularios: marcador de posición, valor, etiqueta, botón, opción"
+            "es": "[ES] 9. Forms - placeholder, value, label, button, option"
           },
           "hash": "c0b0b2119dcad6e66fc789402df92007"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "9.1 Placeholder",
-            "es": "9.1 Marcador de posición"
+            "es": "[ES] 9.1 Placeholder"
           },
           "hash": "2d8cba9a3d2e5a05eedd7aff7ab35b1a"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "9.2 Value",
-            "es": "9.2 Valor"
+            "es": "[ES] 9.2 Value"
           },
           "hash": "d37e47e6ca8d9281b59fa65c09f02c94"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "9.3 Label",
-            "es": "9.3 Etiqueta"
+            "es": "[ES] 9.3 Label"
           },
           "hash": "175c1eb801e562760911af4493182d3b"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "9.4 Button text",
-            "es": "9.4 Texto del botón"
+            "es": "[ES] 9.4 Button text"
           },
           "hash": "9d2972e5c8c2d085301a5c862309c7f5"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "9.5 Textarea",
-            "es": "9.5 Área de texto (Textarea)"
+            "es": "[ES] 9.5 Textarea"
           },
           "hash": "214cd91b22fb8b999701351d96d57a3e"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children11/children1": {
           "content": {
             "en": "9.6 Select options",
-            "es": "9.6 Opciones de selección"
+            "es": "[ES] 9.6 Select options"
           },
           "hash": "75a12f36beeb47f8ac56f0d73c17095a"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children13/children1": {
           "content": {
             "en": "9.7 Fieldset and Legend",
-            "es": "9.7 Fieldset y Legend"
+            "es": "[ES] 9.7 Fieldset and Legend"
           },
           "hash": "56a8cc87b75fbc552f45b980dd5fbdf1"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children15/children1": {
           "content": {
             "en": "9.8 Details and Summary",
-            "es": "9.8 Details y Summary"
+            "es": "[ES] 9.8 Details and Summary"
           },
           "hash": "381729d986c26b835a352f36c1b36c44"
+        }
+      }
+    },
+    "app/layout.tsx": {
+      "entries": {
+        "program/body9/declaration/body/body0/argument/children1/children1/children5": {
+          "content": {
+            "en": "{children}",
+            "es": "[ES] {children}"
+          },
+          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
         }
       }
     },
@@ -1646,49 +1832,63 @@
         "program/body2/declaration/body/body0/argument/children1/children1/children1": {
           "content": {
             "en": "String Rendering Patterns",
-            "es": "Patrones de renderizado de cadenas"
+            "es": "[ES] String Rendering Patterns"
           },
           "hash": "d67cc33eea225011ccdd58c9e0ca06e9"
         },
         "program/body2/declaration/body/body0/argument/children1/children1/children3": {
           "content": {
             "en": "This demonstration shows all possible scenarios and patterns of how\n            strings can appear in the final DOM in React and Next.js\n            applications and be visible to users on screen (without using\n            devtools).",
-            "es": "Esta demostración muestra todos los posibles escenarios y patrones de cómo las cadenas de texto aparecen en el DOM final en aplicaciones React y Next.js, siendo visibles para los usuarios en pantalla (sin necesidad de usar las herramientas de desarrollo)."
+            "es": "[ES] This demonstration shows all possible scenarios and patterns of how\n            strings can appear in the final DOM in React and Next.js\n            applications and be visible to users on screen (without using\n            devtools)."
           },
           "hash": "fff863e8613d1ed5d434154d04034652"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children3/children1/expression/arguments0/body/children1": {
+          "content": {
+            "en": "{variable.title()}",
+            "es": "[ES] {variable.title()}"
+          },
+          "hash": "49fa0401b23e77c4ec3d102089ca1fe9"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children3/children1/expression/arguments0/body/children3": {
+          "content": {
+            "en": "{variable.description()}",
+            "es": "[ES] {variable.description()}"
+          },
+          "hash": "661a0bf8d631e7119a245b0f78ae1ff5"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children1": {
           "content": {
             "en": "Exclusions (not localized):",
-            "es": "Exclusiones (no localizadas):"
+            "es": "[ES] Exclusions (not localized):"
           },
           "hash": "e479ded3cbe39f719577358b3b16467a"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children1": {
           "content": {
             "en": "Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>",
-            "es": "Atributos técnicos: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>"
+            "es": "[ES] Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>"
           },
           "hash": "34f1d87dc7adb94ec8823b2350f93c63"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children3": {
           "content": {
             "en": "Pure API responses without UI",
-            "es": "Respuestas de API puras sin interfaz de usuario"
+            "es": "[ES] Pure API responses without UI"
           },
           "hash": "9fc4ad506e787fe8e987a79fcba3bfe0"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children5": {
           "content": {
             "en": "Code comments",
-            "es": "Comentarios de código"
+            "es": "[ES] Code comments"
           },
           "hash": "b2219a195bef487ca6079bd6c767a388"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children7": {
           "content": {
             "en": "Technical identifiers and CSS classes",
-            "es": "Identificadores técnicos y clases CSS"
+            "es": "[ES] Technical identifiers and CSS classes"
           },
           "hash": "2d37acd08c33d221bbdbc873439d6864"
         }
@@ -1699,7 +1899,7 @@
         "program/body3/declaration/body/body1/argument/children1/children1/children1/children1": {
           "content": {
             "en": "String Rendering Patterns",
-            "es": "Patrones de renderizado de cadenas"
+            "es": "[ES] String Rendering Patterns"
           },
           "hash": "d67cc33eea225011ccdd58c9e0ca06e9"
         }

@@ -7,7 +7,7 @@ This document describes all possible scenarios and patterns of how a string can 
 ## Table of Contents
 
 1. ✅ [Direct Strings in JSX (JSXText)](#1-direct-strings-in-jsx-jsxtext)
-2. [Strings via Expressions (JSXExpressionContainer)](#2-strings-via-expressions-jsxexpressioncontainer)
+2. ✅ [Strings via Expressions (JSXExpressionContainer)](#2-strings-via-expressions-jsxexpressioncontainer)
 3. [Strings in Element Attributes (visible to users)](#3-strings-in-element-attributes-visible-to-users)
 4. [Strings via Variables](#4-strings-via-variables)
 5. [Strings via Functions and Methods](#5-strings-via-functions-and-methods)

@@ -37,6 +37,139 @@ exports.buildContent = buildContent;
 exports.getRelativeScopePath = getRelativeScopePath;
 const t = __importStar(require("@babel/types"));
 /**
+ * Checks if an expression node can produce a string output
+ * that should be translated.
+ */
+function isTranslatableExpression(expression) {
+    if (t.isJSXEmptyExpression(expression)) {
+        return false;
+    }
+    // Direct string literals
+    if (t.isStringLiteral(expression)) {
+        return true;
+    }
+    // Template literals (e.g., `Hello ${name}`)
+    if (t.isTemplateLiteral(expression)) {
+        return true;
+    }
+    // Conditional expressions (e.g., condition ? 'Yes' : 'No')
+    if (t.isConditionalExpression(expression)) {
+        return (isTranslatableExpression(expression.consequent) ||
+            isTranslatableExpression(expression.alternate));
+    }
+    // Logical expressions (e.g., show && 'Text')
+    if (t.isLogicalExpression(expression)) {
+        return (isTranslatableExpression(expression.left) ||
+            isTranslatableExpression(expression.right));
+    }
+    // Binary expressions - string concatenation (e.g., 'Hello ' + name)
+    if (t.isBinaryExpression(expression) && expression.operator === '+') {
+        const leftIsValid = t.isExpression(expression.left) &&
+            isTranslatableExpression(expression.left);
+        const rightIsValid = t.isExpression(expression.right) &&
+            isTranslatableExpression(expression.right);
+        return leftIsValid || rightIsValid;
+    }
+    // String method calls (e.g., text.toUpperCase())
+    if (t.isMemberExpression(expression) &&
+        !t.isPrivateName(expression.property)) {
+        return true;
+    }
+    // Function calls that might return strings
+    if (t.isCallExpression(expression)) {
+        return true;
+    }
+    // Variables that might contain strings
+    if (t.isIdentifier(expression)) {
+        return true;
+    }
+    return false;
+}
+/**
+ * Extracts a readable representation of an expression
+ * for translation purposes.
+ */
+function extractExpressionContent(expression) {
+    if (t.isJSXEmptyExpression(expression)) {
+        return '';
+    }
+    // String literal - return the value
+    if (t.isStringLiteral(expression)) {
+        return expression.value;
+    }
+    // Template literal - build representation
+    if (t.isTemplateLiteral(expression)) {
+        let content = '';
+        for (let i = 0; i < expression.quasis.length; i++) {
+            content += expression.quasis[i].value.raw;
+            if (i < expression.expressions.length) {
+                // Add placeholder for variables
+                const expr = expression.expressions[i];
+                if (t.isIdentifier(expr)) {
+                    content += `{${expr.name}}`;
+                }
+                else {
+                    content += `{expr}`;
+                }
+            }
+        }
+        return content;
+    }
+    // Conditional expression - extract both branches
+    if (t.isConditionalExpression(expression)) {
+        const consequent = extractExpressionContent(expression.consequent);
+        const alternate = extractExpressionContent(expression.alternate);
+        if (consequent && alternate) {
+            return `{condition ? "${consequent}" : "${alternate}"}`;
+        }
+        else if (consequent) {
+            return consequent;
+        }
+        else if (alternate) {
+            return alternate;
+        }
+    }
+    // Logical expression - extract the string part
+    if (t.isLogicalExpression(expression)) {
+        const left = extractExpressionContent(expression.left);
+        const right = extractExpressionContent(expression.right);
+        if (expression.operator === '&&' && right) {
+            return `{condition && "${right}"}`;
+        }
+        if (expression.operator === '||') {
+            return left || right;
+        }
+    }
+    // Binary expression - string concatenation
+    if (t.isBinaryExpression(expression) && expression.operator === '+') {
+        const left = t.isExpression(expression.left)
+            ? extractExpressionContent(expression.left)
+            : '';
+        const right = t.isExpression(expression.right)
+            ? extractExpressionContent(expression.right)
+            : '';
+        return left + right;
+    }
+    // Member expression - method calls
+    if (t.isMemberExpression(expression) &&
+        !t.isPrivateName(expression.property)) {
+        if (t.isIdentifier(expression.property)) {
+            return `{variable.${expression.property.name}()}`;
+        }
+    }
+    // Call expression - function calls
+    if (t.isCallExpression(expression)) {
+        if (t.isIdentifier(expression.callee)) {
+            return `{${expression.callee.name}()}`;
+        }
+    }
+    // Identifier - variable reference
+    if (t.isIdentifier(expression)) {
+        return `{${expression.name}}`;
+    }
+    return '';
+}
+/**
  * Builds a readable content string from a JSXElement node,
  * using pseudo-tags for JSXElements and trimmed text for JSXText.
  */
@@ -80,15 +213,15 @@ function buildContent(node) {
                 out += processedText;
         }
         else if (t.isJSXExpressionContainer(child)) {
-            // Handle JSXExpressionContainer nodes (e.g., {" "} for preserving spaces)
-            // This is crucial for preserving spaces between text and elements
+            // Handle JSXExpressionContainer nodes
+            // This includes: string literals, template literals, ternaries, logical expressions, etc.
             const expression = child.expression;
-            if (t.isStringLiteral(expression)) {
-                // Extract string literal value (e.g., " " from {" "})
-                // This preserves explicit spaces that developers add
-                out += expression.value;
+            if (isTranslatableExpression(expression)) {
+                const content = extractExpressionContent(expression);
+                if (content) {
+                    out += content;
+                }
             }
-            // Ignore other expression types (variables, function calls, etc.)
         }
         else if (t.isJSXElement(child)) {
             const nameNode = child.openingElement.name;
