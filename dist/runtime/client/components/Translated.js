@@ -34,6 +34,23 @@ const Translated = (props) => {
         let match;
         let iterationCount = 0;
         const maxIterations = 100; // Prevent infinite loops
+        // Void elements that cannot have children
+        const voidElements = new Set([
+            'area',
+            'base',
+            'br',
+            'col',
+            'embed',
+            'hr',
+            'img',
+            'input',
+            'link',
+            'meta',
+            'param',
+            'source',
+            'track',
+            'wbr',
+        ]);
         while ((match = elementRegex.exec(text)) !== null) {
             // Safety check to prevent infinite loops
             if (++iterationCount > maxIterations) {
@@ -47,7 +64,13 @@ const Translated = (props) => {
             // Add the element
             const tagName = match[1];
             const innerContent = match[2];
-            parts.push((0, react_1.createElement)(tagName, { key: match.index }, parseContent(innerContent)));
+            // Void elements cannot have children
+            if (voidElements.has(tagName)) {
+                parts.push((0, react_1.createElement)(tagName, { key: match.index }));
+            }
+            else {
+                parts.push((0, react_1.createElement)(tagName, { key: match.index }, parseContent(innerContent)));
+            }
             lastIndex = elementRegex.lastIndex;
             // Safety check: if we're not advancing, break to prevent infinite loop
             if (lastIndex <= match.index) {

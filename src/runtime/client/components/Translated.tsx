@@ -1,6 +1,6 @@
 'use client';
 
-import { createElement, ReactNode } from 'react';
+import { createElement } from 'react';
 import { useAlgebrasIntl } from '../Provider';
 
 interface TranslatedProps {
@@ -45,6 +45,24 @@ const Translated = (props: TranslatedProps) => {
     let iterationCount = 0;
     const maxIterations = 100; // Prevent infinite loops
 
+    // Void elements that cannot have children
+    const voidElements = new Set([
+      'area',
+      'base',
+      'br',
+      'col',
+      'embed',
+      'hr',
+      'img',
+      'input',
+      'link',
+      'meta',
+      'param',
+      'source',
+      'track',
+      'wbr',
+    ]);
+
     while ((match = elementRegex.exec(text)) !== null) {
       // Safety check to prevent infinite loops
       if (++iterationCount > maxIterations) {
@@ -60,9 +78,19 @@ const Translated = (props: TranslatedProps) => {
       // Add the element
       const tagName = match[1];
       const innerContent = match[2];
-      parts.push(
-        createElement(tagName, { key: match.index }, parseContent(innerContent))
-      );
+
+      // Void elements cannot have children
+      if (voidElements.has(tagName)) {
+        parts.push(createElement(tagName, { key: match.index }));
+      } else {
+        parts.push(
+          createElement(
+            tagName,
+            { key: match.index },
+            parseContent(innerContent)
+          )
+        );
+      }
 
       lastIndex = elementRegex.lastIndex;
 

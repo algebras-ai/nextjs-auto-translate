@@ -2,11 +2,11 @@
 
 This document describes all possible scenarios and patterns of how a string can appear in the final DOM in React and Next.js applications and be visible to users on screen (without using devtools).
 
-**Important:** This document describes only strings that users see on screen. Technical attributes (id, className, data-*, htmlFor, etc.) are excluded.
+**Important:** This document describes only strings that users see on screen. Technical attributes (id, className, data-\*, htmlFor, etc.) are excluded.
 
 ## Table of Contents
 
-1. [Direct Strings in JSX (JSXText)](#1-direct-strings-in-jsx-jsxtext)
+1. ✅ [Direct Strings in JSX (JSXText)](#1-direct-strings-in-jsx-jsxtext)
 2. [Strings via Expressions (JSXExpressionContainer)](#2-strings-via-expressions-jsxexpressioncontainer)
 3. [Strings in Element Attributes (visible to users)](#3-strings-in-element-attributes-visible-to-users)
 4. [Strings via Variables](#4-strings-via-variables)
@@ -36,10 +36,7 @@ This document describes all possible scenarios and patterns of how a string can 
 ### 1.2 Text with spaces
 
 ```tsx
-<div>
-  Text with spaces
-  and line breaks
-</div>
+<div>Text with spaces and line breaks</div>
 ```
 
 **AST Type:** `JSXText`  
@@ -60,9 +57,7 @@ This document describes all possible scenarios and patterns of how a string can 
 
 ```tsx
 <div>
-  Text{" "}
-  <span>with space</span>
-  {" "}between elements
+  Text <span>with space</span> between elements
 </div>
 ```
 
@@ -76,7 +71,7 @@ This document describes all possible scenarios and patterns of how a string can 
 ### 2.1 String literal in expression
 
 ```tsx
-<div>{"String in expression"}</div>
+<div>{'String in expression'}</div>
 ```
 
 **AST Type:** `JSXExpressionContainer` with `StringLiteral`  
@@ -85,8 +80,8 @@ This document describes all possible scenarios and patterns of how a string can 
 ### 2.2 Variable with string
 
 ```tsx
-const text = "Text from variable";
-<div>{text}</div>
+const text = 'Text from variable';
+<div>{text}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `Identifier`  
@@ -95,7 +90,7 @@ const text = "Text from variable";
 ### 2.3 String concatenation
 
 ```tsx
-<div>{"Hello" + " " + "World"}</div>
+<div>{'Hello' + ' ' + 'World'}</div>
 ```
 
 **AST Type:** `JSXExpressionContainer` with `BinaryExpression`  
@@ -104,8 +99,8 @@ const text = "Text from variable";
 ### 2.4 Template literals (template strings)
 
 ```tsx
-const name = "John";
-<div>{`Hello, ${name}!`}</div>
+const name = 'John';
+<div>{`Hello, ${name}!`}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `TemplateLiteral`  
@@ -114,7 +109,7 @@ const name = "John";
 ### 2.5 Conditional expression (ternary)
 
 ```tsx
-<div>{isLoggedIn ? "Logout" : "Login"}</div>
+<div>{isLoggedIn ? 'Logout' : 'Login'}</div>
 ```
 
 **AST Type:** `JSXExpressionContainer` with `ConditionalExpression`  
@@ -123,7 +118,7 @@ const name = "John";
 ### 2.6 Logical AND (&&)
 
 ```tsx
-<div>{isVisible && "Visible text"}</div>
+<div>{isVisible && 'Visible text'}</div>
 ```
 
 **AST Type:** `JSXExpressionContainer` with `LogicalExpression`  
@@ -196,7 +191,7 @@ const name = "John";
 <div aria-describedby="help-text">Input field</div>
 <span id="help-text">Enter your email</span>
 
-<input 
+<input
   aria-label="Search site"
   aria-placeholder="Enter query"
 />
@@ -212,8 +207,8 @@ const name = "John";
 ### 4.1 Constant
 
 ```tsx
-const MESSAGE = "Message";
-<div>{MESSAGE}</div>
+const MESSAGE = 'Message';
+<div>{MESSAGE}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `Identifier`  
@@ -222,8 +217,8 @@ const MESSAGE = "Message";
 ### 4.2 State (useState)
 
 ```tsx
-const [message, setMessage] = useState("Initial message");
-<div>{message}</div>
+const [message, setMessage] = useState('Initial message');
+<div>{message}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `Identifier`  
@@ -244,7 +239,7 @@ function Component({ title }: { title: string }) {
 
 ```tsx
 const { locale } = useContext(LocaleContext);
-<div>{locale}</div>
+<div>{locale}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `Identifier`  
@@ -254,7 +249,7 @@ const { locale } = useContext(LocaleContext);
 
 ```tsx
 function Component() {
-  const localVar = "Local variable";
+  const localVar = 'Local variable';
   return <div>{localVar}</div>;
 }
 ```
@@ -270,9 +265,9 @@ function Component() {
 
 ```tsx
 function getText() {
-  return "Text from function";
+  return 'Text from function';
 }
-<div>{getText()}</div>
+<div>{getText()}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -281,8 +276,8 @@ function getText() {
 ### 5.2 Arrow function
 
 ```tsx
-const getText = () => "Text";
-<div>{getText()}</div>
+const getText = () => 'Text';
+<div>{getText()}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -291,8 +286,8 @@ const getText = () => "Text";
 ### 5.3 Object method
 
 ```tsx
-const obj = { getText: () => "Text" };
-<div>{obj.getText()}</div>
+const obj = { getText: () => 'Text' };
+<div>{obj.getText()}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression` (MemberExpression)  
@@ -313,7 +308,7 @@ const obj = { getText: () => "Text" };
 
 ```tsx
 import { formatDate } from './utils';
-<div>{formatDate(date)}</div>
+<div>{formatDate(date)}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -326,7 +321,7 @@ import { formatDate } from './utils';
 ### 6.1 Ternary operator
 
 ```tsx
-<div>{isLoading ? "Loading..." : "Ready"}</div>
+<div>{isLoading ? 'Loading...' : 'Ready'}</div>
 ```
 
 **AST Type:** `JSXExpressionContainer` with `ConditionalExpression`  
@@ -344,7 +339,7 @@ import { formatDate } from './utils';
 ### 6.3 Logical OR
 
 ```tsx
-<div>{message || "Default message"}</div>
+<div>{message || 'Default message'}</div>
 ```
 
 **AST Type:** `JSXExpressionContainer` with `LogicalExpression`  
@@ -354,11 +349,11 @@ import { formatDate } from './utils';
 
 ```tsx
 function getMessage(status: string) {
-  if (status === "loading") return "Loading...";
-  if (status === "error") return "Error";
-  return "Ready";
+  if (status === 'loading') return 'Loading...';
+  if (status === 'error') return 'Error';
+  return 'Ready';
 }
-<div>{getMessage(status)}</div>
+<div>{getMessage(status)}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -369,12 +364,15 @@ function getMessage(status: string) {
 ```tsx
 function getStatusText(status: string) {
   switch (status) {
-    case "pending": return "Pending";
-    case "success": return "Success";
-    default: return "Unknown";
+    case 'pending':
+      return 'Pending';
+    case 'success':
+      return 'Success';
+    default:
+      return 'Unknown';
   }
 }
-<div>{getStatusText(status)}</div>
+<div>{getStatusText(status)}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -387,12 +385,12 @@ function getStatusText(status: string) {
 ### 7.1 map() with strings
 
 ```tsx
-const items = ["First", "Second", "Third"];
+const items = ['First', 'Second', 'Third'];
 <div>
   {items.map((item, index) => (
     <div key={index}>{item}</div>
   ))}
-</div>
+</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression` (map)  
@@ -402,9 +400,7 @@ const items = ["First", "Second", "Third"];
 
 ```tsx
 const numbers = [1, 2, 3];
-<div>
-  {numbers.map(n => `Number: ${n}`)}
-</div>
+<div>{numbers.map((n) => `Number: ${n}`)}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -414,8 +410,8 @@ const numbers = [1, 2, 3];
 
 ```tsx
 const items: string[] = [];
-data.forEach(item => items.push(item.name));
-<div>{items.join(", ")}</div>
+data.forEach((item) => items.push(item.name));
+<div>{items.join(', ')}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression` (join)  
@@ -426,9 +422,10 @@ data.forEach(item => items.push(item.name));
 ```tsx
 <div>
   {items
-    .filter(item => item.length > 5)
-    .map(item => <div key={item}>{item}</div>)
-  }
+    .filter((item) => item.length > 5)
+    .map((item) => (
+      <div key={item}>{item}</div>
+    ))}
 </div>
 ```
 
@@ -438,9 +435,7 @@ data.forEach(item => items.push(item.name));
 ### 7.5 reduce for combining
 
 ```tsx
-<div>
-  {items.reduce((acc, item) => `${acc}, ${item}`, "")}
-</div>
+<div>{items.reduce((acc, item) => `${acc}, ${item}`, '')}</div>
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression` (reduce)  
@@ -469,7 +464,7 @@ data.forEach(item => items.push(item.name));
 ```
 
 **AST Type:** `JSXAttribute` with `StringLiteral`  
-**Description:** String is passed through a prop and rendered as visible text. Important: technical props (id, className, data-*, etc.) are not subject to localization.
+**Description:** String is passed through a prop and rendered as visible text. Important: technical props (id, className, data-\*, etc.) are not subject to localization.
 
 ### 8.3 Children prop
 
@@ -477,7 +472,7 @@ data.forEach(item => items.push(item.name));
 function Component({ children }: { children: React.ReactNode }) {
   return <div>{children}</div>;
 }
-<Component>Text</Component>
+<Component>Text</Component>;
 ```
 
 **AST Type:** `JSXElement` with children  
@@ -489,7 +484,7 @@ function Component({ children }: { children: React.ReactNode }) {
 function TextComponent({ text }: { text: string }) {
   return <span>{text}</span>;
 }
-<TextComponent text="Text" />
+<TextComponent text="Text" />;
 ```
 
 **AST Type:** `JSXElement` (component)  
@@ -501,7 +496,7 @@ function TextComponent({ text }: { text: string }) {
 function Bold({ children }: { children: string }) {
   return <strong>{children}</strong>;
 }
-<Bold>Bold text</Bold>
+<Bold>Bold text</Bold>;
 ```
 
 **AST Type:** `JSXElement` with nested `JSXText`  
@@ -515,8 +510,8 @@ function Bold({ children }: { children: string }) {
 
 ```tsx
 export const metadata: Metadata = {
-  title: "Page title",
-  description: "Page description",
+  title: 'Page title',
+  description: 'Page description',
 };
 ```
 
@@ -528,8 +523,8 @@ export const metadata: Metadata = {
 ```tsx
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Dynamic title",
-    description: "Dynamic description",
+    title: 'Dynamic title',
+    description: 'Dynamic description',
   };
 }
 ```
@@ -545,7 +540,7 @@ import Head from 'next/head';
 <Head>
   <title>Title</title>
   <meta name="description" content="Description" />
-</Head>
+</Head>;
 ```
 
 **AST Type:** `JSXElement` (Head) with nested elements  
@@ -557,7 +552,7 @@ import Head from 'next/head';
 export async function getStaticProps() {
   return {
     props: {
-      title: "Static title",
+      title: 'Static title',
     },
   };
 }
@@ -584,7 +579,7 @@ async function ServerComponent() {
 ```tsx
 'use client';
 function ClientComponent() {
-  const [text, setText] = useState("Client text");
+  const [text, setText] = useState('Client text');
   return <div>{text}</div>;
 }
 ```
@@ -597,7 +592,7 @@ function ClientComponent() {
 ```tsx
 // If Route Handler is used for Server Components
 export async function GET() {
-  return Response.json({ message: "Message" });
+  return Response.json({ message: 'Message' });
 }
 
 // In component:
@@ -808,7 +803,7 @@ All strings in forms that users see on screen are subject to localization.
 
 ```tsx
 import { format } from 'date-fns';
-<div>{format(new Date(), 'dd.MM.yyyy')}</div>
+<div>{format(new Date(), 'dd.MM.yyyy')}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -819,7 +814,7 @@ import { format } from 'date-fns';
 ```tsx
 import { useTranslation } from 'react-i18next';
 const { t } = useTranslation();
-<div>{t('common.welcome')}</div>
+<div>{t('common.welcome')}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -829,7 +824,7 @@ const { t } = useTranslation();
 
 ```tsx
 import { getErrorMessage } from './validation';
-<div>{getErrorMessage(error)}</div>
+<div>{getErrorMessage(error)}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -839,7 +834,7 @@ import { getErrorMessage } from './validation';
 
 ```tsx
 import { formatCurrency } from './utils';
-<div>{formatCurrency(1000)}</div>
+<div>{formatCurrency(1000)}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -849,7 +844,7 @@ import { formatCurrency } from './utils';
 
 ```tsx
 import { truncate } from './string-utils';
-<div>{truncate(longText, 50)}</div>
+<div>{truncate(longText, 50)}</div>;
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression`  
@@ -877,11 +872,9 @@ import { truncate } from './string-utils';
 ### 13.2 Conditional rendering with components
 
 ```tsx
-{isLoading ? (
-  <Loading message="Loading..." />
-) : (
-  <Content title={data.title} />
-)}
+{
+  isLoading ? <Loading message="Loading..." /> : <Content title={data.title} />;
+}
 ```
 
 **AST Type:** `JSXExpressionContainer` with `ConditionalExpression`  
@@ -890,15 +883,13 @@ import { truncate } from './string-utils';
 ### 13.3 Combination of map and conditional rendering
 
 ```tsx
-{items.map(item => (
-  <div key={item.id}>
-    {item.isActive ? (
-      <strong>{item.name}</strong>
-    ) : (
-      <span>{item.name}</span>
-    )}
-  </div>
-))}
+{
+  items.map((item) => (
+    <div key={item.id}>
+      {item.isActive ? <strong>{item.name}</strong> : <span>{item.name}</span>}
+    </div>
+  ));
+}
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression` (map)  
@@ -922,10 +913,9 @@ import { truncate } from './string-utils';
 ```tsx
 import { createPortal } from 'react-dom';
 
-{createPortal(
-  <div>Content in portal</div>,
-  document.body
-)}
+{
+  createPortal(<div>Content in portal</div>, document.body);
+}
 ```
 
 **AST Type:** `JSXExpressionContainer` with `CallExpression` (createPortal)  
@@ -1001,7 +991,9 @@ import { createPortal } from 'react-dom';
 ### Strings in comments (not rendered)
 
 ```tsx
-{/* Comment is not rendered */}
+{
+  /* Comment is not rendered */
+}
 ```
 
 **AST Type:** `JSXExpressionContainer` with `JSXEmptyExpression`  
@@ -1032,4 +1024,3 @@ Strings visible to users on screen can enter the DOM through many paths:
 - Technical identifiers and CSS classes
 
 For parsing and extracting all translatable strings, it is necessary to consider all these patterns and process the corresponding AST nodes, excluding technical attributes.
-
