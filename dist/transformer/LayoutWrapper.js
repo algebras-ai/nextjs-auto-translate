@@ -72,7 +72,8 @@ function wrapLayoutWithIntl(code, filePath) {
             const sourceValue = path.node.source.value;
             // Check for various import paths that might be used
             const isIntlWrapperImport = sourceValue === constants_1.RUNTIME_PATHS.SERVER_INTL_WRAPPER ||
-                sourceValue === `${constants_1.RUNTIME_PATHS.SERVER_INTL_WRAPPER.split('/').slice(0, -1).join('/')}`;
+                sourceValue ===
+                    `${constants_1.RUNTIME_PATHS.SERVER_INTL_WRAPPER.split('/').slice(0, -1).join('/')}`;
             if (isIntlWrapperImport &&
                 path.node.specifiers.some((s) => (t.isImportDefaultSpecifier(s) &&
                     t.isIdentifier(s.local) &&

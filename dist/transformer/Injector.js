@@ -288,9 +288,28 @@ function transformProject(code, options) {
                     }
                     parentPath = parentPath.parentPath;
                 }
-                // Check if this element has JSXText children (meaning it should be replaced)
-                const hasText = path.node.children.some((child) => t.isJSXText(child) && child.value.trim());
-                if (hasText) {
+                // Check if this element has translatable content (JSXText or JSXExpressionContainer)
+                const hasTranslatableContent = path.node.children.some((child) => {
+                    if (t.isJSXText(child) && child.value.trim()) {
+                        return true;
+                    }
+                    if (t.isJSXExpressionContainer(child)) {
+                        const expr = child.expression;
+                        // Check for translatable expressions
+                        if (t.isStringLiteral(expr) ||
+                            t.isTemplateLiteral(expr) ||
+                            t.isConditionalExpression(expr) ||
+                            t.isLogicalExpression(expr) ||
+                            (t.isBinaryExpression(expr) && expr.operator === '+') ||
+                            t.isCallExpression(expr) ||
+                            t.isIdentifier(expr) ||
+                            t.isMemberExpression(expr)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if (hasTranslatableContent) {
                     // Replace all children with a single Translated component
                     path.node.children = [
                         injectTranslated(`${relativePath}::${scopePath}`),

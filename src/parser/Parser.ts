@@ -142,26 +142,66 @@ export class Parser {
                   parentTagName = parentElementName.property.name;
                 }
 
-                // Check if parent has JSXText children (meaning it will be extracted)
-                const hasTextInParent = parentPath.node.children.some(
-                  (child: any) => t.isJSXText(child) && child.value.trim()
+                // Check if parent has JSXText or translatable expressions
+                const hasContentInParent = parentPath.node.children.some(
+                  (child: any) => {
+                    if (t.isJSXText(child) && child.value.trim()) {
+                      return true;
+                    }
+                    if (t.isJSXExpressionContainer(child)) {
+                      const expr = child.expression;
+                      // Check if it's a translatable expression
+                      if (
+                        t.isStringLiteral(expr) ||
+                        t.isTemplateLiteral(expr) ||
+                        t.isConditionalExpression(expr) ||
+                        t.isLogicalExpression(expr) ||
+                        (t.isBinaryExpression(expr) && expr.operator === '+')
+                      ) {
+                        return true;
+                      }
+                    }
+                    return false;
+                  }
                 );
 
-                // If parent has text, this nested element's content is already included in parent's extraction
-                // Skip extracting it separately to avoid duplication
-                // This applies to all parents, including <p> tags
-                if (hasTextInParent) {
+                // If parent has content, this nested element's content is already included
+                if (hasContentInParent) {
                   return;
                 }
               }
               parentPath = parentPath.parentPath;
             }
 
-            for (const child of path.node.children) {
-              if (t.isJSXText(child)) {
-                const text = child.value.trim();
-                if (!text) continue;
-                const content = buildContent(path.node);
+            // Check if element has translatable content
+            const hasTranslatableContent = path.node.children.some(
+              (child: any) => {
+                if (t.isJSXText(child) && child.value.trim()) {
+                  return true;
+                }
+                if (t.isJSXExpressionContainer(child)) {
+                  const expr = child.expression;
+                  // Check for translatable expressions
+                  if (
+                    t.isStringLiteral(expr) ||
+                    t.isTemplateLiteral(expr) ||
+                    t.isConditionalExpression(expr) ||
+                    t.isLogicalExpression(expr) ||
+                    (t.isBinaryExpression(expr) && expr.operator === '+') ||
+                    t.isCallExpression(expr) ||
+                    t.isIdentifier(expr) ||
+                    t.isMemberExpression(expr)
+                  ) {
+                    return true;
+                  }
+                }
+                return false;
+              }
+            );
+
+            if (hasTranslatableContent) {
+              const content = buildContent(path.node);
+              if (content.trim()) {
                 const hash = crypto
                   .createHash('md5')
                   .update(content)

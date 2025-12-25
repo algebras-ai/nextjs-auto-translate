@@ -1,4 +1,4 @@
-import { ScopeMap, Dictionary } from '../types';
+import { Dictionary, ScopeMap } from '../types';
 export interface ITranslateProvider {
     translateText(text: string, targetLang: string): Promise<string>;
 }
