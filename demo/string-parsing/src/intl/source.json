@@ -1,0 +1,1917 @@
+{
+  "version": 0.1,
+  "files": {
+    "app/1-direct-rendering/components/SimpleText.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "9cc7957f78d6a68033415cdf27360485",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>Simple text</div>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "e69eabf2014b5bb19e8f7ecb8213afe6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Simple text"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "a8ad654199323b5fc28aaa92a3e4f297",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> The simplest way - a string directly\n        between opening and closing tags."
+        }
+      }
+    },
+    "app/1-direct-rendering/components/TextBetweenElements.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "9a43720e8ff6085d1b68e68a7d2de08d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>Text <span>between</span> elements</div>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "56e027cf5988f666f1a81bdd0ef43973",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Text <element:span>between</element:span> elements"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "e99d143c84f63889dadac916bbe35b1c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> Multiple JSXText nodes\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Each text fragment between elements\n        becomes a separate JSXText node."
+        }
+      }
+    },
+    "app/1-direct-rendering/components/TextWithExplicitSpaces.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "a9e98a8e5cc9271915076dd332aa80b4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>Text{ } <span>with space</span> \n          { }between elements</div>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "be06bd39cdd267e4f36ec9bb8dc30f28",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Text \n          <element:span>with space</element:span>\n           between elements"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "286ae646a4a72711658ab30d8a3fb942",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText + JSXExpressionContainer +\n        JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Uses { } to explicitly preserve\n        spaces between elements."
+        }
+      }
+    },
+    "app/1-direct-rendering/components/TextWithSpaces.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "fd6cd8d566a7769a9214b191106b20cc",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>Text with spaces and line breaks</div>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "f505eeed95599f5b052c12126fd697c3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Text with spaces and line breaks"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "1672f534864f1fd88f62c02428ee5189",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Spaces and line breaks are preserved in\n        JSXText, but React normalizes them during rendering."
+        }
+      }
+    },
+    "app/1-direct-rendering/page.tsx": {
+      "scopes": {
+        "program/body4/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "353b9ffd4b835fff6902a40a08eb5cac",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1. Direct Rendering - JSXText between tags"
+        },
+        "program/body4/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "55d5c089982b9df64b510b54c370a15c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1.1 Simple text between tags"
+        },
+        "program/body4/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "4871133373336feda1880382cc9b6496",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1.2 Text with spaces"
+        },
+        "program/body4/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "280b903c34527fb8d65afbc564ff8f50",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1.3 Text with spaces between elements"
+        },
+        "program/body4/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "ea5be83c9d137553da1690b08996da68",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1.4 Text with explicit spaces via expression"
+        }
+      }
+    },
+    "app/10-special-cases/components/ErrorBoundary.tsx": {
+      "scopes": {
+        "program/body4/body/body1/argument": {
+          "type": "element",
+          "hash": "7cd8009edd1d99dc22ebc62f60a35c50",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This won't render"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "de918de0afbdcbb4aaa3153a7777e435",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<ErrorBoundary fallback={<div>An error occurred</div>}>"
+        },
+        "program/body5/declaration/body/body0/argument/children3/children1/openingElement/attributes0/value/expression": {
+          "type": "element",
+          "hash": "a25c753ee3e4be15ec0daa5a40deb7b8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "An error occurred"
+        },
+        "program/body5/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "4feb15f8e21190ba79e0f4756059add5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Error Boundary fallback component."
+        }
+      }
+    },
+    "app/10-special-cases/components/Portals.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body3/argument/children1/children1": {
+          "type": "element",
+          "hash": "5543d17e5165044a48d00039d2e28f1a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "createPortal(<div>Content in portal</div>, document.body)"
+        },
+        "program/body2/declaration/body/body3/argument/children3/children1": {
+          "type": "element",
+          "hash": "9ee36f412e40d0a93f09786bfd6b5be8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Portal content is rendered to document.body (check browser inspector)"
+        },
+        "program/body2/declaration/body/body3/argument/children3/children3/expression/right/arguments0": {
+          "type": "element",
+          "hash": "61b3f5aaf23c7603c6156c0bf50ec563",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Content in portal"
+        },
+        "program/body2/declaration/body/body3/argument/children5": {
+          "type": "element",
+          "hash": "69fabd80bc1b82ee9631c2e1b614148b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (createPortal)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered through a portal to\n        another DOM node."
+        }
+      }
+    },
+    "app/10-special-cases/components/SuspenseFallback.tsx": {
+      "scopes": {
+        "program/body1/body/body1/argument": {
+          "type": "element",
+          "hash": "84bad8843fe76ca2703e360a4934c77a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Async content loaded"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "fb26ac56e492404dbbf023bd99f65ffa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<Suspense fallback={<div>Loading...</div>}>"
+        },
+        "program/body2/declaration/body/body0/argument/children3/children1/openingElement/attributes0/value/expression": {
+          "type": "element",
+          "hash": "8524de963f07201e5c086830d370797f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Loading..."
+        },
+        "program/body2/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "054e77a4d71ddc9fbc28a3cb291088b2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXElement (Suspense) with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Suspense fallback component."
+        }
+      }
+    },
+    "app/10-special-cases/page.tsx": {
+      "scopes": {
+        "program/body3/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "d6da010aaf4b4c219722ee76591c3a1d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "10. Special Cases - portals, Suspense, Error Boundary"
+        },
+        "program/body3/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "ca40bd6d16e464c04ea0f0a9ed1fdf6f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "10.1 Portals"
+        },
+        "program/body3/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "2d126df09ad6ac0ba81a390f7e2a23fe",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "10.2 Suspense with fallback"
+        },
+        "program/body3/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "d77b4f5d848c970fa4608850d7bd984b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "10.3 Error Boundary with message"
+        }
+      }
+    },
+    "app/2-expressions/components/ConditionalExpression.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "56baeb868d0415178f9e37ad872a5a87",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{isLoggedIn ? \"Logout\" : \"Login\"}</div>"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "b6e179cec630f45910cd3c506e3e8bc0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Toggle Login State"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "3326e4b96ff4fb38e2dc37a4c28f712b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered."
+        }
+      }
+    },
+    "app/2-expressions/components/FunctionCall.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "069e50b211afbbcdce365cd589bd12cb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{getGreeting()}</div>"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "7bece7ef8da9c27483dd9bffafaa7a33",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function is called and returns a string\n        that is rendered."
+        }
+      }
+    },
+    "app/2-expressions/components/LogicalAnd.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "3b718bd67d65eed9fe0888ffaf54bd15",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{isVisible && \"Visible text\"}</div>"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "923cf754dc998f7ecfca555db1fb1c36",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Toggle Visibility"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "e95bf7b7f83aefc2f47f39ea83a73a60",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> If the left part is true, the right part\n        (string) is rendered."
+        }
+      }
+    },
+    "app/2-expressions/components/StringConcatenation.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "a21ddd774c79cee5d6243b01c7bd290b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{\"Hello\" + \" \" + \"World\"}</div>"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "62d8eab7d8a342a902cf45f4e54b921e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with BinaryExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Result of string concatenation is rendered\n        as text."
+        }
+      }
+    },
+    "app/2-expressions/components/StringLiteral.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "47b7e7e734a0472f6261097140ea842d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{\"String in expression\"}</div>"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "7df3b16a8b969a99dd274709e4b09bb7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but it's\n        still a string."
+        }
+      }
+    },
+    "app/2-expressions/components/StringMethod.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "5d9d7490a47ba2f625f01029f58e9e6d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{text.toUpperCase()}</div>"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "1724cbdbafe685e0bd3c24ce169aed69",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String method returns a new string that\n        is rendered."
+        }
+      }
+    },
+    "app/2-expressions/components/TemplateLiteral.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "81e283c524ff0d7529c36f5ff8d5d03a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "const name = \"John\"; <div>{`Hello, ${name}!`}</div>"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "061b7e72a409ff08c032c4bbef7fe695",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with TemplateLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Template literal is evaluated and rendered\n        as a string."
+        }
+      }
+    },
+    "app/2-expressions/components/VariableString.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "6c83d49b105d7b97dfeca1ec33a89040",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "const text = \"Text from variable\"; <div>{text}</div>"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "192bcb7ebdd329b9065c1d16b20e19d1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Variable containing a string is rendered\n        as text."
+        }
+      }
+    },
+    "app/2-expressions/page.tsx": {
+      "scopes": {
+        "program/body8/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "ad731ecee5ecec8af88f29b64ca69ee1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2. Expressions - JSXExpressionContainer"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "0a37f1f6a65c9f3288d1cc646a6f8a3a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.1 String literal in expression"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "6ba4384c267c95b7d77b3ccd6a684ad2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.2 Variable with string"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "5a11171781d3ad2cfaa354c878c2ba91",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.3 String concatenation"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "39af14c7688252acb561419405338376",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.4 Template literals"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "785b04713602b8ef0b4d7b67afce358d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.5 Conditional expression (ternary)"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children11/children1": {
+          "type": "element",
+          "hash": "c7be86692baaed2134057cf19cb24c34",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.6 Logical AND (&&)"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children13/children1": {
+          "type": "element",
+          "hash": "91dd6b3156125eb002230f6f8750ff44",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.7 Function call returning string"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children15/children1": {
+          "type": "element",
+          "hash": "d486831fb3dc3ba5644ab7490a41b139",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2.8 String method"
+        }
+      }
+    },
+    "app/3-visible-attributes/components/AltAttribute.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "7ec76e1a5fee298ab636f8738b821136",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<img src=\"/image.jpg\" alt=\"Image description\" />"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children1/children1": {
+          "type": "element",
+          "hash": "be53a0541a6d36f6ecb879fa2c584b08",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Image"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children3": {
+          "type": "element",
+          "hash": "0412317bf97e19244da7c2d04aa13ffa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Alt text: \"Image description\" (visible if image fails to load or via screen readers)"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "6d46e4fdff7b44a91d92077b8826d1fc",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed if\n        the image fails to load and is used by screen readers. Visible to users."
+        }
+      }
+    },
+    "app/3-visible-attributes/components/AriaAttributes.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "c0a3096726084b3c9ef2b9e1a774120d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<button aria-label=\"Close dialog\">×</button>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "6392228661363e75c352077a2cfe66d7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "×"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children3": {
+          "type": "element",
+          "hash": "e78100c0b517984ffb7e0020727463c5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "aria-label is read by screen readers"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "36cee950119709bc9399ba6893b4e700",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby, aria-placeholder\n        and other ARIA attributes are used by screen readers and visible to users\n        with disabilities. Subject to localization."
+        }
+      }
+    },
+    "app/3-visible-attributes/components/TitleAttribute.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "c8e2590d8cb41bbafcbd0cbd0752a492",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div title=\"Tooltip on hover\">Content</div>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "6eecce389dbf7070ffa239a6ffba7051",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hover over me to see tooltip"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "1aff1779ce392c4a0e08c090d35a50d2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users."
+        }
+      }
+    },
+    "app/3-visible-attributes/page.tsx": {
+      "scopes": {
+        "program/body3/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "b2aafd9a6b651a9162ba84852682e697",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "3. Visible Attributes - title, alt, aria-*"
+        },
+        "program/body3/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "61cc32fff565659bfde7d2ad3dc6b58e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "3.1 title attribute (tooltip)"
+        },
+        "program/body3/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "60ce61e972aaa239c27c05be44d8c7c6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "3.2 alt attribute (alternative image text)"
+        },
+        "program/body3/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "83fbd431e369ae712276b3f11f5f2c34",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "3.3 Accessibility attributes (ARIA)"
+        }
+      }
+    },
+    "app/4-components/components/ChildAsString.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "6438dcb035e07862e2a93e033425e9b8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<Component>Child element text</Component>"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "f9e3289e688364d487eefaf1ff52dd8f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Child element text"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "1c45df7ef52dc240eaa7d15e7fe513f7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with JSXText in children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed as children of the component."
+        }
+      }
+    },
+    "app/4-components/components/ChildrenProp.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "4f3f75425d133c418a758015373a7d6e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<Component>Text</Component>"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "9dffbf69ffba8bc38bc4e01abf4b1675",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Text"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "b24bdfb42093300d2837d86bab3590f8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through the children prop."
+        }
+      }
+    },
+    "app/4-components/components/PropsAsString.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "7fbd9728d7eb9a3815f7d4fc34e475c6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<Button label=\"Click me\" />"
+        },
+        "program/body2/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "7a4ebbb5d1d34034a4a490a99f2de95f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and rendered\n        as visible text. Important: technical props (id, className, data-*, etc.)\n        are not subject to localization."
+        }
+      }
+    },
+    "app/4-components/components/RenderingViaComponent.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "fd8e8832adc8806b3349dd4671744fef",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<TextComponent text=\"Text\" />"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "030d4c50c353d26b210f2b0fcaf3ac6f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXElement (component)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component receives a string and renders it."
+        }
+      }
+    },
+    "app/4-components/components/WrapperComponent.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "2435d879ea8ca5461bbd381dfd2d08a1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<Bold>Bold text</Bold>"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "da77091f0857719acccaeac900126758",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Bold text"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "205b53498f358674fbb56a35acd8abae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with nested JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component wraps a string in additional tags."
+        }
+      }
+    },
+    "app/4-components/page.tsx": {
+      "scopes": {
+        "program/body5/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "a0f8e7c96e4965961ffb48da8d65ec50",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4. Components - through props and children"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "25f086e6de94b57219c8e21e31a87d6b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4.1 Child element as string"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "92607e20c796a3a11f17323a07cfa232",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4.2 Props as string (visible to users)"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "c347f9651c58dc2be21e7d67c560d588",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4.3 Children prop"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "f2515c396d6a0dbaac0060517f4a7ec1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4.4 Rendering via component"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "b56f3f233688299e08d6e7ca43ae9718",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4.5 Wrapper component"
+        }
+      }
+    },
+    "app/5-functions/components/ArrowFunction.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "57c1dae78534c9411129ee54d6cae4eb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "const getText = () => \"Text\"; <div>{getText()}</div>"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "fdce8d61a5ddc6cfaf4a4a2287bc0613",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Arrow function returning a string."
+        }
+      }
+    },
+    "app/5-functions/components/ComponentFunction.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "c4829648dc5d7386f7d88426410e4f02",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{getText()}</div>"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "9b3945c7712b8d57014a001ecfcfe26e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function call returning a string."
+        }
+      }
+    },
+    "app/5-functions/components/ObjectMethod.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "7ef3b6fdc2e4294168466fb50e63727a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{obj.getText()}</div>"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "49d9acbaa551bedd2f83b6f43464cb4e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Object method returning a string."
+        }
+      }
+    },
+    "app/5-functions/components/StringMethod.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1/children1": {
+          "type": "element",
+          "hash": "f348275329c629ba4776cfdd3840542b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "text.trim()"
+        },
+        "program/body0/declaration/body/body1/argument/children1/children3/children1": {
+          "type": "element",
+          "hash": "b12274994137a8f7de47374867edc045",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "text.substring(0, 10)"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "c8195f443ad0acc8a637d2c9250d7a15",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Built-in JavaScript string methods."
+        }
+      }
+    },
+    "app/5-functions/components/UtilityFunction.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "d11a0969fa8c8d6787c8a10d11cbd14f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "import { formatDate } from './utils'; <div>{formatDate(date)}</div>"
+        },
+        "program/body1/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "d8d8ae91edeb607a1792927f859c4b2e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Imported function returning a string."
+        }
+      }
+    },
+    "app/5-functions/page.tsx": {
+      "scopes": {
+        "program/body5/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "36828f6699f31949e142a817e51ab348",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "5. Functions - through function calls"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "3f4fa65cf30149b678006587990a81e2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "5.1 Component function"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "3bd1326b971d767adc8320502ed07a12",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "5.2 Arrow function"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "f888f23a2f8618aee0c0eea1b259b48b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "5.3 Object method"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "de05761703a0e99c6b1ed96906868dd3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "5.4 String method"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "3d8a3a35681c20aa035ca36bb0453b09",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "5.5 Utility function"
+        }
+      }
+    },
+    "app/6-conditional-logic/components/IfElseFunction.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "bb4d388d80fd96a31f92c5205e13cb91",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{getMessage(status)}</div>"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children1/children1": {
+          "type": "element",
+          "hash": "e7d31fc0602fb2ede144d18cdffd816b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Ready"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children1/children3": {
+          "type": "element",
+          "hash": "16bfbf9c462762cf1cba4134ec53c504",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Loading"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children1/children5": {
+          "type": "element",
+          "hash": "902b0d55fddef6f8d651fe1035b7d4bd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Error"
+        },
+        "program/body2/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "57fb5db03701435f5dd6c2743134c9aa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional logic is extracted into a function."
+        }
+      }
+    },
+    "app/6-conditional-logic/components/LogicalAnd.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "26d417dc5e8115fde02301911f9207a4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{error && `Error: ${error}`}</div>"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "5f8511503a47eeef5ab3da61e3c0a873",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Toggle Error"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "4c198bec289cff0461dd4583452ac761",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is rendered only if the condition is true."
+        }
+      }
+    },
+    "app/6-conditional-logic/components/LogicalOr.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "ffcdb82116109b08123434027f9a1fe8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{message || \"Default message\"}</div>"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "47be838012c368242e0a1e9651072e90",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Toggle Message"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "360b45aa5465134ca80b42d1ff2346d0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Default string is rendered if the main one is missing."
+        }
+      }
+    },
+    "app/6-conditional-logic/components/SwitchCaseFunction.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "37a4eb84575a63d00e6101cf3764543e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{getStatusText(status)}</div>"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children1/children1": {
+          "type": "element",
+          "hash": "2d13df6f8b5e4c5af9f87e0dc39df69d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pending"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children1/children3": {
+          "type": "element",
+          "hash": "505a83f220c02df2f85c3810cd9ceb38",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Success"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children1/children5": {
+          "type": "element",
+          "hash": "88183b946cc5f0e8c96b2e66e1c74a7e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Unknown"
+        },
+        "program/body2/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "39b8ae3fc0e627ca1178c1f30ea000b4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function."
+        }
+      }
+    },
+    "app/6-conditional-logic/components/TernaryOperator.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "52b3ba396713a7036c2b22de5b21a341",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<div>{isLoading ? \"Loading...\" : \"Ready\"}</div>"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "7a2275aa440efd4d337688102ab9a6b3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Toggle Loading"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "05aef2d629892094ce411d418145f543",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional choice of string for rendering."
+        }
+      }
+    },
+    "app/6-conditional-logic/page.tsx": {
+      "scopes": {
+        "program/body5/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "88fd2126cc45157983d28c10df43ce39",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "6. Conditional Logic - ternary operators"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "d2b328c6df8d0a4482516d6cc88f25e0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "6.1 Ternary operator"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "049adbb53debca843f43e321cfe6d9d2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "6.2 Logical AND"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "9ccdfa4c5184ab71d9bd723b250e9d29",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "6.3 Logical OR"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "312fedc967345a9dfa09589ac7a6fc20",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "6.4 If-else via function"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "e0ec100876aa398c4523d02f5ade8ab7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "6.5 Switch-case via function"
+        }
+      }
+    },
+    "app/7-loops/components/FilterMap.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "36f260dbdecb7f8424c24d1d9d25bbed",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "items.filter(item => item.length > 5).map(...)"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "0c8ff2f2a51017a4481475a732091f0b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with chain of CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Chain of methods for filtering and rendering strings."
+        }
+      }
+    },
+    "app/7-loops/components/ForEachJoin.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "7879e64a91aeba22f31bbb6dfc8b270b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "items.join(\", \")"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "cc607234bc119b17dce37e86665bb1ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (join)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is combined into one string."
+        }
+      }
+    },
+    "app/7-loops/components/MapWithFormatting.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "b4a387a73ec71689484aacbc065e7cb7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "numbers.map(n => `Number: ${n}`)"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "2b0ffb9a356bbece11bd4900c32e9928",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are formed dynamically in map."
+        }
+      }
+    },
+    "app/7-loops/components/MapWithStrings.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "3f1459afe307d7c765931426a118eb3e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "items.map((item, index) => <div key={index}>{item}</div>)"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "1c0cf192a506bd844454dc1d168a470b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map."
+        }
+      }
+    },
+    "app/7-loops/components/ReduceCombine.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "f4cde5fdeae0b6ffe0e19bdff80c513f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "items.reduce((acc, item) => `${acc}, ${item}`, \"\")"
+        },
+        "program/body0/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "02f1ce60f6a23b853c53222a6f6b3f2e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (reduce)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Reduce for combining strings into one."
+        }
+      }
+    },
+    "app/7-loops/page.tsx": {
+      "scopes": {
+        "program/body5/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "1f7fcbb98fb335769927e8d03c4d19d2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "7. Loops - map, forEach"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "0567df0eaa1a029aaa2018d05f0685b3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "7.1 map() with strings"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "3fb2938bdba3891e1d355571ec0415a2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "7.2 map() with formatting"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "427132e215e645788a187e179aaf3431",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "7.3 forEach (not recommended)"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "bf99540e20350bb7438fc74d2114fc69",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "7.4 filter + map"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "8cb089c8c5d5db4939ce639856f204c1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "7.5 reduce for combining"
+        }
+      }
+    },
+    "app/8-nextjs-specifics/components/ClientComponent.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "869551a7f0a73d24bf74b893224d9a83",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "'use client'; const [text, setText] = useState(\"Client text\");"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "79d6ca48c8008c1e949169553fc664d1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client."
+        }
+      }
+    },
+    "app/8-nextjs-specifics/components/GenerateMetadata.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "5401b663f9763f2d3c99b956df977de1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "export async function generateMetadata(): Promise<Metadata> { \n          return { title: \"Dynamic title\", description: \"Dynamic description\" \n          }; }"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "c2a2e6b90adb906feed508706b34ba50",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Dynamic metadata via function (can be async and fetch data)"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "5c3e9936f25b7d80d60cca26d5525102",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> FunctionDeclaration with ReturnStatement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Dynamic metadata via function."
+        }
+      }
+    },
+    "app/8-nextjs-specifics/components/Metadata.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "d39dbec0bf55338b4a6c9d7f2e6ec69a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "export const metadata: Metadata = { \n          {title: \"Page title\", description: \"Page description\"}\n          };"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "db494bdd412063b2fa72390a82de5522",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Check the browser tab title - it should show \"8. Next.js Specifics\""
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "0d76c1f0e3b744b1e46991e9e6e1b109",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> ExportNamedDeclaration with ObjectExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings in Next.js App Router metadata."
+        }
+      }
+    },
+    "app/8-nextjs-specifics/components/ServerComponent.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "ee999648e11f3e8deeb481fad34f3a68",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "async function ServerComponent() { \n          const data = await fetchData(); return <div>{data.title}</div> \n          }"
+        },
+        "program/body2/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "e03ad61e5e140f52bb42df50f7a1c0dc",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the server in App Router."
+        }
+      }
+    },
+    "app/8-nextjs-specifics/page.tsx": {
+      "scopes": {
+        "program/body5/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "4248fbf1b24f1347edb0faf54932f59a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "8. Next.js Specifics - metadata, Server/Client Components"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "748db58fcca92c11915c66e8c0231d10",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "8.1 Metadata"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "42e1d1fb35c42f04fc29238ff67175f9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "8.2 generateMetadata function"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "272d3686a291ae16ea2ac8cb18d77c23",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "8.3 Server Components"
+        },
+        "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "acc69a8497fea3f585e8f88a757cc316",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "8.4 Client Components"
+        }
+      }
+    },
+    "app/9-forms/components/ButtonText.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "44f4e0c08652974bf5851ee2d3d5df73",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<button>Submit</button>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "a4d3b161ce1309df1c4e25df28694b7b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Submit"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "1e7445e8ee01ea9199ab9821e4f94be2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute."
+        }
+      }
+    },
+    "app/9-forms/components/DetailsSummary.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "934082ec72a734bc78f3c007d8b73fb8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<details> <summary>Click to expand</summary> ... </details>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children1": {
+          "type": "element",
+          "hash": "e3cfcd8feda52c804ffcc02c85292337",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Click to expand"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children3/children1": {
+          "type": "element",
+          "hash": "e43df5de2cb14fa198c6349652d9cf4c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hidden content"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "2b37195da5276b0e7d6ff10c3f9f7c8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <summary> is visible to users\n        as a clickable heading for an expandable block."
+        }
+      }
+    },
+    "app/9-forms/components/FieldsetLegend.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "a3c70e238e53deebada39355482930ca",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<fieldset> <legend>Field group</legend> ... </fieldset>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children1": {
+          "type": "element",
+          "hash": "52c11ee2036946f458575360d1021a34",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Field group"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "9da9f8bc456c2510227f2385760b6f28",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields."
+        }
+      }
+    },
+    "app/9-forms/components/Label.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "7dfe3553871a577f84927d920d5a531d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<label htmlFor=\"input\">Field label</label>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children1": {
+          "type": "element",
+          "hash": "d71675f75feb54ebb0bd3c94a7f1e755",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Field label"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children3/children1": {
+          "type": "element",
+          "hash": "a6095e3ff3927c3782b96ec4844cfcf9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email address\n            <element:input></element:input>"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "d3a17f6a8281241bed64d311096204a9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Label text for input field is visible to\n        users. The htmlFor attribute (technical) is not localized, but text\n        inside <label> is subject to localization."
+        }
+      }
+    },
+    "app/9-forms/components/Placeholder.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "34c98e1ce1ce5e23e50c8a9c0929c815",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<input placeholder=\"Enter text\" />"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "a47f9ae133bb19c711b486ba2a597cb1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
+        }
+      }
+    },
+    "app/9-forms/components/SelectOptions.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "8b2f0774cd1edd692b9141b387946690",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<option value=\"1\">First option</option>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children1": {
+          "type": "element",
+          "hash": "ff9cf53441647734b4e45fe8b4c14847",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "First option"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children3": {
+          "type": "element",
+          "hash": "52217b6cfed9b47cd29ed284ca44a0c3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Second option"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "10de309a6a9ee9ee4e7ab274a019cbae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Option text in select is visible to users\n        when opening the list. The value attribute (technical) is not localized."
+        }
+      }
+    },
+    "app/9-forms/components/Textarea.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "9dcd4b20167997b8e29c5717b1bae2a3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<textarea placeholder=\"Enter your comment\" />"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "fcd8ac058eb5cfc77aef7080dbf60692",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users."
+        }
+      }
+    },
+    "app/9-forms/components/Value.tsx": {
+      "scopes": {
+        "program/body1/declaration/body/body1/argument/children1/children1": {
+          "type": "element",
+          "hash": "f88c66a8224e127edfcab35d35ed6e16",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<input value={inputValue} />"
+        },
+        "program/body1/declaration/body/body1/argument/children5": {
+          "type": "element",
+          "hash": "68925826615bc26889af5771322a121e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with JSXExpressionContainer or StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field value is visible to users in\n        the field. Used for pre-filled fields or controlled components."
+        }
+      }
+    },
+    "app/9-forms/page.tsx": {
+      "scopes": {
+        "program/body8/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "c0b0b2119dcad6e66fc789402df92007",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9. Forms - placeholder, value, label, button, option"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children1/children1": {
+          "type": "element",
+          "hash": "2d8cba9a3d2e5a05eedd7aff7ab35b1a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.1 Placeholder"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "d37e47e6ca8d9281b59fa65c09f02c94",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.2 Value"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "175c1eb801e562760911af4493182d3b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.3 Label"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "9d2972e5c8c2d085301a5c862309c7f5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.4 Button text"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "214cd91b22fb8b999701351d96d57a3e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.5 Textarea"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children11/children1": {
+          "type": "element",
+          "hash": "75a12f36beeb47f8ac56f0d73c17095a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.6 Select options"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children13/children1": {
+          "type": "element",
+          "hash": "56a8cc87b75fbc552f45b980dd5fbdf1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.7 Fieldset and Legend"
+        },
+        "program/body8/declaration/body/body0/argument/children1/children3/children15/children1": {
+          "type": "element",
+          "hash": "381729d986c26b835a352f36c1b36c44",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9.8 Details and Summary"
+        }
+      }
+    },
+    "app/page.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body0/argument/children1/children1/children1": {
+          "type": "element",
+          "hash": "d67cc33eea225011ccdd58c9e0ca06e9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "String Rendering Patterns"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children1/children3": {
+          "type": "element",
+          "hash": "fff863e8613d1ed5d434154d04034652",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This demonstration shows all possible scenarios and patterns of how\n            strings can appear in the final DOM in React and Next.js\n            applications and be visible to users on screen (without using\n            devtools)."
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children1": {
+          "type": "element",
+          "hash": "e479ded3cbe39f719577358b3b16467a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Exclusions (not localized):"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children3/children1": {
+          "type": "element",
+          "hash": "34f1d87dc7adb94ec8823b2350f93c63",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children3/children3": {
+          "type": "element",
+          "hash": "9fc4ad506e787fe8e987a79fcba3bfe0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pure API responses without UI"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children3/children5": {
+          "type": "element",
+          "hash": "b2219a195bef487ca6079bd6c767a388",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Code comments"
+        },
+        "program/body2/declaration/body/body0/argument/children1/children5/children3/children7": {
+          "type": "element",
+          "hash": "2d37acd08c33d221bbdbc873439d6864",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Technical identifiers and CSS classes"
+        }
+      }
+    },
+    "components/Navigation.tsx": {
+      "scopes": {
+        "program/body3/declaration/body/body1/argument/children1/children1/children1/children1": {
+          "type": "element",
+          "hash": "d67cc33eea225011ccdd58c9e0ca06e9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "String Rendering Patterns"
+        }
+      }
+    }
+  }
+}

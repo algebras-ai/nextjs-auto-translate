@@ -9,12 +9,14 @@ const scenarios = [
   {
     path: '/2-expressions',
     title: '2. Expressions',
-    description: 'JSXExpressionContainer with various expression types returning strings',
+    description:
+      'JSXExpressionContainer with various expression types returning strings',
   },
   {
     path: '/3-visible-attributes',
     title: '3. Visible Attributes',
-    description: 'JSXAttribute with title, alt, aria-label, aria-describedby, aria-placeholder and other accessibility attributes',
+    description:
+      'JSXAttribute with title, alt, aria-label, aria-describedby, aria-placeholder and other accessibility attributes',
   },
   {
     path: '/4-components',
@@ -29,12 +31,14 @@ const scenarios = [
   {
     path: '/6-conditional-logic',
     title: '6. Conditional Logic',
-    description: 'Through ternary operators and logical expressions returning strings',
+    description:
+      'Through ternary operators and logical expressions returning strings',
   },
   {
     path: '/7-loops',
     title: '7. Loops',
-    description: 'Through map, forEach and other array methods rendering strings',
+    description:
+      'Through map, forEach and other array methods rendering strings',
   },
   {
     path: '/8-nextjs-specifics',
@@ -63,8 +67,9 @@ export default function Home() {
           </h1>
           <p className="mx-auto max-w-3xl text-lg text-gray-600 dark:text-gray-400">
             This demonstration shows all possible scenarios and patterns of how
-            strings can appear in the final DOM in React and Next.js applications
-            and be visible to users on screen (without using devtools).
+            strings can appear in the final DOM in React and Next.js
+            applications and be visible to users on screen (without using
+            devtools).
           </p>
         </div>
 
@@ -78,7 +83,9 @@ export default function Home() {
               <h2 className="mb-2 text-xl font-semibold text-gray-900 group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400">
                 {scenario.title}
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{scenario.description}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {scenario.description}
+              </p>
             </Link>
           ))}
         </div>
@@ -89,12 +96,30 @@ export default function Home() {
           </h2>
           <ul className="list-disc space-y-2 pl-6 text-gray-600 dark:text-gray-400">
             <li>
-              Technical attributes: <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">id</code>,{' '}
-              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">className</code>,{' '}
-              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">htmlFor</code>,{' '}
-              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">data-*</code>,{' '}
-              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">key</code>,{' '}
-              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">ref</code>
+              Technical attributes:{' '}
+              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">
+                id
+              </code>
+              ,{' '}
+              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">
+                className
+              </code>
+              ,{' '}
+              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">
+                htmlFor
+              </code>
+              ,{' '}
+              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">
+                data-*
+              </code>
+              ,{' '}
+              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">
+                key
+              </code>
+              ,{' '}
+              <code className="rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300">
+                ref
+              </code>
             </li>
             <li>Pure API responses without UI</li>
             <li>Code comments</li>
