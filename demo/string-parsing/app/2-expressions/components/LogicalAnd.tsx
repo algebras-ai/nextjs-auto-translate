@@ -10,7 +10,7 @@ export default function LogicalAnd() {
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
       <div className="mb-4">
         <code className="rounded bg-gray-100 dark:bg-gray-700 px-2 py-1 text-sm">
-          &lt;div&gt;{'{'}isVisible && "Visible text"{'}'}&lt;/div&gt;
+          &lt;div&gt;{'{'}isVisible && &quot;Visible text&quot;{'}'}&lt;/div&gt;
         </code>
       </div>
       <div className="mb-4 flex items-center gap-4">
@@ -33,4 +33,3 @@ export default function LogicalAnd() {
     </div>
   );
 }
-

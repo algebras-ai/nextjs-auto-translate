@@ -205,11 +205,11 @@
         },
         "program/body2/declaration/body/body3/argument/children3": {
           "type": "element",
-          "hash": "03b015b5cc598052f17d42bbbbcb7ecb",
+          "hash": "1f24b36d5d87b25ce81ec91d0a04a485",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Portal content is rendered to document.body (check browser inspector)\n        {condition && \"{createPortal()}\"}"
+          "content": "Portal content is rendered to document.body (check browser inspector)\n        "
         },
         "program/body2/declaration/body/body3/argument/children5": {
           "type": "element",
@@ -297,11 +297,11 @@
       "scopes": {
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "type": "element",
-          "hash": "56baeb868d0415178f9e37ad872a5a87",
+          "hash": "1c5a94d89bcc9b060d63916df00c5eeb",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<div>{isLoggedIn ? \"Logout\" : \"Login\"}</div>"
+          "content": "<div>{isLoggedIn ? \"Logout\" : \"Login\"\n          }</div>"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "type": "element",
@@ -313,19 +313,35 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "type": "element",
-          "hash": "771c0ce34870cfbe7f09443aa4ea05cf",
+          "hash": "bc5d44bc04b4db2f71d11344e8caca00",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{condition ? \"Logout\" : \"Login\"}"
+          "content": "{? \"Logout\" : \"Login\"}"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_consequent": {
+          "type": "element",
+          "hash": "0323de4f66a1700e2173e9bcdce02715",
+          "context": "Conditional expression consequent branch",
+          "skip": false,
+          "overrides": {},
+          "content": "Logout"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_alternate": {
+          "type": "element",
+          "hash": "99dea78007133396a7b8ed70578ac6ae",
+          "context": "Conditional expression alternate branch",
+          "skip": false,
+          "overrides": {},
+          "content": "Login"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
-          "hash": "3326e4b96ff4fb38e2dc37a4c28f712b",
+          "hash": "352b9f5541ed78f894ef5e89b1b5c83c",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered."
         }
       }
     },
@@ -341,11 +357,11 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "type": "element",
-          "hash": "81be6ec245d0a34beebeefd387d54a80",
+          "hash": "bc27719767b2740a2f52973c138c9edd",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{getGreeting()}"
+          "content": "Hello from function"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -377,11 +393,19 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "type": "element",
-          "hash": "127a0eb1d0a8be6ffd65a3a6e450c416",
+          "hash": "59ec4127bbd76101af792d315cc264dc",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{condition && \"Visible text\"}"
+          "content": "Visible text"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_and_right": {
+          "type": "element",
+          "hash": "59ec4127bbd76101af792d315cc264dc",
+          "context": "Logical expression (&&) right operand",
+          "skip": false,
+          "overrides": {},
+          "content": "Visible text"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -397,11 +421,11 @@
       "scopes": {
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "type": "element",
-          "hash": "a21ddd774c79cee5d6243b01c7bd290b",
+          "hash": "de0cbb3a22d1855def61e26911102106",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<div>{\"Hello\" + \" \" + \"World\"}</div>"
+          "content": "<div>{\"Hello\" + \" \" + \"World\"\n          }</div>"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "type": "element",
@@ -441,11 +465,11 @@
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "7df3b16a8b969a99dd274709e4b09bb7",
+          "hash": "1d306e2156eed69f434d170a1cf57ada",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but it's\n        still a string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but\n        it's still a string."
         }
       }
     },
@@ -458,6 +482,14 @@
           "skip": false,
           "overrides": {},
           "content": "<div>{text.toUpperCase()}</div>"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "361fadf1c712e812d198c4cab5712a79",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "HELLO WORLD"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -473,11 +505,11 @@
       "scopes": {
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "type": "element",
-          "hash": "81e283c524ff0d7529c36f5ff8d5d03a",
+          "hash": "02ece78d3b1ffd8e69d5cb9556c24298",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "const name = \"John\"; <div>{`Hello, ${name}!`}</div>"
+          "content": "const name = \"World\"; <div>{`Hello, ${name\n          }\n          !`}</div>"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "type": "element",
@@ -486,6 +518,14 @@
           "skip": false,
           "overrides": {},
           "content": "Hello, {name}!"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1_var_name": {
+          "type": "element",
+          "hash": "f5a7924e621e84c9280a9a27e1bcb7f6",
+          "context": "Variable \"name\" used in template literal",
+          "skip": false,
+          "overrides": {},
+          "content": "World"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -501,19 +541,19 @@
       "scopes": {
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "type": "element",
-          "hash": "6c83d49b105d7b97dfeca1ec33a89040",
+          "hash": "ec224ca43a4bc0512496ec503cedc29b",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "const text = \"Text from variable\"; <div>{text}</div>"
+          "content": "const text = \" Text from variable\"; <div>{text\n          }</div>"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "type": "element",
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c",
+          "hash": "e640808fdfd2e22d8e9fade24d5b2a29",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{text}"
+          "content": "Text from variable"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -739,14 +779,6 @@
     },
     "app/4-components/components/ChildAsString.tsx": {
       "scopes": {
-        "program/body0/body/body0/argument": {
-          "type": "element",
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{children}"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "6438dcb035e07862e2a93e033425e9b8",
@@ -775,14 +807,6 @@
     },
     "app/4-components/components/ChildrenProp.tsx": {
       "scopes": {
-        "program/body0/body/body0/argument": {
-          "type": "element",
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{children}"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "4f3f75425d133c418a758015373a7d6e",
@@ -875,14 +899,6 @@
     },
     "app/4-components/components/WrapperComponent.tsx": {
       "scopes": {
-        "program/body0/body/body0/argument": {
-          "type": "element",
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{children}"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "2435d879ea8ca5461bbd381dfd2d08a1",
@@ -973,11 +989,11 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "type": "element",
-          "hash": "698c1e3bf832f65bdb353dfd3b1bf1b6",
+          "hash": "9dffbf69ffba8bc38bc4e01abf4b1675",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{getText()}"
+          "content": "Text"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -1001,11 +1017,11 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "type": "element",
-          "hash": "698c1e3bf832f65bdb353dfd3b1bf1b6",
+          "hash": "dfa57e14a8f6a37cb6de467fb19f255b",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{getText()}"
+          "content": "Text from function"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -1026,6 +1042,14 @@
           "skip": false,
           "overrides": {},
           "content": "<div>{obj.getText()}</div>"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "6e719ae9b3e951ac29b2c4e5382c5ca9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{obj.getText()}"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -1055,6 +1079,22 @@
           "overrides": {},
           "content": "text.substring(0, 10)"
         },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "b10a8db164e0754105b7a99be72e3fe5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hello World"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children3": {
+          "type": "element",
+          "hash": "c10562818f129f8bf7ed11806f389c85",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "  Hello World  "
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "c8195f443ad0acc8a637d2c9250d7a15",
@@ -1074,14 +1114,6 @@
           "skip": false,
           "overrides": {},
           "content": "import { formatDate } from './utils'; <div>{formatDate(date)}</div>"
-        },
-        "program/body1/declaration/body/body0/argument/children3/children1": {
-          "type": "element",
-          "hash": "dd2376549efbea22bf3c7a7a78f0aee5",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{formatDate()}"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -1179,14 +1211,6 @@
           "overrides": {},
           "content": "Error"
         },
-        "program/body2/declaration/body/body1/argument/children3/children3/children1": {
-          "type": "element",
-          "hash": "5f7cdc1bd64d3cb7d017d4fcb98ac578",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{getMessage()}"
-        },
         "program/body2/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "57fb5db03701435f5dd6c2743134c9aa",
@@ -1217,11 +1241,11 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "type": "element",
-          "hash": "3a0f50888a3e8f0f4ca401e560f1d095",
+          "hash": "80076ad5610360024b43514e96923a92",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{condition && \"Error: {error}\"}"
+          "content": "Error: {error}"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1258,6 +1282,14 @@
           "skip": false,
           "overrides": {},
           "content": "{message}"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_or_right": {
+          "type": "element",
+          "hash": "2da2fc7f382fa2e5b9d0e433fa71a475",
+          "context": "Logical expression (||) right operand",
+          "skip": false,
+          "overrides": {},
+          "content": "Default message"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1303,14 +1335,6 @@
           "overrides": {},
           "content": "Unknown"
         },
-        "program/body2/declaration/body/body1/argument/children3/children3/children1": {
-          "type": "element",
-          "hash": "78fb9d9c61f9522c1b279f07b6426f8c",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{getStatusText()}"
-        },
         "program/body2/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "39b8ae3fc0e627ca1178c1f30ea000b4",
@@ -1341,11 +1365,27 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "type": "element",
-          "hash": "b5c29adee200a96d19373d6395b021c3",
+          "hash": "01ee2b75a7621836af17dfa14af01701",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{condition ? \"Loading...\" : \"Ready\"}"
+          "content": "{? \"Loading...\" : \"Ready\"}"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_consequent": {
+          "type": "element",
+          "hash": "8524de963f07201e5c086830d370797f",
+          "context": "Conditional expression consequent branch",
+          "skip": false,
+          "overrides": {},
+          "content": "Loading..."
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_alternate": {
+          "type": "element",
+          "hash": "e7d31fc0602fb2ede144d18cdffd816b",
+          "context": "Conditional expression alternate branch",
+          "skip": false,
+          "overrides": {},
+          "content": "Ready"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1446,6 +1486,14 @@
           "skip": false,
           "overrides": {},
           "content": "items.join(\", \")"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "b9f3f5d0e778d934dc50684e5915b6a7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{items.join()}"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -2038,18 +2086,6 @@
           "skip": false,
           "overrides": {},
           "content": "9.8 Details and Summary"
-        }
-      }
-    },
-    "app/layout.tsx": {
-      "scopes": {
-        "program/body9/declaration/body/body0/argument/children1/children1/children5": {
-          "type": "element",
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{children}"
         }
       }
     },

@@ -183,10 +183,10 @@
         },
         "program/body2/declaration/body/body3/argument/children3": {
           "content": {
-            "en": "Portal content is rendered to document.body (check browser inspector)\n        {condition && \"{createPortal()}\"}",
-            "es": "El contenido del portal se renderiza en document.body (revisa el inspector del navegador)\n        {condition && \"{createPortal()}\"}"
+            "en": "Portal content is rendered to document.body (check browser inspector)\n        ",
+            "es": "El contenido del portal se renderiza en document.body (compruébalo en el inspector del navegador)"
           },
-          "hash": "03b015b5cc598052f17d42bbbbcb7ecb"
+          "hash": "1f24b36d5d87b25ce81ec91d0a04a485"
         },
         "program/body2/declaration/body/body3/argument/children5": {
           "content": {
@@ -265,10 +265,10 @@
       "entries": {
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
-            "en": "<div>{isLoggedIn ? \"Logout\" : \"Login\"}</div>",
-            "es": "<div>{isLoggedIn ? \"Cerrar sesión\" : \"Iniciar sesión\"}</div>"
+            "en": "<div>{isLoggedIn ? \"Logout\" : \"Login\"\n          }</div>",
+            "es": "<div>{isLoggedIn ? \"Cerrar sesión\" : \"Iniciar sesión\"\n          }</div>"
           },
-          "hash": "56baeb868d0415178f9e37ad872a5a87"
+          "hash": "1c5a94d89bcc9b060d63916df00c5eeb"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
@@ -279,17 +279,31 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
-            "en": "{condition ? \"Logout\" : \"Login\"}",
-            "es": "{condition ? \"Cerrar sesión\" : \"Iniciar sesión\"}"
+            "en": "{? \"Logout\" : \"Login\"}",
+            "es": "{? \"Cerrar sesión\" : \"Iniciar sesión\"}"
           },
-          "hash": "771c0ce34870cfbe7f09443aa4ea05cf"
+          "hash": "bc5d44bc04b4db2f71d11344e8caca00"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_consequent": {
+          "content": {
+            "en": "Logout",
+            "es": "Cerrar sesión"
+          },
+          "hash": "0323de4f66a1700e2173e9bcdce02715"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_alternate": {
+          "content": {
+            "en": "Login",
+            "es": "Iniciar sesión"
+          },
+          "hash": "99dea78007133396a7b8ed70578ac6ae"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
-            "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La expresión condicional devuelve una cadena de texto que se renderiza."
+            "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered.",
+            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La expresión condicional devuelve una cadena de texto\n        que se renderiza."
           },
-          "hash": "3326e4b96ff4fb38e2dc37a4c28f712b"
+          "hash": "352b9f5541ed78f894ef5e89b1b5c83c"
         }
       }
     },
@@ -304,10 +318,10 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
-            "en": "{getGreeting()}",
-            "es": "{getGreeting()}"
+            "en": "Hello from function",
+            "es": "Hola desde la función"
           },
-          "hash": "81be6ec245d0a34beebeefd387d54a80"
+          "hash": "bc27719767b2740a2f52973c138c9edd"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -336,10 +350,17 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
-            "en": "{condition && \"Visible text\"}",
-            "es": "{condition && \"Texto visible\"}"
+            "en": "Visible text",
+            "es": "Texto visible"
           },
-          "hash": "127a0eb1d0a8be6ffd65a3a6e450c416"
+          "hash": "59ec4127bbd76101af792d315cc264dc"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_and_right": {
+          "content": {
+            "en": "Visible text",
+            "es": "Texto visible"
+          },
+          "hash": "59ec4127bbd76101af792d315cc264dc"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
@@ -354,10 +375,10 @@
       "entries": {
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
-            "en": "<div>{\"Hello\" + \" \" + \"World\"}</div>",
-            "es": "<div>{\"Hola\" + \" \" + \"Mundo\"}</div>"
+            "en": "<div>{\"Hello\" + \" \" + \"World\"\n          }</div>",
+            "es": "<div>{\"Hola\" + \" \" + \"Mundo\"\n          }</div>"
           },
-          "hash": "a21ddd774c79cee5d6243b01c7bd290b"
+          "hash": "de0cbb3a22d1855def61e26911102106"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
@@ -393,10 +414,10 @@
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
-            "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but it's\n        still a string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con StringLiteral\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cadena de texto envuelta en llaves, pero sigue siendo una cadena."
+            "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but\n        it's still a string.",
+            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con StringLiteral\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cadena de texto encerrada entre llaves, pero sigue siendo una cadena."
           },
-          "hash": "7df3b16a8b969a99dd274709e4b09bb7"
+          "hash": "1d306e2156eed69f434d170a1cf57ada"
         }
       }
     },
@@ -408,6 +429,13 @@
             "es": "<div>{texto.toUpperCase()}</div>"
           },
           "hash": "5d9d7490a47ba2f625f01029f58e9e6d"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "content": {
+            "en": "HELLO WORLD",
+            "es": "HOLA MUNDO"
+          },
+          "hash": "361fadf1c712e812d198c4cab5712a79"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -422,10 +450,10 @@
       "entries": {
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
-            "en": "const name = \"John\"; <div>{`Hello, ${name}!`}</div>",
-            "es": "const nombre = \"Juan\"; <div>{`Hola, ${nombre}!`}</div>"
+            "en": "const name = \"World\"; <div>{`Hello, ${name\n          }\n          !`}</div>",
+            "es": "const nombre = \"Mundo\"; <div>{`¡Hola, ${nombre\n          }\n          !`}</div>"
           },
-          "hash": "81e283c524ff0d7529c36f5ff8d5d03a"
+          "hash": "02ece78d3b1ffd8e69d5cb9556c24298"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "content": {
@@ -433,6 +461,13 @@
             "es": "¡Hola, {name}!"
           },
           "hash": "613969df8ffc1c390f81917c0cddee77"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1_var_name": {
+          "content": {
+            "en": "World",
+            "es": "Mundo"
+          },
+          "hash": "f5a7924e621e84c9280a9a27e1bcb7f6"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -447,17 +482,17 @@
       "entries": {
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
-            "en": "const text = \"Text from variable\"; <div>{text}</div>",
-            "es": "const texto = \"Texto de una variable\"; <div>{texto}</div>"
+            "en": "const text = \" Text from variable\"; <div>{text\n          }</div>",
+            "es": "const texto = \" Texto de una variable\"; <div>{texto\n          }</div>"
           },
-          "hash": "6c83d49b105d7b97dfeca1ec33a89040"
+          "hash": "ec224ca43a4bc0512496ec503cedc29b"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "content": {
-            "en": "{text}",
-            "es": "{texto}"
+            "en": "Text from variable",
+            "es": "Texto de variable"
           },
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
+          "hash": "e640808fdfd2e22d8e9fade24d5b2a29"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -658,13 +693,6 @@
     },
     "app/4-components/components/ChildAsString.tsx": {
       "entries": {
-        "program/body0/body/body0/argument": {
-          "content": {
-            "en": "{children}",
-            "es": "{hijos}"
-          },
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Component>Child element text</Component>",
@@ -690,13 +718,6 @@
     },
     "app/4-components/components/ChildrenProp.tsx": {
       "entries": {
-        "program/body0/body/body0/argument": {
-          "content": {
-            "en": "{children}",
-            "es": "{hijos}"
-          },
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Component>Text</Component>",
@@ -779,13 +800,6 @@
     },
     "app/4-components/components/WrapperComponent.tsx": {
       "entries": {
-        "program/body0/body/body0/argument": {
-          "content": {
-            "en": "{children}",
-            "es": "{hijos}"
-          },
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Bold>Bold text</Bold>",
@@ -866,10 +880,10 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
-            "en": "{getText()}",
-            "es": "{obtenerTexto()}"
+            "en": "Text",
+            "es": "Texto"
           },
-          "hash": "698c1e3bf832f65bdb353dfd3b1bf1b6"
+          "hash": "9dffbf69ffba8bc38bc4e01abf4b1675"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -891,10 +905,10 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
-            "en": "{getText()}",
-            "es": "{obtenerTexto()}"
+            "en": "Text from function",
+            "es": "Texto de la función"
           },
-          "hash": "698c1e3bf832f65bdb353dfd3b1bf1b6"
+          "hash": "dfa57e14a8f6a37cb6de467fb19f255b"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -913,6 +927,13 @@
             "es": "<div>{obj.getText()}</div>"
           },
           "hash": "7ef3b6fdc2e4294168466fb50e63727a"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "{obj.getText()}",
+            "es": "{obj.obtenerTexto()}"
+          },
+          "hash": "6e719ae9b3e951ac29b2c4e5382c5ca9"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -939,6 +960,20 @@
           },
           "hash": "b12274994137a8f7de47374867edc045"
         },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "content": {
+            "en": "Hello World",
+            "es": "Hola, mundo"
+          },
+          "hash": "b10a8db164e0754105b7a99be72e3fe5"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children3": {
+          "content": {
+            "en": "  Hello World  ",
+            "es": "Hola mundo"
+          },
+          "hash": "c10562818f129f8bf7ed11806f389c85"
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Built-in JavaScript string methods.",
@@ -956,13 +991,6 @@
             "es": "import { formatDate } from './utils'; <div>{formatDate(date)}</div>"
           },
           "hash": "d11a0969fa8c8d6787c8a10d11cbd14f"
-        },
-        "program/body1/declaration/body/body0/argument/children3/children1": {
-          "content": {
-            "en": "{formatDate()}",
-            "es": "{formatearFecha()}"
-          },
-          "hash": "dd2376549efbea22bf3c7a7a78f0aee5"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
@@ -1049,13 +1077,6 @@
           },
           "hash": "902b0d55fddef6f8d651fe1035b7d4bd"
         },
-        "program/body2/declaration/body/body1/argument/children3/children3/children1": {
-          "content": {
-            "en": "{getMessage()}",
-            "es": "{obtenerMensaje()}"
-          },
-          "hash": "5f7cdc1bd64d3cb7d017d4fcb98ac578"
-        },
         "program/body2/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional logic is extracted into a function.",
@@ -1083,10 +1104,10 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
-            "en": "{condition && \"Error: {error}\"}",
-            "es": "{condición && \"Error: {error}\"}"
+            "en": "Error: {error}",
+            "es": "Error: {error}"
           },
-          "hash": "3a0f50888a3e8f0f4ca401e560f1d095"
+          "hash": "80076ad5610360024b43514e96923a92"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
@@ -1119,6 +1140,13 @@
             "es": "{mensaje}"
           },
           "hash": "f933e224b575d7014aed7bd26d621391"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_or_right": {
+          "content": {
+            "en": "Default message",
+            "es": "Mensaje predeterminado"
+          },
+          "hash": "2da2fc7f382fa2e5b9d0e433fa71a475"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
@@ -1159,13 +1187,6 @@
           },
           "hash": "88183b946cc5f0e8c96b2e66e1c74a7e"
         },
-        "program/body2/declaration/body/body1/argument/children3/children3/children1": {
-          "content": {
-            "en": "{getStatusText()}",
-            "es": "{obtenerTextoEstado()}"
-          },
-          "hash": "78fb9d9c61f9522c1b279f07b6426f8c"
-        },
         "program/body2/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function.",
@@ -1193,10 +1214,24 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
-            "en": "{condition ? \"Loading...\" : \"Ready\"}",
-            "es": "{condición ? \"Cargando...\" : \"Listo\"}"
+            "en": "{? \"Loading...\" : \"Ready\"}",
+            "es": "{? \"Cargando...\" : \"Listo\"}"
           },
-          "hash": "b5c29adee200a96d19373d6395b021c3"
+          "hash": "01ee2b75a7621836af17dfa14af01701"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_consequent": {
+          "content": {
+            "en": "Loading...",
+            "es": "Cargando..."
+          },
+          "hash": "8524de963f07201e5c086830d370797f"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_alternate": {
+          "content": {
+            "en": "Ready",
+            "es": "Listo"
+          },
+          "hash": "e7d31fc0602fb2ede144d18cdffd816b"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
@@ -1286,6 +1321,13 @@
             "es": "items.join(\", \")"
           },
           "hash": "7879e64a91aeba22f31bbb6dfc8b270b"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "content": {
+            "en": "{items.join()}",
+            "es": "{elementos.unir()}"
+          },
+          "hash": "b9f3f5d0e778d934dc50684e5915b6a7"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -1404,7 +1446,7 @@
         "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "7.5 reduce for combining",
-            "es": "7.5 reduce para combinar"
+            "es": "[ES] 7.5 reduce for combining"
           },
           "hash": "8cb089c8c5d5db4939ce639856f204c1"
         }
@@ -1415,21 +1457,21 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "'use client'; const [text, setText] = useState(\"Client text\");",
-            "es": "'use client'; const [text, setText] = useState(\"Texto del cliente\");"
+            "es": "[ES] 'use client'; const [text, setText] = useState(\"Client text\");"
           },
           "hash": "869551a7f0a73d24bf74b893224d9a83"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "{text}",
-            "es": "{texto}"
+            "es": "[ES] {text}"
           },
           "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con Identifier\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Las cadenas se renderizan en el lado del cliente."
+            "es": "[ES] <element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client."
           },
           "hash": "79d6ca48c8008c1e949169553fc664d1"
         }
@@ -1440,14 +1482,14 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "export async function generateMetadata(): Promise<Metadata> { \n          return { title: \"Dynamic title\", description: \"Dynamic description\" \n          }; }",
-            "es": "export async function generateMetadata(): Promise<Metadata> { \n          return { title: \"Título dinámico\", description: \"Descripción dinámica\" \n          }; }"
+            "es": "[ES] export async function generateMetadata(): Promise<Metadata> { \n          return { title: \"Dynamic title\", description: \"Dynamic description\" \n          }; }"
           },
           "hash": "5401b663f9763f2d3c99b956df977de1"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Dynamic metadata via function (can be async and fetch data)",
-            "es": "Metadatos dinámicos mediante una función (puede ser asíncrona y obtener datos)"
+            "es": "[ES] Dynamic metadata via function (can be async and fetch data)"
           },
           "hash": "c2a2e6b90adb906feed508706b34ba50"
         },
@@ -1813,17 +1855,6 @@
             "es": "[ES] 9.8 Details and Summary"
           },
           "hash": "381729d986c26b835a352f36c1b36c44"
-        }
-      }
-    },
-    "app/layout.tsx": {
-      "entries": {
-        "program/body9/declaration/body/body0/argument/children1/children1/children5": {
-          "content": {
-            "en": "{children}",
-            "es": "[ES] {children}"
-          },
-          "hash": "8f5eba575ca59d85cfc23b9990cf9377"
         }
       }
     },

@@ -10,7 +10,8 @@ export default function ConditionalExpression() {
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
       <div className="mb-4">
         <code className="rounded bg-gray-100 dark:bg-gray-700 px-2 py-1 text-sm">
-          &lt;div&gt;{'{'}isLoggedIn ? "Logout" : "Login"{'}'}&lt;/div&gt;
+          &lt;div&gt;{'{'}isLoggedIn ? &quot;Logout&quot; : &quot;Login&quot;
+          {'}'}&lt;/div&gt;
         </code>
       </div>
       <div className="mb-4 flex items-center gap-4">
@@ -25,7 +26,8 @@ export default function ConditionalExpression() {
         </div>
       </div>
       <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-        <strong>AST Type:</strong> JSXExpressionContainer with ConditionalExpression
+        <strong>AST Type:</strong> JSXExpressionContainer with
+        ConditionalExpression
         <br />
         <strong>Description:</strong> Conditional expression returns a string
         that is rendered.
@@ -33,4 +35,3 @@ export default function ConditionalExpression() {
     </div>
   );
 }
-
