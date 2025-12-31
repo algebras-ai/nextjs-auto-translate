@@ -1,6 +1,6 @@
 'use client';
 
-import { createElement, ReactNode } from 'react';
+import { createElement } from 'react';
 import { useAlgebrasIntl } from '../Provider';
 
 interface TranslatedProps {
@@ -36,14 +36,90 @@ const Translated = (props: TranslatedProps) => {
     return <>🚫 Content not found for locale: {locale}</>;
   }
 
+  // Replace placeholders like {variableName} with translated variable values
+  // Professional approach: Extract all placeholders first, then replace them all at once
+  const replacePlaceholders = (text: string): string => {
+    // Look for placeholders in format {variableName}
+    const placeholderRegex = /\{(\w+)\}/g;
+    const placeholders = new Map<string, string>();
+    let match;
+
+    // First pass: Find all placeholders and their translated values
+    while ((match = placeholderRegex.exec(text)) !== null) {
+      const varName = match[1];
+
+      // Skip if already processed
+      if (placeholders.has(varName)) {
+        continue;
+      }
+
+      // Try to find the translated variable value in the dictionary
+      // Pattern: {entryKey}_var_{variableName}
+      const varEntryKey = `${entryKey}_var_${varName}`;
+      let varEntry = dictionary.files[fileKey]?.entries[varEntryKey];
+
+      // If not found with exact pattern, search for any entry ending with _var_{varName}
+      if (!varEntry) {
+        const allEntries = dictionary.files[fileKey]?.entries || {};
+        for (const [key, entry] of Object.entries(allEntries)) {
+          if (key.endsWith(`_var_${varName}`)) {
+            varEntry = entry;
+            break;
+          }
+        }
+      }
+
+      if (varEntry?.content[locale]) {
+        const translatedValue = varEntry.content[locale];
+        placeholders.set(varName, translatedValue);
+      } else {
+        // If translation not found, keep the placeholder as-is
+        // This allows the original variable value to be used at runtime
+        placeholders.set(varName, `{${varName}}`);
+      }
+    }
+
+    // Second pass: Replace all placeholders at once
+    let result = text;
+    for (const [varName, translatedValue] of placeholders) {
+      // Replace all occurrences of {varName} with translated value
+      // Use a more robust regex that handles edge cases
+      const regex = new RegExp(`\\{${varName}\\}`, 'g');
+      result = result.replace(regex, translatedValue);
+    }
+
+    return result;
+  };
+
   // Parse content with <element:tag> syntax back into React elements
   const parseContent = (text: string): React.ReactNode => {
+    // First replace placeholders with translated variable values
+    const textWithPlaceholders = replacePlaceholders(text);
+
     const elementRegex = /<element:(\w+)>(.*?)<\/element:\1>/gs;
     const parts: React.ReactNode[] = [];
     let lastIndex = 0;
     let match;
     let iterationCount = 0;
     const maxIterations = 100; // Prevent infinite loops
+
+    // Void elements that cannot have children
+    const voidElements = new Set([
+      'area',
+      'base',
+      'br',
+      'col',
+      'embed',
+      'hr',
+      'img',
+      'input',
+      'link',
+      'meta',
+      'param',
+      'source',
+      'track',
+      'wbr',
+    ]);
 
     while ((match = elementRegex.exec(text)) !== null) {
       // Safety check to prevent infinite loops
@@ -52,17 +128,27 @@ const Translated = (props: TranslatedProps) => {
         break;
       }
 
-      // Add text before the element
+      // Add text before the element (with placeholders replaced)
       if (match.index > lastIndex) {
-        parts.push(text.substring(lastIndex, match.index));
+        parts.push(textWithPlaceholders.substring(lastIndex, match.index));
       }
 
       // Add the element
       const tagName = match[1];
       const innerContent = match[2];
-      parts.push(
-        createElement(tagName, { key: match.index }, parseContent(innerContent))
-      );
+
+      // Void elements cannot have children
+      if (voidElements.has(tagName)) {
+        parts.push(createElement(tagName, { key: match.index }));
+      } else {
+        parts.push(
+          createElement(
+            tagName,
+            { key: match.index },
+            parseContent(innerContent)
+          )
+        );
+      }
 
       lastIndex = elementRegex.lastIndex;
 
@@ -73,12 +159,12 @@ const Translated = (props: TranslatedProps) => {
       }
     }
 
-    // Add remaining text
-    if (lastIndex < text.length) {
-      parts.push(text.substring(lastIndex));
+    // Add remaining text (with placeholders replaced)
+    if (lastIndex < textWithPlaceholders.length) {
+      parts.push(textWithPlaceholders.substring(lastIndex));
     }
 
-    return parts.length > 0 ? parts : text;
+    return parts.length > 0 ? parts : textWithPlaceholders;
   };
 
   return <>{parseContent(content)}</>;

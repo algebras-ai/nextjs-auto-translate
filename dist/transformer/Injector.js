@@ -261,6 +261,98 @@ function transformProject(code, options) {
     if (isInSourceMap) {
         const fileScopes = options.sourceMap.files[relativePath]?.scopes || {};
         const processedElements = new Set();
+        // Compute a stable scope path compatible with Parser's getRelativeScopePath().
+        // Parser stores scope keys like: program/bodyX/... (no dots, no [N]).
+        const getRelativeScopePath = (fullPath) => {
+            const parts = fullPath.split('.');
+            const bodyIndex = parts.findIndex((part) => part === 'body');
+            if (bodyIndex !== -1 && parts[bodyIndex - 1] === 'program') {
+                const relativeParts = parts.slice(bodyIndex + 1);
+                return relativeParts.join('/').replace(/\[(\d+)\]/g, '$1');
+            }
+            return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
+        };
+        // Pass 0: Handle runtime ternaries first.
+        // We inject <Translated /> into the consequent/alternate branches and mark the
+        // containing element as "processed" so it won't be replaced wholesale later.
+        traverse(ast, {
+            JSXElement(path) {
+                const elementScopePath = path
+                    .getPathLocation()
+                    .replace(/\[(\d+)\]/g, '$1')
+                    .replace(/\./g, '/');
+                let conditionalIndex = 0;
+                let didInject = false;
+                for (const child of path.node.children) {
+                    if (!t.isJSXExpressionContainer(child))
+                        continue;
+                    const expr = child.expression;
+                    if (!t.isConditionalExpression(expr))
+                        continue;
+                    const consequentKey = `${elementScopePath}_cond_${conditionalIndex}_consequent`;
+                    const alternateKey = `${elementScopePath}_cond_${conditionalIndex}_alternate`;
+                    if (fileScopes[consequentKey]) {
+                        expr.consequent = injectTranslated(`${relativePath}::${consequentKey}`);
+                        didInject = true;
+                    }
+                    if (fileScopes[alternateKey]) {
+                        expr.alternate = injectTranslated(`${relativePath}::${alternateKey}`);
+                        didInject = true;
+                    }
+                    conditionalIndex++;
+                }
+                if (didInject) {
+                    processedElements.add(elementScopePath);
+                    changed = true;
+                }
+            },
+        });
+        // Pass 0b: Handle runtime logical expressions safely.
+        // We only translate the RIGHT operand when it is a string literal:
+        // - condition && "Text"  -> condition && <Translated .../>
+        // - value || "Fallback"  -> value || <Translated .../>
+        // We mark the containing element as processed to prevent wholesale replacement.
+        traverse(ast, {
+            JSXElement(path) {
+                const elementScopePath = path
+                    .getPathLocation()
+                    .replace(/\[(\d+)\]/g, '$1')
+                    .replace(/\./g, '/');
+                let logicalIndex = 0;
+                let didInject = false;
+                for (const child of path.node.children) {
+                    if (!t.isJSXExpressionContainer(child))
+                        continue;
+                    const expr = child.expression;
+                    if (!t.isLogicalExpression(expr))
+                        continue;
+                    // Only safe if right operand is a string literal
+                    if (!t.isStringLiteral(expr.right)) {
+                        logicalIndex++;
+                        continue;
+                    }
+                    const opName = expr.operator === '&&'
+                        ? 'and'
+                        : expr.operator === '||'
+                            ? 'or'
+                            : null;
+                    if (!opName) {
+                        logicalIndex++;
+                        continue;
+                    }
+                    const rightKey = `${elementScopePath}_logic_${logicalIndex}_${opName}_right`;
+                    if (fileScopes[rightKey]) {
+                        expr.right = injectTranslated(`${relativePath}::${rightKey}`);
+                        didInject = true;
+                    }
+                    logicalIndex++;
+                }
+                if (didInject) {
+                    processedElements.add(elementScopePath);
+                    changed = true;
+                }
+            },
+        });
         // First pass: Replace entire elements that have scope entries
         // This handles cases where an element contains both text and nested elements
         traverse(ast, {
@@ -273,6 +365,20 @@ function transformProject(code, options) {
                     return;
                 if (processedElements.has(scopePath))
                     return;
+                // If the element contains a ternary (ConditionalExpression) rendered in JSX,
+                // we must preserve runtime logic. We'll translate its branches in a later pass.
+                const containsConditionalExpression = path.node.children.some((child) => t.isJSXExpressionContainer(child) &&
+                    t.isConditionalExpression(child.expression));
+                if (containsConditionalExpression) {
+                    return;
+                }
+                // If the element contains a logical expression (&& / ||), preserve runtime semantics.
+                // We either injected the right operand in Pass 0b (processedElements), or we skip replacing.
+                const containsLogicalExpression = path.node.children.some((child) => t.isJSXExpressionContainer(child) &&
+                    t.isLogicalExpression(child.expression));
+                if (containsLogicalExpression) {
+                    return;
+                }
                 // Check if any ancestor element also has a scope entry
                 // If so, this element is nested inside it and shouldn't be replaced separately
                 let parentPath = path.parentPath;
@@ -288,9 +394,28 @@ function transformProject(code, options) {
                     }
                     parentPath = parentPath.parentPath;
                 }
-                // Check if this element has JSXText children (meaning it should be replaced)
-                const hasText = path.node.children.some((child) => t.isJSXText(child) && child.value.trim());
-                if (hasText) {
+                // Check if this element has translatable content (JSXText or JSXExpressionContainer)
+                const hasTranslatableContent = path.node.children.some((child) => {
+                    if (t.isJSXText(child) && child.value.trim()) {
+                        return true;
+                    }
+                    if (t.isJSXExpressionContainer(child)) {
+                        const expr = child.expression;
+                        // Check for translatable expressions
+                        if (t.isStringLiteral(expr) ||
+                            t.isTemplateLiteral(expr) ||
+                            t.isConditionalExpression(expr) ||
+                            t.isLogicalExpression(expr) ||
+                            (t.isBinaryExpression(expr) && expr.operator === '+') ||
+                            t.isCallExpression(expr) ||
+                            t.isIdentifier(expr) ||
+                            t.isMemberExpression(expr)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if (hasTranslatableContent) {
                     // Replace all children with a single Translated component
                     path.node.children = [
                         injectTranslated(`${relativePath}::${scopePath}`),

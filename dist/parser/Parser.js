@@ -139,6 +139,177 @@ class Parser {
                 // Get relative file path from project root
                 const relativeFilePath = path_1.default.relative(projectRoot, file);
                 const fileScopes = {};
+                // Map to store variable scopes per function/component
+                // Key: function path location, Value: Map<variableName, stringValue>
+                const functionScopes = new Map();
+                // Map to store function return scopes per function/component
+                // Key: function path location, Value: Map<functionName, stringReturnValue>
+                const functionReturnScopes = new Map();
+                // First pass: Build variable and function scope maps for each function/component
+                traverse(ast, {
+                    // Track variable declarations with string literal initializers
+                    VariableDeclarator(path) {
+                        if (t.isIdentifier(path.node.id) &&
+                            path.node.init &&
+                            t.isStringLiteral(path.node.init)) {
+                            const varName = path.node.id.name;
+                            const stringValue = path.node.init.value;
+                            // Find the parent function/component
+                            const functionPath = path.findParent((p) => {
+                                return (p.isFunctionDeclaration() ||
+                                    p.isArrowFunctionExpression() ||
+                                    p.isFunctionExpression() ||
+                                    (p.isVariableDeclarator() &&
+                                        p.node.init &&
+                                        (t.isArrowFunctionExpression(p.node.init) ||
+                                            t.isFunctionExpression(p.node.init))));
+                            });
+                            if (functionPath) {
+                                const functionLocation = functionPath.getPathLocation();
+                                if (!functionScopes.has(functionLocation)) {
+                                    functionScopes.set(functionLocation, new Map());
+                                }
+                                const scope = functionScopes.get(functionLocation);
+                                scope.set(varName, stringValue);
+                            }
+                            else {
+                                // Top-level variable - use file path as scope key
+                                const fileScopeKey = `file:${relativeFilePath}`;
+                                if (!functionScopes.has(fileScopeKey)) {
+                                    functionScopes.set(fileScopeKey, new Map());
+                                }
+                                const scope = functionScopes.get(fileScopeKey);
+                                scope.set(varName, stringValue);
+                            }
+                        }
+                    },
+                });
+                // First pass (continued): Build function return scopes for deterministic string-returning functions.
+                // We only record functions when we can prove the return value is a single stable string
+                // (e.g., `function getGreeting(){ return 'Hello' }`).
+                traverse(ast, {
+                    FunctionDeclaration(path) {
+                        if (!path.node.id || !t.isIdentifier(path.node.id))
+                            return;
+                        const funcName = path.node.id.name;
+                        // Collect string literal returns for this function body only (skip nested functions).
+                        const returnValues = new Set();
+                        path.traverse({
+                            Function(inner) {
+                                if (inner.node !== path.node) {
+                                    inner.skip();
+                                }
+                            },
+                            ReturnStatement(retPath) {
+                                const arg = retPath.node.argument;
+                                if (!arg)
+                                    return;
+                                if (!t.isStringLiteral(arg)) {
+                                    // Non-string return -> not deterministic for our purposes
+                                    returnValues.add('__NON_STRING__');
+                                    return;
+                                }
+                                returnValues.add(arg.value);
+                            },
+                        });
+                        if (returnValues.size !== 1 || returnValues.has('__NON_STRING__')) {
+                            return;
+                        }
+                        const onlyValue = Array.from(returnValues)[0];
+                        // Determine scope key (file-level or enclosing function/component)
+                        const enclosingFunctionPath = path.findParent((p) => {
+                            if (p === path)
+                                return false;
+                            return (p.isFunctionDeclaration() ||
+                                p.isArrowFunctionExpression() ||
+                                p.isFunctionExpression() ||
+                                (p.isVariableDeclarator() &&
+                                    p.node.init &&
+                                    (t.isArrowFunctionExpression(p.node.init) ||
+                                        t.isFunctionExpression(p.node.init))));
+                        });
+                        const fileScopeKey = `file:${relativeFilePath}`;
+                        const scopeKey = enclosingFunctionPath
+                            ? enclosingFunctionPath.getPathLocation()
+                            : fileScopeKey;
+                        if (!functionReturnScopes.has(scopeKey)) {
+                            functionReturnScopes.set(scopeKey, new Map());
+                        }
+                        functionReturnScopes.get(scopeKey).set(funcName, onlyValue);
+                    },
+                    VariableDeclarator(path) {
+                        // Handle: const getGreeting = () => 'Hello'
+                        if (!t.isIdentifier(path.node.id) || !path.node.init)
+                            return;
+                        const funcName = path.node.id.name;
+                        const init = path.node.init;
+                        const extractDeterministicReturn = () => {
+                            // Arrow function: () => 'Hello'
+                            if (t.isArrowFunctionExpression(init)) {
+                                if (t.isStringLiteral(init.body)) {
+                                    return init.body.value;
+                                }
+                                if (t.isBlockStatement(init.body)) {
+                                    const returnValues = new Set();
+                                    for (const stmt of init.body.body) {
+                                        if (!t.isReturnStatement(stmt))
+                                            continue;
+                                        const arg = stmt.argument;
+                                        if (!arg)
+                                            continue;
+                                        if (!t.isStringLiteral(arg))
+                                            return null;
+                                        returnValues.add(arg.value);
+                                    }
+                                    return returnValues.size === 1
+                                        ? Array.from(returnValues)[0]
+                                        : null;
+                                }
+                                return null;
+                            }
+                            // Function expression: const fn = function(){ return 'Hello' }
+                            if (t.isFunctionExpression(init) &&
+                                t.isBlockStatement(init.body)) {
+                                const returnValues = new Set();
+                                for (const stmt of init.body.body) {
+                                    if (!t.isReturnStatement(stmt))
+                                        continue;
+                                    const arg = stmt.argument;
+                                    if (!arg)
+                                        continue;
+                                    if (!t.isStringLiteral(arg))
+                                        return null;
+                                    returnValues.add(arg.value);
+                                }
+                                return returnValues.size === 1
+                                    ? Array.from(returnValues)[0]
+                                    : null;
+                            }
+                            return null;
+                        };
+                        const onlyValue = extractDeterministicReturn();
+                        if (!onlyValue)
+                            return;
+                        const enclosingFunctionPath = path.findParent((p) => {
+                            return (p.isFunctionDeclaration() ||
+                                p.isArrowFunctionExpression() ||
+                                p.isFunctionExpression() ||
+                                (p.isVariableDeclarator() &&
+                                    p.node.init &&
+                                    (t.isArrowFunctionExpression(p.node.init) ||
+                                        t.isFunctionExpression(p.node.init))));
+                        });
+                        const fileScopeKey = `file:${relativeFilePath}`;
+                        const scopeKey = enclosingFunctionPath
+                            ? enclosingFunctionPath.getPathLocation()
+                            : fileScopeKey;
+                        if (!functionReturnScopes.has(scopeKey)) {
+                            functionReturnScopes.set(scopeKey, new Map());
+                        }
+                        functionReturnScopes.get(scopeKey).set(funcName, onlyValue);
+                    },
+                });
+                // Second pass: Process JSXElements with variable scope context
                 traverse(ast, {
                     JSXElement(path) {
                         // Get the element name
@@ -149,6 +320,35 @@ class Parser {
                         }
                         else if (t.isJSXMemberExpression(elementName)) {
                             tagName = elementName.property.name;
+                        }
+                        // Find the parent function/component to get its variable scope
+                        const functionPath = path.findParent((p) => {
+                            return (p.isFunctionDeclaration() ||
+                                p.isArrowFunctionExpression() ||
+                                p.isFunctionExpression() ||
+                                (p.isVariableDeclarator() &&
+                                    p.node.init &&
+                                    (t.isArrowFunctionExpression(p.node.init) ||
+                                        t.isFunctionExpression(p.node.init))));
+                        });
+                        // Get variable scope for this function, or use file-level scope
+                        // Merge both function-level and file-level scopes
+                        const fileScopeKey = `file:${relativeFilePath}`;
+                        const fileLevelScope = functionScopes.get(fileScopeKey) || new Map();
+                        const fileLevelFunctionScope = functionReturnScopes.get(fileScopeKey) || new Map();
+                        let variableScope = new Map(fileLevelScope);
+                        let functionReturnScope = new Map(fileLevelFunctionScope);
+                        if (functionPath) {
+                            const functionLocation = functionPath.getPathLocation();
+                            const functionLevelScope = functionScopes.get(functionLocation) || new Map();
+                            const functionLevelFunctionScope = functionReturnScopes.get(functionLocation) || new Map();
+                            // Merge function-level scope into file-level scope
+                            for (const [key, value] of functionLevelScope) {
+                                variableScope.set(key, value);
+                            }
+                            for (const [key, value] of functionLevelFunctionScope) {
+                                functionReturnScope.set(key, value);
+                            }
                         }
                         // Check if this element is nested inside another element that has text
                         // If so, skip extracting it to avoid duplication (content is already in parent's extraction)
@@ -163,23 +363,56 @@ class Parser {
                                 else if (t.isJSXMemberExpression(parentElementName)) {
                                     parentTagName = parentElementName.property.name;
                                 }
-                                // Check if parent has JSXText children (meaning it will be extracted)
-                                const hasTextInParent = parentPath.node.children.some((child) => t.isJSXText(child) && child.value.trim());
-                                // If parent has text, this nested element's content is already included in parent's extraction
-                                // Skip extracting it separately to avoid duplication
-                                // This applies to all parents, including <p> tags
-                                if (hasTextInParent) {
+                                // Check if parent has JSXText or translatable expressions
+                                const hasContentInParent = parentPath.node.children.some((child) => {
+                                    if (t.isJSXText(child) && child.value.trim()) {
+                                        return true;
+                                    }
+                                    if (t.isJSXExpressionContainer(child)) {
+                                        const expr = child.expression;
+                                        // Check if it's a translatable expression
+                                        if (t.isStringLiteral(expr) ||
+                                            t.isTemplateLiteral(expr) ||
+                                            t.isConditionalExpression(expr) ||
+                                            t.isLogicalExpression(expr) ||
+                                            (t.isBinaryExpression(expr) && expr.operator === '+')) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                });
+                                // If parent has content, this nested element's content is already included
+                                if (hasContentInParent) {
                                     return;
                                 }
                             }
                             parentPath = parentPath.parentPath;
                         }
-                        for (const child of path.node.children) {
-                            if (t.isJSXText(child)) {
-                                const text = child.value.trim();
-                                if (!text)
-                                    continue;
-                                const content = (0, utils_1.buildContent)(path.node);
+                        // Check if element has translatable content
+                        const hasTranslatableContent = path.node.children.some((child) => {
+                            if (t.isJSXText(child) && child.value.trim()) {
+                                return true;
+                            }
+                            if (t.isJSXExpressionContainer(child)) {
+                                const expr = child.expression;
+                                // Check for translatable expressions
+                                if (t.isStringLiteral(expr) ||
+                                    t.isTemplateLiteral(expr) ||
+                                    t.isConditionalExpression(expr) ||
+                                    t.isLogicalExpression(expr) ||
+                                    (t.isBinaryExpression(expr) && expr.operator === '+') ||
+                                    t.isCallExpression(expr) ||
+                                    t.isIdentifier(expr) ||
+                                    t.isMemberExpression(expr)) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
+                        if (hasTranslatableContent) {
+                            // Pass variableScope to buildContent
+                            const content = (0, utils_1.buildContent)(path.node, variableScope, functionReturnScope);
+                            if (content.trim()) {
                                 const hash = crypto_1.default
                                     .createHash('md5')
                                     .update(content)
@@ -194,6 +427,130 @@ class Parser {
                                     overrides: {},
                                     content,
                                 };
+                                // Extract variable values used in template literals separately
+                                // Professional approach: Extract variable values as separate translatable entries
+                                // This allows variable values (like "John") to be translated independently
+                                // Pattern: {scopePath}_var_{variableName}
+                                path.node.children.forEach((child) => {
+                                    if (t.isJSXExpressionContainer(child)) {
+                                        const expr = child.expression;
+                                        if (t.isTemplateLiteral(expr)) {
+                                            // Find all identifiers in the template literal
+                                            expr.expressions.forEach((templateExpr, index) => {
+                                                if (t.isIdentifier(templateExpr)) {
+                                                    const varName = templateExpr.name;
+                                                    // Check if variable value is in scope
+                                                    const varValue = variableScope.get(varName);
+                                                    if (varValue) {
+                                                        // Extract variable value as separate entry
+                                                        // This allows "John" to be translated to "Juan" independently
+                                                        const varHash = crypto_1.default
+                                                            .createHash('md5')
+                                                            .update(varValue)
+                                                            .digest('hex');
+                                                        // Use pattern: {scopePath}_var_{variableName} for variable entries
+                                                        const varScopePath = `${relativeScopePath}_var_${varName}`;
+                                                        // Only add if not already exists (avoid duplicates)
+                                                        if (!fileScopes[varScopePath]) {
+                                                            fileScopes[varScopePath] = {
+                                                                type: 'element',
+                                                                hash: varHash,
+                                                                context: `Variable "${varName}" used in template literal`,
+                                                                skip: false,
+                                                                overrides: {},
+                                                                content: varValue,
+                                                            };
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                                // Extract conditional expression branches (ternary) as separate entries
+                                // This enables preserving runtime conditional logic while translating each branch.
+                                // Pattern: {scopePath}_cond_{index}_{consequent|alternate}
+                                let conditionalIndex = 0;
+                                path.node.children.forEach((child) => {
+                                    if (!t.isJSXExpressionContainer(child))
+                                        return;
+                                    const expr = child.expression;
+                                    if (!t.isConditionalExpression(expr))
+                                        return;
+                                    const consequentContent = (0, utils_1.extractExpressionContent)(expr.consequent, variableScope, functionReturnScope);
+                                    const alternateContent = (0, utils_1.extractExpressionContent)(expr.alternate, variableScope, functionReturnScope);
+                                    if (!consequentContent || !alternateContent)
+                                        return;
+                                    const consequentKey = `${relativeScopePath}_cond_${conditionalIndex}_consequent`;
+                                    const alternateKey = `${relativeScopePath}_cond_${conditionalIndex}_alternate`;
+                                    if (!fileScopes[consequentKey]) {
+                                        const hash = crypto_1.default
+                                            .createHash('md5')
+                                            .update(consequentContent)
+                                            .digest('hex');
+                                        fileScopes[consequentKey] = {
+                                            type: 'element',
+                                            hash,
+                                            context: 'Conditional expression consequent branch',
+                                            skip: false,
+                                            overrides: {},
+                                            content: consequentContent,
+                                        };
+                                    }
+                                    if (!fileScopes[alternateKey]) {
+                                        const hash = crypto_1.default
+                                            .createHash('md5')
+                                            .update(alternateContent)
+                                            .digest('hex');
+                                        fileScopes[alternateKey] = {
+                                            type: 'element',
+                                            hash,
+                                            context: 'Conditional expression alternate branch',
+                                            skip: false,
+                                            overrides: {},
+                                            content: alternateContent,
+                                        };
+                                    }
+                                    conditionalIndex++;
+                                });
+                                // Extract logical expression right operands as separate entries
+                                // This enables preserving runtime logic like: condition && "Text" or value || "Fallback"
+                                // Pattern: {scopePath}_logic_{index}_{and|or}_right
+                                let logicalIndex = 0;
+                                path.node.children.forEach((child) => {
+                                    if (!t.isJSXExpressionContainer(child))
+                                        return;
+                                    const expr = child.expression;
+                                    if (!t.isLogicalExpression(expr))
+                                        return;
+                                    // Only safe to extract when right side is a plain string literal.
+                                    // We do NOT extract template literals/identifiers here to avoid breaking runtime interpolation.
+                                    if (!t.isStringLiteral(expr.right))
+                                        return;
+                                    const op = expr.operator;
+                                    const opName = op === '&&' ? 'and' : op === '||' ? 'or' : null;
+                                    if (!opName)
+                                        return;
+                                    const rightContent = expr.right.value;
+                                    if (!rightContent)
+                                        return;
+                                    const key = `${relativeScopePath}_logic_${logicalIndex}_${opName}_right`;
+                                    if (!fileScopes[key]) {
+                                        const hash = crypto_1.default
+                                            .createHash('md5')
+                                            .update(rightContent)
+                                            .digest('hex');
+                                        fileScopes[key] = {
+                                            type: 'element',
+                                            hash,
+                                            context: `Logical expression (${op}) right operand`,
+                                            skip: false,
+                                            overrides: {},
+                                            content: rightContent,
+                                        };
+                                    }
+                                    logicalIndex++;
+                                });
                             }
                         }
                     },
