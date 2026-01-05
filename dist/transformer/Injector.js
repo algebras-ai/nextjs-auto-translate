@@ -37,6 +37,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.injectTranslated = injectTranslated;
+exports.injectTranslatedWithParams = injectTranslatedWithParams;
 exports.ensureImportTranslated = ensureImportTranslated;
 exports.ensureImportLocalesSwitcher = ensureImportLocalesSwitcher;
 exports.injectLocaleSwitcher = injectLocaleSwitcher;
@@ -54,6 +55,19 @@ const generate = generator_1.default.default || generator_1.default;
 function injectTranslated(scope) {
     return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
     ), null, [], true);
+}
+// Injects <Translated tKey="scope" params={{...}} /> for template literals with parameters
+function injectTranslatedWithParams(scope, params) {
+    const attributes = [
+        t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
+    ];
+    // Create params object expression
+    if (Object.keys(params).length > 0) {
+        const properties = Object.entries(params).map(([key, value]) => t.objectProperty(t.identifier(key), value));
+        const paramsObject = t.objectExpression(properties);
+        attributes.push(t.jsxAttribute(t.jsxIdentifier('params'), t.jsxExpressionContainer(paramsObject)));
+    }
+    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true), null, [], true);
 }
 // Ensures import Translated from the package runtime path exists
 function ensureImportTranslated(ast) {
@@ -272,6 +286,56 @@ function transformProject(code, options) {
             }
             return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
         };
+        // Pass 0a: Handle template literals with parameters (professional approach)
+        // Transform template literals to use <Translated params={{...}} />
+        // This follows ICU MessageFormat standard where variables are runtime parameters
+        traverse(ast, {
+            JSXElement(path) {
+                const elementScopePath = path
+                    .getPathLocation()
+                    .replace(/\[(\d+)\]/g, '$1')
+                    .replace(/\./g, '/');
+                for (const child of path.node.children) {
+                    if (!t.isJSXExpressionContainer(child))
+                        continue;
+                    const expr = child.expression;
+                    if (!t.isTemplateLiteral(expr))
+                        continue;
+                    // Check if this template literal has a scope entry
+                    if (!fileScopes[elementScopePath])
+                        continue;
+                    // Extract parameters from template literal expressions
+                    const params = {};
+                    let hasParams = false;
+                    for (let i = 0; i < expr.expressions.length; i++) {
+                        const templateExpr = expr.expressions[i];
+                        if (t.isIdentifier(templateExpr)) {
+                            // Use variable name as parameter key
+                            params[templateExpr.name] = templateExpr;
+                            hasParams = true;
+                        }
+                        else if (t.isMemberExpression(templateExpr)) {
+                            // Handle member expressions like obj.prop
+                            if (t.isIdentifier(templateExpr.property)) {
+                                params[templateExpr.property.name] = templateExpr;
+                                hasParams = true;
+                            }
+                        }
+                    }
+                    // Replace template literal with Translated component
+                    // We need to replace the entire JSXExpressionContainer, not just the expression
+                    const translatedComponent = hasParams
+                        ? injectTranslatedWithParams(`${relativePath}::${elementScopePath}`, params)
+                        : injectTranslated(`${relativePath}::${elementScopePath}`);
+                    // Find the index of this child and replace it
+                    const childIndex = path.node.children.indexOf(child);
+                    if (childIndex !== -1) {
+                        path.node.children[childIndex] = translatedComponent;
+                        changed = true;
+                    }
+                }
+            },
+        });
         // Pass 0: Handle runtime ternaries first.
         // We inject <Translated /> into the consequent/alternate branches and mark the
         // containing element as "processed" so it won't be replaced wholesale later.
