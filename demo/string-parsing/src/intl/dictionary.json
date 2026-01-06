@@ -6,21 +6,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>Simple text</div>",
-            "es": "<div>Texto simple</div>"
+            "ru": "<div>Простой текст</div>"
           },
           "hash": "9cc7957f78d6a68033415cdf27360485"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Simple text",
-            "es": "Texto simple"
+            "ru": "Простой текст"
           },
           "hash": "e69eabf2014b5bb19e8f7ecb8213afe6"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> The simplest way - a string directly\n        between opening and closing tags.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La forma más sencilla: una cadena de texto directamente entre las etiquetas de apertura y cierre."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Самый простой способ - строка, расположенная непосредственно\n        между открывающим и закрывающим тегами."
           },
           "hash": "a8ad654199323b5fc28aaa92a3e4f297"
         }
@@ -31,21 +31,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>Text <span>between</span> elements</div>",
-            "es": "<div>Texto <span>entre</span> elementos</div>"
+            "ru": "<div>Текст <span>между</span> элементами</div>"
           },
           "hash": "9a43720e8ff6085d1b68e68a7d2de08d"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Text <element:span>between</element:span> elements",
-            "es": "Texto <element:span>entre</element:span> elementos"
+            "ru": "Текст <element:span>между</element:span> элементами"
           },
           "hash": "56e027cf5988f666f1a81bdd0ef43973"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> Multiple JSXText nodes\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Each text fragment between elements\n        becomes a separate JSXText node.",
-            "es": "<element:strong>Tipo de AST:</element:strong> Múltiples nodos JSXText\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cada fragmento de texto entre elementos se convierte en un nodo JSXText independiente."
+            "ru": "<element:strong>Тип AST:</element:strong> Множественные узлы JSXText\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Каждый текстовый фрагмент между элементами\n        преобразуется в отдельный узел JSXText."
           },
           "hash": "e99d143c84f63889dadac916bbe35b1c"
         }
@@ -56,21 +56,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>Text{ } <span>with space</span> \n          { }between elements</div>",
-            "es": "<div>Texto{ } <span>con espacio</span> \n          { }entre elementos</div>"
+            "ru": "<div>Текст{ } <span>с пробелом</span>\n          { }между элементами</div>"
           },
           "hash": "a9e98a8e5cc9271915076dd332aa80b4"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Text \n          <element:span>with space</element:span>\n           between elements",
-            "es": "Texto \n          <element:span>con espacio</element:span>\n           entre elementos"
+            "ru": "Текст\n          <element:span>с пробелом</element:span>\n           между элементами"
           },
           "hash": "be06bd39cdd267e4f36ec9bb8dc30f28"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText + JSXExpressionContainer +\n        JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Uses { } to explicitly preserve\n        spaces between elements.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText + JSXExpressionContainer +\n        JSXElement\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Utiliza { } para conservar explícitamente los espacios entre elementos."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText + JSXExpressionContainer +\n        JSXElement\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Использует { } для явного сохранения\n        пробелов между элементами."
           },
           "hash": "286ae646a4a72711658ab30d8a3fb942"
         }
@@ -81,21 +81,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>Text with spaces and line breaks</div>",
-            "es": "<div>Texto con espacios y saltos de línea</div>"
+            "ru": "<div>Текст с пробелами и переносами строк</div>"
           },
           "hash": "fd6cd8d566a7769a9214b191106b20cc"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Text with spaces and line breaks",
-            "es": "Texto con espacios y saltos de línea"
+            "ru": "Текст с пробелами и разрывами строк"
           },
           "hash": "f505eeed95599f5b052c12126fd697c3"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Spaces and line breaks are preserved in\n        JSXText, but React normalizes them during rendering.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Los espacios y saltos de línea se conservan en JSXText, pero React los normaliza durante el renderizado."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Пробелы и переносы строк сохраняются в\n        JSXText, но React нормализует их во время рендеринга."
           },
           "hash": "1672f534864f1fd88f62c02428ee5189"
         }
@@ -106,35 +106,35 @@
         "program/body4/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "1. Direct Rendering - JSXText between tags",
-            "es": "1. Renderizado directo: JSXText entre etiquetas"
+            "ru": "1. Прямой рендеринг - текст JSX между тегами"
           },
           "hash": "353b9ffd4b835fff6902a40a08eb5cac"
         },
         "program/body4/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "1.1 Simple text between tags",
-            "es": "1.1 Texto simple entre etiquetas"
+            "ru": "1.1 Простой текст между тегами"
           },
           "hash": "55d5c089982b9df64b510b54c370a15c"
         },
         "program/body4/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "1.2 Text with spaces",
-            "es": "1.2 Texto con espacios"
+            "ru": "1.2 Текст с пробелами"
           },
           "hash": "4871133373336feda1880382cc9b6496"
         },
         "program/body4/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "1.3 Text with spaces between elements",
-            "es": "1.3 Texto con espacios entre elementos"
+            "ru": "1.3 Текст с пробелами между элементами"
           },
           "hash": "280b903c34527fb8d65afbc564ff8f50"
         },
         "program/body4/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "1.4 Text with explicit spaces via expression",
-            "es": "1.4 Texto con espacios explícitos mediante expresiones"
+            "ru": "1.4 Текст с явными пробелами посредством выражения"
           },
           "hash": "ea5be83c9d137553da1690b08996da68"
         }
@@ -145,28 +145,28 @@
         "program/body4/body/body1/argument": {
           "content": {
             "en": "This won't render",
-            "es": "Esto no se renderizará"
+            "ru": "Это не отобразится"
           },
           "hash": "7cd8009edd1d99dc22ebc62f60a35c50"
         },
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<ErrorBoundary fallback={<div>An error occurred</div>}>",
-            "es": "<ErrorBoundary fallback={<div>Ocurrió un error</div>}>"
+            "ru": "<ErrorBoundary fallback={<div>Произошла ошибка</div>}>"
           },
           "hash": "de918de0afbdcbb4aaa3153a7777e435"
         },
         "program/body5/declaration/body/body0/argument/children3/children1/openingElement/attributes0/value/expression": {
           "content": {
             "en": "An error occurred",
-            "es": "Ocurrió un error"
+            "ru": "Произошла ошибка"
           },
           "hash": "a25c753ee3e4be15ec0daa5a40deb7b8"
         },
         "program/body5/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXElement with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Error Boundary fallback component.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXElement con JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cadena de texto en el componente de reserva (fallback) de un Error Boundary."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXЭлемент с атрибутом JSX (fallback)\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Строка в резервном компоненте Error Boundary."
           },
           "hash": "4feb15f8e21190ba79e0f4756059add5"
         }
@@ -177,21 +177,21 @@
         "program/body2/declaration/body/body3/argument/children1/children1": {
           "content": {
             "en": "createPortal(<div>Content in portal</div>, document.body)",
-            "es": "createPortal(<div>Contenido en el portal</div>, document.body)"
+            "ru": "createPortal (<div>Содержимое в портале</div>, document.body)"
           },
           "hash": "5543d17e5165044a48d00039d2e28f1a"
         },
         "program/body2/declaration/body/body3/argument/children3": {
           "content": {
             "en": "Portal content is rendered to document.body (check browser inspector)\n        ",
-            "es": "El contenido del portal se renderiza en document.body (compruébalo en el inspector del navegador)"
+            "ru": "Содержимое портала отображается в document.body (проверьте в инспекторе браузера)"
           },
           "hash": "1f24b36d5d87b25ce81ec91d0a04a485"
         },
         "program/body2/declaration/body/body3/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (createPortal)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered through a portal to\n        another DOM node.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression (createPortal)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Las cadenas de texto se renderizan a través de un portal en otro nodo del DOM."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression (createPortal)\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Строки рендерятся через портал в\n        другой узел DOM."
           },
           "hash": "69fabd80bc1b82ee9631c2e1b614148b"
         }
@@ -202,28 +202,28 @@
         "program/body1/body/body1/argument": {
           "content": {
             "en": "Async content loaded",
-            "es": "Contenido asíncrono cargado"
+            "ru": "Асинхронное содержимое загружено"
           },
           "hash": "84bad8843fe76ca2703e360a4934c77a"
         },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Suspense fallback={<div>Loading...</div>}>",
-            "es": "<Suspense fallback={<div>Cargando...</div>}>"
+            "ru": "<Suspense fallback={<div>Загрузка...</div>}>"
           },
           "hash": "fb26ac56e492404dbbf023bd99f65ffa"
         },
         "program/body2/declaration/body/body0/argument/children3/children1/openingElement/attributes0/value/expression": {
           "content": {
             "en": "Loading...",
-            "es": "Cargando..."
+            "ru": "Загрузка..."
           },
           "hash": "8524de963f07201e5c086830d370797f"
         },
         "program/body2/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXElement (Suspense) with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Suspense fallback component.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXElement (Suspense) con JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cadena de texto en el componente de reserva (fallback) de Suspense."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXElement (Suspense) с JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Строка в резервном компоненте Suspense."
           },
           "hash": "054e77a4d71ddc9fbc28a3cb291088b2"
         }
@@ -234,28 +234,28 @@
         "program/body3/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "10. Special Cases - portals, Suspense, Error Boundary",
-            "es": "10. Casos especiales: portals, Suspense, Error Boundary"
+            "ru": "10. Особые случаи - порталы, Suspense, предохранители ошибок"
           },
           "hash": "d6da010aaf4b4c219722ee76591c3a1d"
         },
         "program/body3/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "10.1 Portals",
-            "es": "10.1 Portals"
+            "ru": "10.1 Порталы"
           },
           "hash": "ca40bd6d16e464c04ea0f0a9ed1fdf6f"
         },
         "program/body3/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "10.2 Suspense with fallback",
-            "es": "10.2 Suspense con fallback"
+            "ru": "10.2 Ожидание с резервным вариантом"
           },
           "hash": "2d126df09ad6ac0ba81a390f7e2a23fe"
         },
         "program/body3/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "10.3 Error Boundary with message",
-            "es": "10.3 Error Boundary con mensaje"
+            "ru": "10.3 Граница ошибки с сообщением"
           },
           "hash": "d77b4f5d848c970fa4608850d7bd984b"
         }
@@ -266,42 +266,42 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{isLoggedIn ? \"Logout\" : \"Login\"\n          }</div>",
-            "es": "<div>{isLoggedIn ? \"Cerrar sesión\" : \"Iniciar sesión\"\n          }</div>"
+            "ru": "<div>{isLoggedIn? \"Выйти\": \"Войти\"\n          }</div>"
           },
           "hash": "1c5a94d89bcc9b060d63916df00c5eeb"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Toggle Login State",
-            "es": "Alternar estado de inicio de sesión"
+            "ru": "Переключить статус входа"
           },
           "hash": "b6e179cec630f45910cd3c506e3e8bc0"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "{? \"Logout\" : \"Login\"}",
-            "es": "{? \"Cerrar sesión\" : \"Iniciar sesión\"}"
+            "ru": "{?\"Выйти\": \"Войти\"}"
           },
           "hash": "bc5d44bc04b4db2f71d11344e8caca00"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_consequent": {
           "content": {
             "en": "Logout",
-            "es": "Cerrar sesión"
+            "ru": "Выход"
           },
           "hash": "0323de4f66a1700e2173e9bcdce02715"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_alternate": {
           "content": {
             "en": "Login",
-            "es": "Iniciar sesión"
+            "ru": "Войти"
           },
           "hash": "99dea78007133396a7b8ed70578ac6ae"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La expresión condicional devuelve una cadena de texto\n        que se renderiza."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Условное выражение возвращает строку,\n        которая отображается."
           },
           "hash": "352b9f5541ed78f894ef5e89b1b5c83c"
         }
@@ -312,21 +312,21 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>{getGreeting()}</div>",
-            "es": "<div>{getGreeting()}</div>"
+            "ru": "<div>{getGreeting () }</div>"
           },
           "hash": "069e50b211afbbcdce365cd589bd12cb"
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Hello from function",
-            "es": "Hola desde la función"
+            "ru": "Приветствие из функции"
           },
           "hash": "bc27719767b2740a2f52973c138c9edd"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function is called and returns a string\n        that is rendered.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Se llama a la función y esta devuelve una cadena de texto que se renderiza."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Функция вызывается и возвращает строку, которая отображается."
           },
           "hash": "7bece7ef8da9c27483dd9bffafaa7a33"
         }
@@ -337,35 +337,35 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{isVisible && \"Visible text\"}</div>",
-            "es": "<div>{isVisible && \"Texto visible\"}</div>"
+            "ru": "<div>{isVisible && \"Visible text\"}</div>"
           },
           "hash": "3b718bd67d65eed9fe0888ffaf54bd15"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Toggle Visibility",
-            "es": "Alternar visibilidad"
+            "ru": "Переключить видимость"
           },
           "hash": "923cf754dc998f7ecfca555db1fb1c36"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "Visible text",
-            "es": "Texto visible"
+            "ru": "Видимый текст"
           },
           "hash": "59ec4127bbd76101af792d315cc264dc"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_and_right": {
           "content": {
             "en": "Visible text",
-            "es": "Texto visible"
+            "ru": "Видимый текст"
           },
           "hash": "59ec4127bbd76101af792d315cc264dc"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> If the left part is true, the right part\n        (string) is rendered.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con LogicalExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Si la parte izquierda es verdadera, se renderiza la parte derecha (cadena de texto)."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с логическим выражением\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Если левая часть истинна, правая часть (строка) отображается."
           },
           "hash": "e95bf7b7f83aefc2f47f39ea83a73a60"
         }
@@ -376,21 +376,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>{\"Hello\" + \" \" + \"World\"\n          }</div>",
-            "es": "<div>{\"Hola\" + \" \" + \"Mundo\"\n          }</div>"
+            "ru": "<div>{\"Hello\" + \" \" + \"World\"\n }</div>"
           },
           "hash": "de0cbb3a22d1855def61e26911102106"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Hello World",
-            "es": "Hola, mundo"
+            "ru": "Hello World"
           },
           "hash": "b10a8db164e0754105b7a99be72e3fe5"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with BinaryExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Result of string concatenation is rendered\n        as text.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con BinaryExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El resultado de la concatenación de cadenas se renderiza como texto."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с бинарным выражением\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Результат конкатенации строк отображается в виде текста."
           },
           "hash": "62d8eab7d8a342a902cf45f4e54b921e"
         }
@@ -401,21 +401,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>{\"String in expression\"}</div>",
-            "es": "<div>{\"Cadena en expresión\"}</div>"
+            "ru": "<div>{\"String in expression\"}</div>"
           },
           "hash": "47b7e7e734a0472f6261097140ea842d"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "String in expression",
-            "es": "Cadena en expresión"
+            "ru": "Строка в выражении"
           },
           "hash": "426756fb39cb710b433b30c5058f9545"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but\n        it's still a string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con StringLiteral\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cadena de texto encerrada entre llaves, pero sigue siendo una cadena."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer со StringLiteral\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка обернута в фигурные скобки, но все равно остается строкой."
           },
           "hash": "1d306e2156eed69f434d170a1cf57ada"
         }
@@ -426,21 +426,21 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{text.toUpperCase()}</div>",
-            "es": "<div>{texto.toUpperCase()}</div>"
+            "ru": "<div>{text.toUpperCase () }</div>"
           },
           "hash": "5d9d7490a47ba2f625f01029f58e9e6d"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "HELLO WORLD",
-            "es": "HOLA MUNDO"
+            "ru": "HELLO WORLD"
           },
           "hash": "361fadf1c712e812d198c4cab5712a79"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String method returns a new string that\n        is rendered.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El método de cadena devuelve una nueva cadena que se renderiza."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression (MemberExpression) \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Метод строки возвращает новую строку, которая отображается."
           },
           "hash": "1724cbdbafe685e0bd3c24ce169aed69"
         }
@@ -451,28 +451,21 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "const name = \"World\"; <div>{`Hello, ${name\n          }\n          !`}</div>",
-            "es": "const nombre = \"Mundo\"; <div>{`¡Hola, ${nombre\n          }\n          !`}</div>"
+            "ru": "const name = \"World\"; <div>{'Hello, ${name\n }\n !'}</div>"
           },
           "hash": "02ece78d3b1ffd8e69d5cb9556c24298"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "content": {
-            "en": "Hello, {name}!",
-            "es": "¡Hola, {name}!"
+            "en": "Hello, World!",
+            "ru": "Привет, мир!"
           },
-          "hash": "613969df8ffc1c390f81917c0cddee77"
-        },
-        "program/body0/declaration/body/body1/argument/children3/children1_var_name": {
-          "content": {
-            "en": "World",
-            "es": "Mundo"
-          },
-          "hash": "f5a7924e621e84c9280a9a27e1bcb7f6"
+          "hash": "65a8e27d8879283831b664bd8b7f0ad4"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with TemplateLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Template literal is evaluated and rendered\n        as a string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con TemplateLiteral\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El literal de plantilla se evalúa y se renderiza como una cadena."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с TemplateLiteral\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Шаблонный литерал вычисляется и отображается как строка."
           },
           "hash": "061b7e72a409ff08c032c4bbef7fe695"
         }
@@ -483,21 +476,21 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "const text = \" Text from variable\"; <div>{text\n          }</div>",
-            "es": "const texto = \" Texto de una variable\"; <div>{texto\n          }</div>"
+            "ru": "const text = \" Текст из переменной\"; <div>{text\n }</div>"
           },
           "hash": "ec224ca43a4bc0512496ec503cedc29b"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Text from variable",
-            "es": "Texto de variable"
+            "ru": "Текст из переменной"
           },
           "hash": "e640808fdfd2e22d8e9fade24d5b2a29"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Variable containing a string is rendered\n        as text.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con Identifier\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La variable que contiene una cadena se renderiza como texto."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с идентификатором\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Переменная, содержащая строку, отображается как текст."
           },
           "hash": "192bcb7ebdd329b9065c1d16b20e19d1"
         }
@@ -508,63 +501,63 @@
         "program/body8/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "2. Expressions - JSXExpressionContainer",
-            "es": "2. Expresiones - JSXExpressionContainer"
+            "ru": "2. Выражения - JSXExpressionContainer"
           },
           "hash": "ad731ecee5ecec8af88f29b64ca69ee1"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "2.1 String literal in expression",
-            "es": "2.1 Literal de cadena en expresión"
+            "ru": "2.1 Строковый литерал в выражении"
           },
           "hash": "0a37f1f6a65c9f3288d1cc646a6f8a3a"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "2.2 Variable with string",
-            "es": "2.2 Variable con cadena"
+            "ru": "2.2 Переменная со строкой"
           },
           "hash": "6ba4384c267c95b7d77b3ccd6a684ad2"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "2.3 String concatenation",
-            "es": "2.3 Concatenación de cadenas"
+            "ru": "2.3 Конкатенация строк"
           },
           "hash": "5a11171781d3ad2cfaa354c878c2ba91"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "2.4 Template literals",
-            "es": "2.4 Literales de plantilla"
+            "ru": "2.4 Шаблонные литералы"
           },
           "hash": "39af14c7688252acb561419405338376"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "2.5 Conditional expression (ternary)",
-            "es": "2.5 Expresión condicional (ternaria)"
+            "ru": "2.5 Условное выражение (тернарный оператор) "
           },
           "hash": "785b04713602b8ef0b4d7b67afce358d"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children11/children1": {
           "content": {
             "en": "2.6 Logical AND (&&)",
-            "es": "2.6 AND lógico (&&)"
+            "ru": "2.6 Логическое И (&&) "
           },
           "hash": "c7be86692baaed2134057cf19cb24c34"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children13/children1": {
           "content": {
             "en": "2.7 Function call returning string",
-            "es": "2.7 Llamada a función que devuelve una cadena"
+            "ru": "2.7 Вызов функции, возвращающей строку"
           },
           "hash": "91dd6b3156125eb002230f6f8750ff44"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children15/children1": {
           "content": {
             "en": "2.8 String method",
-            "es": "2.8 Método de cadena"
+            "ru": "2.8 Метод строки"
           },
           "hash": "d486831fb3dc3ba5644ab7490a41b139"
         }
@@ -575,28 +568,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<img src=\"/image.jpg\" alt=\"Image description\" />",
-            "es": "<img src=\"/image.jpg\" alt=\"Descripción de la imagen\" />"
+            "ru": "<img src=\"/image.jpg\" alt=\"Описание изображения\" />"
           },
           "hash": "7ec76e1a5fee298ab636f8738b821136"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1/children1": {
           "content": {
             "en": "Image",
-            "es": "Imagen"
+            "ru": "Изображение"
           },
           "hash": "be53a0541a6d36f6ecb879fa2c584b08"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children3": {
           "content": {
             "en": "Alt text: \"Image description\" (visible if image fails to load or via screen readers)",
-            "es": "Texto alternativo: \"Descripción de la imagen\" (visible si la imagen no carga o mediante lectores de pantalla)"
+            "ru": "Альтернативный текст: \"Описание изображения\" (отображается, если изображение не загружается или через программы чтения с экрана) "
           },
           "hash": "0412317bf97e19244da7c2d04aa13ffa"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed if\n        the image fails to load and is used by screen readers. Visible to users.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXAttribute con StringLiteral o JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La cadena en el atributo alt se muestra si la imagen no carga y es utilizada por los lectores de pantalla. Es visible para los usuarios."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral или JSXExpressionContainer\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка в атрибуте alt отображается, если\n изображение не загружается, и используется программами чтения с экрана. Видна пользователям."
           },
           "hash": "6d46e4fdff7b44a91d92077b8826d1fc"
         }
@@ -607,28 +600,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<button aria-label=\"Close dialog\">×</button>",
-            "es": "<button aria-label=\"Cerrar diálogo\">×</button>"
+            "ru": "<button aria-label=\"Закрыть диалог\">×</button>"
           },
           "hash": "c0a3096726084b3c9ef2b9e1a774120d"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "×",
-            "es": "×"
+            "ru": "×"
           },
           "hash": "6392228661363e75c352077a2cfe66d7"
         },
         "program/body0/declaration/body/body0/argument/children3/children3": {
           "content": {
             "en": "aria-label is read by screen readers",
-            "es": "aria-label es leído por los lectores de pantalla"
+            "ru": "aria-label читается программами чтения с экрана"
           },
           "hash": "e78100c0b517984ffb7e0020727463c5"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby, aria-placeholder\n        and other ARIA attributes are used by screen readers and visible to users\n        with disabilities. Subject to localization.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXAttribute con StringLiteral o JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> aria-label, aria-describedby, aria-placeholder y otros atributos ARIA son utilizados por lectores de pantalla y son visibles para usuarios con discapacidades. Están sujetos a localización."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral или JSXExpressionContainer\n <element:br></element:br>\n <element:strong>Описание:</element:strong> aria-label, aria-describedby, aria-placeholder\n и другие атрибуты ARIA используются программами чтения с экрана и видны пользователям с ограниченными возможностями\n. Подлежит локализации."
           },
           "hash": "36cee950119709bc9399ba6893b4e700"
         }
@@ -639,21 +632,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div title=\"Tooltip on hover\">Content</div>",
-            "es": "<div title=\"Descripción emergente al pasar el cursor\">Contenido</div>"
+            "ru": "<div title=\"Подсказка при наведении\">Содержимое</div>"
           },
           "hash": "c8e2590d8cb41bbafcbd0cbd0752a492"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Hover over me to see tooltip",
-            "es": "Pasa el cursor sobre mí para ver la descripción emergente"
+            "ru": "Наведите на меня, чтобы увидеть всплывающую подсказку"
           },
           "hash": "6eecce389dbf7070ffa239a6ffba7051"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXAttribute con StringLiteral\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La cadena en el atributo title se muestra en una descripción emergente al pasar el cursor. Es visible para los usuarios."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка в атрибуте title отображается\n во всплывающей подсказке при наведении. Видима пользователям."
           },
           "hash": "1aff1779ce392c4a0e08c090d35a50d2"
         }
@@ -664,28 +657,28 @@
         "program/body3/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "3. Visible Attributes - title, alt, aria-*",
-            "es": "3. Atributos visibles: title, alt, aria-*"
+            "ru": "3. Видимые атрибуты - title, alt, aria-*"
           },
           "hash": "b2aafd9a6b651a9162ba84852682e697"
         },
         "program/body3/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "3.1 title attribute (tooltip)",
-            "es": "3.1 Atributo title (descripción emergente)"
+            "ru": "3.1 Атрибут title (всплывающая подсказка) "
           },
           "hash": "61cc32fff565659bfde7d2ad3dc6b58e"
         },
         "program/body3/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "3.2 alt attribute (alternative image text)",
-            "es": "3.2 Atributo alt (texto alternativo de imagen)"
+            "ru": "3.2 Атрибут alt (альтернативный текст изображения) "
           },
           "hash": "60ce61e972aaa239c27c05be44d8c7c6"
         },
         "program/body3/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "3.3 Accessibility attributes (ARIA)",
-            "es": "3.3 Atributos de accesibilidad (ARIA)"
+            "ru": "3.3 Атрибуты доступности (ARIA) "
           },
           "hash": "83fbd431e369ae712276b3f11f5f2c34"
         }
@@ -696,21 +689,21 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Component>Child element text</Component>",
-            "es": "<Component>Texto del elemento hijo</Component>"
+            "ru": "<Component>Текст дочернего элемента</Component>"
           },
           "hash": "6438dcb035e07862e2a93e033425e9b8"
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Child element text",
-            "es": "Texto del elemento hijo"
+            "ru": "Текст дочернего элемента"
           },
           "hash": "f9e3289e688364d487eefaf1ff52dd8f"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXElement with JSXText in children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed as children of the component.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXElement con JSXText en children\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La cadena se pasa como contenido hijo (children) del componente."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXElement с JSXText в дочерних элементах\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка передается в качестве дочерних элементов компонента."
           },
           "hash": "1c45df7ef52dc240eaa7d15e7fe513f7"
         }
@@ -721,21 +714,21 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Component>Text</Component>",
-            "es": "<Component>Texto</Component>"
+            "ru": "<Component>Текст</Component>"
           },
           "hash": "4f3f75425d133c418a758015373a7d6e"
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Text",
-            "es": "Texto"
+            "ru": "Текст"
           },
           "hash": "9dffbf69ffba8bc38bc4e01abf4b1675"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXElement with children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through the children prop.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXElement con hijos\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Se pasa una cadena de texto a través de la propiedad children."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXElement с дочерними элементами\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка передается через проп children."
           },
           "hash": "b24bdfb42093300d2837d86bab3590f8"
         }
@@ -746,28 +739,28 @@
         "program/body0/body/body0/argument": {
           "content": {
             "en": "{label}",
-            "es": "{etiqueta}"
+            "ru": "{label}"
           },
           "hash": "dfa8040e56bc3a9b83f5c0a8160d8f33"
         },
         "program/body1/body/body0/argument": {
           "content": {
             "en": "{message}",
-            "es": "{mensaje}"
+            "ru": "{message}"
           },
           "hash": "f933e224b575d7014aed7bd26d621391"
         },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Button label=\"Click me\" />",
-            "es": "<Button label=\"Haz clic aquí\" />"
+            "ru": "<Button label=\"Нажми меня\" />"
           },
           "hash": "7fbd9728d7eb9a3815f7d4fc34e475c6"
         },
         "program/body2/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and rendered\n        as visible text. Important: technical props (id, className, data-*, etc.)\n        are not subject to localization.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXAttribute con StringLiteral\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Se pasa una cadena a través de una propiedad (prop) y se renderiza\n        como texto visible. Importante: las propiedades técnicas (id, className, data-*, etc.)\n        no están sujetas a localización."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка передается через проп и отображается\n как видимый текст. Важно: технические пропы (id, className, data-* и т.д.) \n не подлежат локализации."
           },
           "hash": "7a4ebbb5d1d34034a4a490a99f2de95f"
         }
@@ -778,21 +771,21 @@
         "program/body0/body/body0/argument": {
           "content": {
             "en": "{text}",
-            "es": "{texto}"
+            "ru": "{text}"
           },
           "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
         },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<TextComponent text=\"Text\" />",
-            "es": "<TextComponent text=\"Texto\" />"
+            "ru": "<TextComponent text=\"Текст\" />"
           },
           "hash": "fd8e8832adc8806b3349dd4671744fef"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXElement (component)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component receives a string and renders it.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXElement (componente)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El componente recibe una cadena y la renderiza."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXElement (компонент) \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Компонент получает строку и отображает ее."
           },
           "hash": "030d4c50c353d26b210f2b0fcaf3ac6f"
         }
@@ -803,21 +796,21 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Bold>Bold text</Bold>",
-            "es": "<Bold>Texto en negrita</Bold>"
+            "ru": "<Bold>Жирный текст</Bold>"
           },
           "hash": "2435d879ea8ca5461bbd381dfd2d08a1"
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Bold text",
-            "es": "Texto en negrita"
+            "ru": "Жирный текст"
           },
           "hash": "da77091f0857719acccaeac900126758"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXElement with nested JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component wraps a string in additional tags.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXElement con JSXText anidado\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> El componente envuelve una cadena en etiquetas adicionales."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXElement с вложенным JSXText\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Компонент обертывает строку в дополнительные теги."
           },
           "hash": "205b53498f358674fbb56a35acd8abae"
         }
@@ -828,42 +821,42 @@
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "4. Components - through props and children",
-            "es": "4. Componentes: mediante propiedades (props) e hijos (children)"
+            "ru": "4. Компоненты - через пропсы и дочерние элементы"
           },
           "hash": "a0f8e7c96e4965961ffb48da8d65ec50"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "4.1 Child element as string",
-            "es": "4.1 Elemento hijo como cadena"
+            "ru": "4.1 Дочерний элемент как строка"
           },
           "hash": "25f086e6de94b57219c8e21e31a87d6b"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "4.2 Props as string (visible to users)",
-            "es": "4.2 Propiedades (props) como cadena (visibles para los usuarios)"
+            "ru": "4.2 Пропсы как строка (видимые пользователям) "
           },
           "hash": "92607e20c796a3a11f17323a07cfa232"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "4.3 Children prop",
-            "es": "4.3 Propiedad children"
+            "ru": "4.3 Проп children"
           },
           "hash": "c347f9651c58dc2be21e7d67c560d588"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "4.4 Rendering via component",
-            "es": "4.4 Renderizado mediante componente"
+            "ru": "4.4 Рендеринг через компонент"
           },
           "hash": "f2515c396d6a0dbaac0060517f4a7ec1"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "4.5 Wrapper component",
-            "es": "4.5 Componente envoltorio (wrapper)"
+            "ru": "4.5 Компонент-обертка"
           },
           "hash": "b56f3f233688299e08d6e7ca43ae9718"
         }
@@ -874,21 +867,21 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "const getText = () => \"Text\"; <div>{getText()}</div>",
-            "es": "const getText = () => \"Texto\"; <div>{getText()}</div>"
+            "ru": "const getText = () => \"Text\"; <div>{getText () }</div>"
           },
           "hash": "57c1dae78534c9411129ee54d6cae4eb"
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Text",
-            "es": "Texto"
+            "ru": "Текст"
           },
           "hash": "9dffbf69ffba8bc38bc4e01abf4b1675"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Arrow function returning a string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Función de flecha (arrow function) que devuelve una cadena."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Стрелочная функция, возвращающая строку."
           },
           "hash": "fdce8d61a5ddc6cfaf4a4a2287bc0613"
         }
@@ -899,21 +892,21 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>{getText()}</div>",
-            "es": "<div>{getText()}</div>"
+            "ru": "<div>{getText () }</div>"
           },
           "hash": "c4829648dc5d7386f7d88426410e4f02"
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Text from function",
-            "es": "Texto de la función"
+            "ru": "Текст из функции"
           },
           "hash": "dfa57e14a8f6a37cb6de467fb19f255b"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function call returning a string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Llamada a función que devuelve una cadena."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Вызов функции, возвращающей строку."
           },
           "hash": "9b3945c7712b8d57014a001ecfcfe26e"
         }
@@ -924,21 +917,21 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<div>{obj.getText()}</div>",
-            "es": "<div>{obj.getText()}</div>"
+            "ru": "<div>{obj.getText () }</div>"
           },
           "hash": "7ef3b6fdc2e4294168466fb50e63727a"
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "{obj.getText()}",
-            "es": "{obj.obtenerTexto()}"
+            "ru": "{obj.getText () }"
           },
           "hash": "6e719ae9b3e951ac29b2c4e5382c5ca9"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Object method returning a string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Método de objeto que devuelve una cadena."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n (MemberExpression) \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Метод объекта, возвращающий строку."
           },
           "hash": "49d9acbaa551bedd2f83b6f43464cb4e"
         }
@@ -949,35 +942,35 @@
         "program/body0/declaration/body/body1/argument/children1/children1/children1": {
           "content": {
             "en": "text.trim()",
-            "es": "text.trim()"
+            "ru": "text.trim () "
           },
           "hash": "f348275329c629ba4776cfdd3840542b"
         },
         "program/body0/declaration/body/body1/argument/children1/children3/children1": {
           "content": {
             "en": "text.substring(0, 10)",
-            "es": "text.substring(0, 10)"
+            "ru": "text.substring (0, 10) "
           },
           "hash": "b12274994137a8f7de47374867edc045"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Hello World",
-            "es": "Hola, mundo"
+            "ru": "Hello World"
           },
           "hash": "b10a8db164e0754105b7a99be72e3fe5"
         },
         "program/body0/declaration/body/body1/argument/children3/children3": {
           "content": {
             "en": "  Hello World  ",
-            "es": "Hola mundo"
+            "ru": "Привет, мир"
           },
           "hash": "c10562818f129f8bf7ed11806f389c85"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Built-in JavaScript string methods.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Métodos de cadena integrados de JavaScript."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Встроенные методы строк JavaScript."
           },
           "hash": "c8195f443ad0acc8a637d2c9250d7a15"
         }
@@ -988,14 +981,14 @@
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "import { formatDate } from './utils'; <div>{formatDate(date)}</div>",
-            "es": "import { formatDate } from './utils'; <div>{formatDate(date)}</div>"
+            "ru": "import { formatDate } from './utils'; <div>{formatDate (date) }</div>"
           },
           "hash": "d11a0969fa8c8d6787c8a10d11cbd14f"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Imported function returning a string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Función importada que devuelve una cadena."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Импортированная функция, возвращающая строку."
           },
           "hash": "d8d8ae91edeb607a1792927f859c4b2e"
         }
@@ -1006,42 +999,42 @@
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "5. Functions - through function calls",
-            "es": "5. Funciones: mediante llamadas a funciones"
+            "ru": "5. Функции - через вызовы функций"
           },
           "hash": "36828f6699f31949e142a817e51ab348"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "5.1 Component function",
-            "es": "5.1 Función de componente"
+            "ru": "5.1 Функция компонента"
           },
           "hash": "3f4fa65cf30149b678006587990a81e2"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "5.2 Arrow function",
-            "es": "5.2 Función de flecha"
+            "ru": "5.2 Стрелочная функция"
           },
           "hash": "3bd1326b971d767adc8320502ed07a12"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "5.3 Object method",
-            "es": "5.3 Método de objeto"
+            "ru": "5.3 Метод объекта"
           },
           "hash": "f888f23a2f8618aee0c0eea1b259b48b"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "5.4 String method",
-            "es": "5.4 Método de cadena"
+            "ru": "5.4 Метод строки"
           },
           "hash": "de05761703a0e99c6b1ed96906868dd3"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "5.5 Utility function",
-            "es": "5.5 Función de utilidad"
+            "ru": "5.5 Вспомогательная функция"
           },
           "hash": "3d8a3a35681c20aa035ca36bb0453b09"
         }
@@ -1052,35 +1045,35 @@
         "program/body2/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{getMessage(status)}</div>",
-            "es": "<div>{getMessage(status)}</div>"
+            "ru": "<div>{getMessage (status) }</div>"
           },
           "hash": "bb4d388d80fd96a31f92c5205e13cb91"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children1": {
           "content": {
             "en": "Ready",
-            "es": "Listo"
+            "ru": "Готово"
           },
           "hash": "e7d31fc0602fb2ede144d18cdffd816b"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children3": {
           "content": {
             "en": "Loading",
-            "es": "Cargando"
+            "ru": "Загрузка"
           },
           "hash": "16bfbf9c462762cf1cba4134ec53c504"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children5": {
           "content": {
             "en": "Error",
-            "es": "Error"
+            "ru": "Ошибка"
           },
           "hash": "902b0d55fddef6f8d651fe1035b7d4bd"
         },
         "program/body2/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional logic is extracted into a function.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La lógica condicional se extrae en una función."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Условная логика вынесена в функцию."
           },
           "hash": "57fb5db03701435f5dd6c2743134c9aa"
         }
@@ -1091,28 +1084,28 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{error && `Error: ${error}`}</div>",
-            "es": "<div>{error && `Error: ${error}`}</div>"
+            "ru": "<div>{error && 'Error: ${error}'}</div>"
           },
           "hash": "26d417dc5e8115fde02301911f9207a4"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Toggle Error",
-            "es": "Alternar error"
+            "ru": "Переключить ошибку"
           },
           "hash": "5f8511503a47eeef5ab3da61e3c0a873"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "Error: {error}",
-            "es": "Error: {error}"
+            "ru": "Ошибка: {error}"
           },
           "hash": "80076ad5610360024b43514e96923a92"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is rendered only if the condition is true.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con LogicalExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> La cadena se renderiza solo si la condición es verdadera."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с LogicalExpression\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка отображается только если условие истинно."
           },
           "hash": "4c198bec289cff0461dd4583452ac761"
         }
@@ -1123,35 +1116,35 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{message || \"Default message\"}</div>",
-            "es": "<div>{message || \"Mensaje predeterminado\"}</div>"
+            "ru": "<div>{message || \"Сообщение по умолчанию\"}</div>"
           },
           "hash": "ffcdb82116109b08123434027f9a1fe8"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Toggle Message",
-            "es": "Alternar mensaje"
+            "ru": "Переключить сообщение"
           },
           "hash": "47be838012c368242e0a1e9651072e90"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "{message}",
-            "es": "{mensaje}"
+            "ru": "{message}"
           },
           "hash": "f933e224b575d7014aed7bd26d621391"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_or_right": {
           "content": {
             "en": "Default message",
-            "es": "Mensaje predeterminado"
+            "ru": "Сообщение по умолчанию"
           },
           "hash": "2da2fc7f382fa2e5b9d0e433fa71a475"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Default string is rendered if the main one is missing.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con LogicalExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Se renderiza la cadena predeterminada si falta la principal."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с логическим выражением\n <element:br></element:br>\n <element:strong>Описание:</element:strong> При отсутствии основной строки отображается строка по умолчанию."
           },
           "hash": "360b45aa5465134ca80b42d1ff2346d0"
         }
@@ -1162,35 +1155,35 @@
         "program/body2/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{getStatusText(status)}</div>",
-            "es": "<div>{getStatusText(status)}</div>"
+            "ru": "<div>{getStatusText (status) }</div>"
           },
           "hash": "37a4eb84575a63d00e6101cf3764543e"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children1": {
           "content": {
             "en": "Pending",
-            "es": "Pendiente"
+            "ru": "В ожидании"
           },
           "hash": "2d13df6f8b5e4c5af9f87e0dc39df69d"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children3": {
           "content": {
             "en": "Success",
-            "es": "Éxito"
+            "ru": "Успешно"
           },
           "hash": "505a83f220c02df2f85c3810cd9ceb38"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children5": {
           "content": {
             "en": "Unknown",
-            "es": "Desconocido"
+            "ru": "Неизвестно"
           },
           "hash": "88183b946cc5f0e8c96b2e66e1c74a7e"
         },
         "program/body2/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Lógica switch-case en una función."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с вызовом функции\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Логика switch-case в функции."
           },
           "hash": "39b8ae3fc0e627ca1178c1f30ea000b4"
         }
@@ -1201,42 +1194,42 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{isLoading ? \"Loading...\" : \"Ready\"}</div>",
-            "es": "<div>{isLoading ? \"Cargando...\" : \"Listo\"}</div>"
+            "ru": "<div>{isLoading ? \"Загрузка...\": \"Готово\"}</div>"
           },
           "hash": "52b3ba396713a7036c2b22de5b21a341"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Toggle Loading",
-            "es": "Alternar carga"
+            "ru": "Переключить загрузку"
           },
           "hash": "7a2275aa440efd4d337688102ab9a6b3"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "{? \"Loading...\" : \"Ready\"}",
-            "es": "{? \"Cargando...\" : \"Listo\"}"
+            "ru": "{? \"Загрузка...\": \"Готово\"}"
           },
           "hash": "01ee2b75a7621836af17dfa14af01701"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_consequent": {
           "content": {
             "en": "Loading...",
-            "es": "Cargando..."
+            "ru": "Загрузка..."
           },
           "hash": "8524de963f07201e5c086830d370797f"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_alternate": {
           "content": {
             "en": "Ready",
-            "es": "Listo"
+            "ru": "Готово"
           },
           "hash": "e7d31fc0602fb2ede144d18cdffd816b"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional choice of string for rendering.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Elección condicional de una cadena para renderizar."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с условным выражением\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Условный выбор строки для отображения."
           },
           "hash": "05aef2d629892094ce411d418145f543"
         }
@@ -1247,42 +1240,42 @@
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "6. Conditional Logic - ternary operators",
-            "es": "6. Lógica condicional: operadores ternarios"
+            "ru": "6. Условная логика - тернарные операторы"
           },
           "hash": "88fd2126cc45157983d28c10df43ce39"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "6.1 Ternary operator",
-            "es": "6.1 Operador ternario"
+            "ru": "6.1 Тернарный оператор"
           },
           "hash": "d2b328c6df8d0a4482516d6cc88f25e0"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "6.2 Logical AND",
-            "es": "6.2 AND lógico"
+            "ru": "6.2 Логическое И"
           },
           "hash": "049adbb53debca843f43e321cfe6d9d2"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "6.3 Logical OR",
-            "es": "6.3 OR lógico"
+            "ru": "6.3 Логическое ИЛИ"
           },
           "hash": "9ccdfa4c5184ab71d9bd723b250e9d29"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "6.4 If-else via function",
-            "es": "6.4 If-else mediante función"
+            "ru": "6.4 If-else через функцию"
           },
           "hash": "312fedc967345a9dfa09589ac7a6fc20"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "6.5 Switch-case via function",
-            "es": "6.5 Switch-case mediante función"
+            "ru": "6.5 Оператор switch-case с использованием функций"
           },
           "hash": "e0ec100876aa398c4523d02f5ade8ab7"
         }
@@ -1293,21 +1286,21 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "items.filter(item => item.length > 5).map(...)",
-            "es": "items.filter(item => item.length > 5).map(...)"
+            "ru": "items.filter (элемент => элемент.length > 5).map (...)"
           },
           "hash": "36f260dbdecb7f8424c24d1d9d25bbed"
         },
         "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
           "content": {
             "en": "{item}",
-            "es": "{objeto}"
+            "ru": "[Improved Russian translation of the provided text, incorporating corrections and enhancements as per the instructions. The translation aims to be accurate, natural-sounding, and faithful to the original English while optimizing for Russian language norms and expression.]"
           },
           "hash": "e232d42269bb57ff0c0c0778cc43441a"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with chain of CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Chain of methods for filtering and rendering strings.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con cadena de CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Cadena de métodos para filtrar y renderizar cadenas."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с цепочкой CallExpression\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Цепочка методов для фильтрации и отображения строк."
           },
           "hash": "0c8ff2f2a51017a4481475a732091f0b"
         }
@@ -1318,21 +1311,21 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "items.join(\", \")",
-            "es": "items.join(\", \")"
+            "ru": "items.join (,\" \")"
           },
           "hash": "7879e64a91aeba22f31bbb6dfc8b270b"
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "{items.join()}",
-            "es": "{elementos.unir()}"
+            "ru": "{items.join () }"
           },
           "hash": "b9f3f5d0e778d934dc50684e5915b6a7"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (join)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is combined into one string.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression (join)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Un arreglo de cadenas se combina en una sola cadena."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression (join)\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Массив строк объединяется в одну строку."
           },
           "hash": "cc607234bc119b17dce37e86665bb1ff"
         }
@@ -1343,21 +1336,21 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "numbers.map(n => `Number: ${n}`)",
-            "es": "numbers.map(n => `Número: ${n}`)"
+            "ru": "numbers.map (n => 'Число: ${n}')"
           },
           "hash": "b4a387a73ec71689484aacbc065e7cb7"
         },
         "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
           "content": {
             "en": "Number: {n}",
-            "es": "Número: {n}"
+            "ru": "Число: {n}"
           },
           "hash": "e3b751801ae7824c7ce6e8177cc99638"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are formed dynamically in map.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Las cadenas se generan dinámicamente dentro de map."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Строки формируются динамически в функции map."
           },
           "hash": "2b0ffb9a356bbece11bd4900c32e9928"
         }
@@ -1368,21 +1361,21 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "items.map((item, index) => <div key={index}>{item}</div>)",
-            "es": "items.map((item, index) => <div key={index}>{item}</div>)"
+            "ru": "items.map ((item, index) => <div key={index}>{item}</div>)"
           },
           "hash": "3f1459afe307d7c765931426a118eb3e"
         },
         "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
           "content": {
             "en": "{item}",
-            "es": "{objeto}"
+            "ru": "[Improved Russian translation of the provided text, incorporating corrections and enhancements as per the instructions. The translation aims to be accurate, natural-sounding, and faithful to the original English while optimizing for Russian language norms and expression.]"
           },
           "hash": "e232d42269bb57ff0c0c0778cc43441a"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression (map)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Se renderiza un array de cadenas mediante map."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression (map)\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Массив строк отображается с помощью метода map."
           },
           "hash": "1c0cf192a506bd844454dc1d168a470b"
         }
@@ -1393,14 +1386,14 @@
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "items.reduce((acc, item) => `${acc}, ${item}`, \"\")",
-            "es": "items.reduce((acc, item) => `${acc}, ${item}`, \"\")"
+            "ru": "items.reduce ((acc, item) => '${acc}, ${item}', \"\")"
           },
           "hash": "f4cde5fdeae0b6ffe0e19bdff80c513f"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (reduce)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Reduce for combining strings into one.",
-            "es": "<element:strong>Tipo de AST:</element:strong> JSXExpressionContainer con CallExpression (reduce)\n        <element:br></element:br>\n        <element:strong>Descripción:</element:strong> Uso de reduce para combinar varias cadenas en una sola."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с CallExpression (reduce)\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Метод reduce для объединения строк в одну."
           },
           "hash": "02f1ce60f6a23b853c53222a6f6b3f2e"
         }
@@ -1411,42 +1404,42 @@
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "7. Loops - map, forEach",
-            "es": "7. Bucles: map, forEach"
+            "ru": "7. Циклы - map, forEach"
           },
           "hash": "1f7fcbb98fb335769927e8d03c4d19d2"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "7.1 map() with strings",
-            "es": "7.1 map() con cadenas"
+            "ru": "7.1 Функция map () для работы со строками"
           },
           "hash": "0567df0eaa1a029aaa2018d05f0685b3"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "7.2 map() with formatting",
-            "es": "7.2 map() con formato"
+            "ru": "7.2 Функция map () с форматированием"
           },
           "hash": "3fb2938bdba3891e1d355571ec0415a2"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "7.3 forEach (not recommended)",
-            "es": "7.3 forEach (no recomendado)"
+            "ru": "7.3 forEach (не рекомендуется к использованию)"
           },
           "hash": "427132e215e645788a187e179aaf3431"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "7.4 filter + map",
-            "es": "7.4 filter + map"
+            "ru": "7.4 Фильтрация и отображение"
           },
           "hash": "bf99540e20350bb7438fc74d2114fc69"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "7.5 reduce for combining",
-            "es": "[ES] 7.5 reduce for combining"
+            "ru": "7.5 Сокращение для объединения"
           },
           "hash": "8cb089c8c5d5db4939ce639856f204c1"
         }
@@ -1457,21 +1450,21 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "'use client'; const [text, setText] = useState(\"Client text\");",
-            "es": "[ES] 'use client'; const [text, setText] = useState(\"Client text\");"
+            "ru": "'use client'; const [text, setText] = useState (\"Текст на стороне клиента\");"
           },
           "hash": "869551a7f0a73d24bf74b893224d9a83"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "{text}",
-            "es": "[ES] {text}"
+            "ru": "{text}"
           },
           "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с идентификатором\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Строки обрабатываются на стороне клиента."
           },
           "hash": "79d6ca48c8008c1e949169553fc664d1"
         }
@@ -1482,21 +1475,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "export async function generateMetadata(): Promise<Metadata> { \n          return { title: \"Dynamic title\", description: \"Dynamic description\" \n          }; }",
-            "es": "[ES] export async function generateMetadata(): Promise<Metadata> { \n          return { title: \"Dynamic title\", description: \"Dynamic description\" \n          }; }"
+            "ru": "export async function generateMetadata (): Promise<Metadata> {\n          return { title: \"Динамический заголовок,\" description: \"Динамическое описание\"\n          }; }"
           },
           "hash": "5401b663f9763f2d3c99b956df977de1"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Dynamic metadata via function (can be async and fetch data)",
-            "es": "[ES] Dynamic metadata via function (can be async and fetch data)"
+            "ru": "Динамические метаданные через функцию (может быть асинхронной и получать данные)"
           },
           "hash": "c2a2e6b90adb906feed508706b34ba50"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> FunctionDeclaration with ReturnStatement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Dynamic metadata via function.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> FunctionDeclaration with ReturnStatement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Dynamic metadata via function."
+            "ru": "<element:strong>Тип AST:</element:strong> Объявление функции с оператором возврата\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Динамические метаданные через функцию."
           },
           "hash": "5c3e9936f25b7d80d60cca26d5525102"
         }
@@ -1507,21 +1500,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "export const metadata: Metadata = { \n          {title: \"Page title\", description: \"Page description\"}\n          };",
-            "es": "[ES] export const metadata: Metadata = { \n          {title: \"Page title\", description: \"Page description\"}\n          };"
+            "ru": "export const metadata: Metadata = {\n          {title: \"Заголовок страницы,\" description: \"Описание страницы\"}\n          };"
           },
           "hash": "d39dbec0bf55338b4a6c9d7f2e6ec69a"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Check the browser tab title - it should show \"8. Next.js Specifics\"",
-            "es": "[ES] Check the browser tab title - it should show \"8. Next.js Specifics\""
+            "ru": "Проверьте заголовок вкладки браузера - он должен отображать \"8.Next.js Specifics\""
           },
           "hash": "db494bdd412063b2fa72390a82de5522"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> ExportNamedDeclaration with ObjectExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings in Next.js App Router metadata.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> ExportNamedDeclaration with ObjectExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings in Next.js App Router metadata."
+            "ru": "<element:strong>Тип AST:</element:strong> ExportNamedDeclaration с ObjectExpression\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Строки в метаданных App Router фреймворка Next.js."
           },
           "hash": "0d76c1f0e3b744b1e46991e9e6e1b109"
         }
@@ -1532,21 +1525,21 @@
         "program/body1/body/body1/argument": {
           "content": {
             "en": "{variable.title()}",
-            "es": "[ES] {variable.title()}"
+            "ru": "{variable.title () }"
           },
           "hash": "49fa0401b23e77c4ec3d102089ca1fe9"
         },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "async function ServerComponent() { \n          const data = await fetchData(); return <div>{data.title}</div> \n          }",
-            "es": "[ES] async function ServerComponent() { \n          const data = await fetchData(); return <div>{data.title}</div> \n          }"
+            "ru": "асинхронная функция ServerComponent () {\n          const data = await fetchData (); return <div>{data.title}</div>\n          }"
           },
           "hash": "ee999648e11f3e8deeb481fad34f3a68"
         },
         "program/body2/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the server in App Router.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the server in App Router."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с идентификатором\n        <element:br></element:br>\n        <element:strong>Описание:</element:strong> Строки рендерятся на сервере в App Router."
           },
           "hash": "e03ad61e5e140f52bb42df50f7a1c0dc"
         }
@@ -1557,35 +1550,35 @@
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "8. Next.js Specifics - metadata, Server/Client Components",
-            "es": "[ES] 8. Next.js Specifics - metadata, Server/Client Components"
+            "ru": "8. Специфика Next.js - метаданные, серверные и клиентские компоненты"
           },
           "hash": "4248fbf1b24f1347edb0faf54932f59a"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "8.1 Metadata",
-            "es": "[ES] 8.1 Metadata"
+            "ru": "8.1 Метаданные"
           },
           "hash": "748db58fcca92c11915c66e8c0231d10"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "8.2 generateMetadata function",
-            "es": "[ES] 8.2 generateMetadata function"
+            "ru": "8.2 Функция generateMetadata"
           },
           "hash": "42e1d1fb35c42f04fc29238ff67175f9"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "8.3 Server Components",
-            "es": "[ES] 8.3 Server Components"
+            "ru": "8.3 Серверные компоненты"
           },
           "hash": "272d3686a291ae16ea2ac8cb18d77c23"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "8.4 Client Components",
-            "es": "[ES] 8.4 Client Components"
+            "ru": "8.4 Клиентские компоненты"
           },
           "hash": "acc69a8497fea3f585e8f88a757cc316"
         }
@@ -1596,21 +1589,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<button>Submit</button>",
-            "es": "[ES] <button>Submit</button>"
+            "ru": "<button>Отправить</button>"
           },
           "hash": "44f4e0c08652974bf5851ee2d3d5df73"
         },
         "program/body0/declaration/body/body0/argument/children3/children1": {
           "content": {
             "en": "Submit",
-            "es": "[ES] Submit"
+            "ru": "Отправить"
           },
           "hash": "a4d3b161ce1309df1c4e25df28694b7b"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText в JSXElement или JSXAttribute (значение для input\n type=\"submit\") \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Текст кнопки виден пользователям. Для \n <input type=\"submit\"> текст устанавливается через атрибут value."
           },
           "hash": "1e7445e8ee01ea9199ab9821e4f94be2"
         }
@@ -1621,28 +1614,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<details> <summary>Click to expand</summary> ... </details>",
-            "es": "[ES] <details> <summary>Click to expand</summary> ... </details>"
+            "ru": "<details> <summary>Нажмите, чтобы развернуть</summary>... </details>"
           },
           "hash": "934082ec72a734bc78f3c007d8b73fb8"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "Click to expand",
-            "es": "[ES] Click to expand"
+            "ru": "Нажмите, чтобы развернуть"
           },
           "hash": "e3cfcd8feda52c804ffcc02c85292337"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children3/children1": {
           "content": {
             "en": "Hidden content",
-            "es": "[ES] Hidden content"
+            "ru": "Скрытое содержимое"
           },
           "hash": "e43df5de2cb14fa198c6349652d9cf4c"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <summary> is visible to users\n        as a clickable heading for an expandable block.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <summary> is visible to users\n        as a clickable heading for an expandable block."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText в JSXElement (summary) \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Текст в <summary> виден пользователям\n как кликабельный заголовок для разворачиваемого блока."
           },
           "hash": "2b37195da5276b0e7d6ff10c3f9f7c8a"
         }
@@ -1653,21 +1646,21 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<fieldset> <legend>Field group</legend> ... </fieldset>",
-            "es": "[ES] <fieldset> <legend>Field group</legend> ... </fieldset>"
+            "ru": "<fieldset> <legend>Группа полей</legend>... </fieldset>"
           },
           "hash": "a3c70e238e53deebada39355482930ca"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "Field group",
-            "es": "[ES] Field group"
+            "ru": "Группа полей"
           },
           "hash": "52c11ee2036946f458575360d1021a34"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText в JSXElement (legend) \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Текст в <legend> виден пользователям\n как заголовок для группы полей."
           },
           "hash": "9da9f8bc456c2510227f2385760b6f28"
         }
@@ -1678,28 +1671,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<label htmlFor=\"input\">Field label</label>",
-            "es": "[ES] <label htmlFor=\"input\">Field label</label>"
+            "ru": "<label htmlFor=\"input\">Метка поля</label>"
           },
           "hash": "7dfe3553871a577f84927d920d5a531d"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "Field label",
-            "es": "[ES] Field label"
+            "ru": "Метка поля"
           },
           "hash": "d71675f75feb54ebb0bd3c94a7f1e755"
         },
         "program/body0/declaration/body/body0/argument/children3/children3/children1": {
           "content": {
             "en": "Email address\n            <element:input></element:input>",
-            "es": "[ES] Email address\n            <element:input></element:input>"
+            "ru": "Адрес электронной почты\n <element:input></element:input>"
           },
           "hash": "a6095e3ff3927c3782b96ec4844cfcf9"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Label text for input field is visible to\n        users. The htmlFor attribute (technical) is not localized, but text\n        inside <label> is subject to localization.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Label text for input field is visible to\n        users. The htmlFor attribute (technical) is not localized, but text\n        inside <label> is subject to localization."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText в JSXElement\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Текст метки для поля ввода виден\n пользователям. Атрибут htmlFor (технический) не локализуется, но текст\n внутри <label> подлежит локализации."
           },
           "hash": "d3a17f6a8281241bed64d311096204a9"
         }
@@ -1710,14 +1703,14 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<input placeholder=\"Enter text\" />",
-            "es": "[ES] <input placeholder=\"Enter text\" />"
+            "ru": "<input placeholder=\"Введите текст\" />"
           },
           "hash": "34c98e1ce1ce5e23e50c8a9c0929c815"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral или JSXExpressionContainer\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Текст-подсказка в поле ввода виден\n пользователям до ввода текста."
           },
           "hash": "a47f9ae133bb19c711b486ba2a597cb1"
         }
@@ -1728,28 +1721,28 @@
         "program/body0/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<option value=\"1\">First option</option>",
-            "es": "[ES] <option value=\"1\">First option</option>"
+            "ru": "<option value=\"1\">Первый вариант</option>"
           },
           "hash": "8b2f0774cd1edd692b9141b387946690"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children1": {
           "content": {
             "en": "First option",
-            "es": "[ES] First option"
+            "ru": "Первый вариант"
           },
           "hash": "ff9cf53441647734b4e45fe8b4c14847"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/children3": {
           "content": {
             "en": "Second option",
-            "es": "[ES] Second option"
+            "ru": "Второй вариант"
           },
           "hash": "52217b6cfed9b47cd29ed284ca44a0c3"
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Option text in select is visible to users\n        when opening the list. The value attribute (technical) is not localized.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXText in JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Option text in select is visible to users\n        when opening the list. The value attribute (technical) is not localized."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXText в JSXElement (option) \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Текст опции в select виден пользователям\n при открытии списка. Атрибут value (технический) не локализуется."
           },
           "hash": "10de309a6a9ee9ee4e7ab274a019cbae"
         }
@@ -1760,14 +1753,14 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<textarea placeholder=\"Enter your comment\" />",
-            "es": "[ES] <textarea placeholder=\"Enter your comment\" />"
+            "ru": "<textarea placeholder=\"Введите свой комментарий\" />"
           },
           "hash": "9dcd4b20167997b8e29c5717b1bae2a3"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral или JSXExpressionContainer\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Placeholder и значение в textarea\n видны пользователям."
           },
           "hash": "fcd8ac058eb5cfc77aef7080dbf60692"
         }
@@ -1778,14 +1771,14 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<input value={inputValue} />",
-            "es": "[ES] <input value={inputValue} />"
+            "ru": "<input value={inputValue} />"
           },
           "hash": "f88c66a8224e127edfcab35d35ed6e16"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXAttribute with JSXExpressionContainer or StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field value is visible to users in\n        the field. Used for pre-filled fields or controlled components.",
-            "es": "[ES] <element:strong>AST Type:</element:strong> JSXAttribute with JSXExpressionContainer or StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field value is visible to users in\n        the field. Used for pre-filled fields or controlled components."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute с JSXExpressionContainer или StringLiteral\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Значение поля ввода видно пользователям в\n поле. Используется для предварительно заполненных полей или управляемых компонентов."
           },
           "hash": "68925826615bc26889af5771322a121e"
         }
@@ -1796,63 +1789,63 @@
         "program/body8/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "9. Forms - placeholder, value, label, button, option",
-            "es": "[ES] 9. Forms - placeholder, value, label, button, option"
+            "ru": "9. Формы - placeholder, value, label, button, option"
           },
           "hash": "c0b0b2119dcad6e66fc789402df92007"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "9.1 Placeholder",
-            "es": "[ES] 9.1 Placeholder"
+            "ru": "9.1 Placeholder"
           },
           "hash": "2d8cba9a3d2e5a05eedd7aff7ab35b1a"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "9.2 Value",
-            "es": "[ES] 9.2 Value"
+            "ru": "9.2 Value"
           },
           "hash": "d37e47e6ca8d9281b59fa65c09f02c94"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "9.3 Label",
-            "es": "[ES] 9.3 Label"
+            "ru": "9.3 Label"
           },
           "hash": "175c1eb801e562760911af4493182d3b"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "9.4 Button text",
-            "es": "[ES] 9.4 Button text"
+            "ru": "9.4 Текст кнопки"
           },
           "hash": "9d2972e5c8c2d085301a5c862309c7f5"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children9/children1": {
           "content": {
             "en": "9.5 Textarea",
-            "es": "[ES] 9.5 Textarea"
+            "ru": "9.5 Textarea"
           },
           "hash": "214cd91b22fb8b999701351d96d57a3e"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children11/children1": {
           "content": {
             "en": "9.6 Select options",
-            "es": "[ES] 9.6 Select options"
+            "ru": "9.6 Варианты выбора"
           },
           "hash": "75a12f36beeb47f8ac56f0d73c17095a"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children13/children1": {
           "content": {
             "en": "9.7 Fieldset and Legend",
-            "es": "[ES] 9.7 Fieldset and Legend"
+            "ru": "9.7 Fieldset и Legend"
           },
           "hash": "56a8cc87b75fbc552f45b980dd5fbdf1"
         },
         "program/body8/declaration/body/body0/argument/children1/children3/children15/children1": {
           "content": {
             "en": "9.8 Details and Summary",
-            "es": "[ES] 9.8 Details and Summary"
+            "ru": "9.8 Details и Summary"
           },
           "hash": "381729d986c26b835a352f36c1b36c44"
         }
@@ -1863,63 +1856,63 @@
         "program/body2/declaration/body/body0/argument/children1/children1/children1": {
           "content": {
             "en": "String Rendering Patterns",
-            "es": "[ES] String Rendering Patterns"
+            "ru": "Шаблоны отображения строк"
           },
           "hash": "d67cc33eea225011ccdd58c9e0ca06e9"
         },
         "program/body2/declaration/body/body0/argument/children1/children1/children3": {
           "content": {
             "en": "This demonstration shows all possible scenarios and patterns of how\n            strings can appear in the final DOM in React and Next.js\n            applications and be visible to users on screen (without using\n            devtools).",
-            "es": "[ES] This demonstration shows all possible scenarios and patterns of how\n            strings can appear in the final DOM in React and Next.js\n            applications and be visible to users on screen (without using\n            devtools)."
+            "ru": "Эта демонстрация показывает все возможные сценарии и шаблоны того, как\n строки могут появляться в конечном DOM в приложениях React и Next.js\n и быть видимыми пользователям на экране (без использования\n инструментов разработчика)."
           },
           "hash": "fff863e8613d1ed5d434154d04034652"
         },
         "program/body2/declaration/body/body0/argument/children1/children3/children1/expression/arguments0/body/children1": {
           "content": {
             "en": "{variable.title()}",
-            "es": "[ES] {variable.title()}"
+            "ru": "{variable.title () }"
           },
           "hash": "49fa0401b23e77c4ec3d102089ca1fe9"
         },
         "program/body2/declaration/body/body0/argument/children1/children3/children1/expression/arguments0/body/children3": {
           "content": {
             "en": "{variable.description()}",
-            "es": "[ES] {variable.description()}"
+            "ru": "{variable.description () }"
           },
           "hash": "661a0bf8d631e7119a245b0f78ae1ff5"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children1": {
           "content": {
             "en": "Exclusions (not localized):",
-            "es": "[ES] Exclusions (not localized):"
+            "ru": "Исключения (не локализуются):"
           },
           "hash": "e479ded3cbe39f719577358b3b16467a"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children1": {
           "content": {
             "en": "Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>",
-            "es": "[ES] Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>"
+            "ru": "Технические атрибуты: \n <element:code>id</element:code>\n , \n <element:code>className</element:code>\n , \n <element:code>htmlFor</element:code>\n , \n <element:code>data-*</element:code>\n , \n <element:code>key</element:code>\n , \n <element:code>ref</element:code>"
           },
           "hash": "34f1d87dc7adb94ec8823b2350f93c63"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children3": {
           "content": {
             "en": "Pure API responses without UI",
-            "es": "[ES] Pure API responses without UI"
+            "ru": "Чистые ответы API без пользовательского интерфейса"
           },
           "hash": "9fc4ad506e787fe8e987a79fcba3bfe0"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children5": {
           "content": {
             "en": "Code comments",
-            "es": "[ES] Code comments"
+            "ru": "Комментарии в коде"
           },
           "hash": "b2219a195bef487ca6079bd6c767a388"
         },
         "program/body2/declaration/body/body0/argument/children1/children5/children3/children7": {
           "content": {
             "en": "Technical identifiers and CSS classes",
-            "es": "[ES] Technical identifiers and CSS classes"
+            "ru": "Технические идентификаторы и CSS-классы"
           },
           "hash": "2d37acd08c33d221bbdbc873439d6864"
         }
@@ -1930,7 +1923,7 @@
         "program/body3/declaration/body/body1/argument/children1/children1/children1/children1": {
           "content": {
             "en": "String Rendering Patterns",
-            "es": "[ES] String Rendering Patterns"
+            "ru": "Шаблоны отображения строк"
           },
           "hash": "d67cc33eea225011ccdd58c9e0ca06e9"
         }

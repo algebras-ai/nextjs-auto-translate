@@ -386,32 +386,39 @@ export function transformProject(
         );
 
         // Check if this parent element has a scope entry
-        // The parser extracts template literals as single messages with placeholders
-        // e.g., `Hello, ${name}!` → "Hello, {name}!" (one translation key)
+        // The parser extracts template literals as single messages
+        // Static variables are resolved directly: `Hello, ${name}!` → "Hello, World!" (if name="World")
+        // Runtime variables remain as placeholders: `Hello, ${name}!` → "Hello, {name}!" (if name is runtime)
         const scopeEntry = fileScopes[elementScopePath];
         if (!scopeEntry) return;
 
-        // Verify the content matches a template literal pattern (has placeholders)
-        // Template literals are extracted as parameterized messages like "Hello, {name}!"
+        // Verify the content matches a template literal pattern
+        // Static variables are resolved directly, only runtime variables remain as placeholders
         const content = scopeEntry.content;
-        if (!content || !/\{[^}]+\}/.test(content)) {
-          // Not a template literal entry, skip
+        if (!content) {
           return;
         }
 
         // Extract parameters from template literal expressions
-        // Combine all expressions into a single params object
+        // Only include variables that are NOT static (runtime variables)
+        // Static variables are already resolved in the content string
         const params: Record<string, t.Expression> = {};
         let hasParams = false;
 
         for (let i = 0; i < expr.expressions.length; i++) {
           const templateExpr = expr.expressions[i];
           if (t.isIdentifier(templateExpr)) {
-            // Use variable name as parameter key (matches placeholder {name})
-            params[templateExpr.name] = templateExpr;
-            hasParams = true;
+            // Check if this is a runtime variable by looking for placeholder in content
+            // If the content has a placeholder for this variable, it's runtime
+            const placeholderPattern = `{${templateExpr.name}}`;
+            if (content.includes(placeholderPattern)) {
+              // This is a runtime variable - pass it as a param
+              params[templateExpr.name] = templateExpr;
+              hasParams = true;
+            }
+            // If placeholder not found, variable was resolved statically, skip it
           } else if (t.isMemberExpression(templateExpr)) {
-            // Handle member expressions like obj.prop
+            // Member expressions are always runtime
             if (t.isIdentifier(templateExpr.property)) {
               params[templateExpr.property.name] = templateExpr;
               hasParams = true;

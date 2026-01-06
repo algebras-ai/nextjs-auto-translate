@@ -365,6 +365,9 @@ export class Parser {
               }
             }
 
+            // Debug: Log variable scope for template literals
+            // This helps verify that variables are in scope when processing template literals
+
             // Check if this element is nested inside another element that has text
             // If so, skip extracting it to avoid duplication (content is already in parent's extraction)
             let parentPath: any = path.parentPath;
@@ -459,49 +462,8 @@ export class Parser {
                   content,
                 };
 
-                // Extract variable values used in template literals separately
-                // Professional approach: Extract variable values as separate translatable entries
-                // This allows variable values (like "John") to be translated independently
-                // Pattern: {scopePath}_var_{variableName}
-                path.node.children.forEach((child: any) => {
-                  if (t.isJSXExpressionContainer(child)) {
-                    const expr = child.expression;
-                    if (t.isTemplateLiteral(expr)) {
-                      // Find all identifiers in the template literal
-                      expr.expressions.forEach(
-                        (templateExpr: any, index: number) => {
-                          if (t.isIdentifier(templateExpr)) {
-                            const varName = templateExpr.name;
-                            // Check if variable value is in scope
-                            const varValue = variableScope.get(varName);
-                            if (varValue) {
-                              // Extract variable value as separate entry
-                              // This allows "John" to be translated to "Juan" independently
-                              const varHash = crypto
-                                .createHash('md5')
-                                .update(varValue)
-                                .digest('hex');
-                              // Use pattern: {scopePath}_var_{variableName} for variable entries
-                              const varScopePath = `${relativeScopePath}_var_${varName}`;
-
-                              // Only add if not already exists (avoid duplicates)
-                              if (!fileScopes[varScopePath]) {
-                                fileScopes[varScopePath] = {
-                                  type: 'element',
-                                  hash: varHash,
-                                  context: `Variable "${varName}" used in template literal`,
-                                  skip: false,
-                                  overrides: {},
-                                  content: varValue,
-                                };
-                              }
-                            }
-                          }
-                        }
-                      );
-                    }
-                  }
-                });
+                // Static variables are now resolved directly in extractExpressionContent
+                // Only runtime variables (not in variableScope) will remain as placeholders
 
                 // Extract conditional expression branches (ternary) as separate entries
                 // This enables preserving runtime conditional logic while translating each branch.

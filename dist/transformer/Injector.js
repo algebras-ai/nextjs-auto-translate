@@ -287,53 +287,79 @@ function transformProject(code, options) {
             return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
         };
         // Pass 0a: Handle template literals with parameters (professional approach)
+        // TemplateLiteral → combine into single message → replace expressions with placeholders → extract one translation key
         // Transform template literals to use <Translated params={{...}} />
         // This follows ICU MessageFormat standard where variables are runtime parameters
         traverse(ast, {
-            JSXElement(path) {
-                const elementScopePath = path
-                    .getPathLocation()
-                    .replace(/\[(\d+)\]/g, '$1')
-                    .replace(/\./g, '/');
-                for (const child of path.node.children) {
-                    if (!t.isJSXExpressionContainer(child))
-                        continue;
-                    const expr = child.expression;
-                    if (!t.isTemplateLiteral(expr))
-                        continue;
-                    // Check if this template literal has a scope entry
-                    if (!fileScopes[elementScopePath])
-                        continue;
-                    // Extract parameters from template literal expressions
-                    const params = {};
-                    let hasParams = false;
-                    for (let i = 0; i < expr.expressions.length; i++) {
-                        const templateExpr = expr.expressions[i];
-                        if (t.isIdentifier(templateExpr)) {
-                            // Use variable name as parameter key
+            JSXExpressionContainer(path) {
+                const expr = path.node.expression;
+                if (!t.isTemplateLiteral(expr))
+                    return;
+                // Find the parent JSXElement to get the scope path
+                // The parser creates scope entries for JSXElements that contain template literals
+                let parentElement = null;
+                let currentPath = path.parentPath;
+                while (currentPath) {
+                    if (currentPath.isJSXElement && currentPath.isJSXElement()) {
+                        parentElement = currentPath;
+                        break;
+                    }
+                    currentPath = currentPath.parentPath;
+                }
+                if (!parentElement)
+                    return;
+                // Get the scope path using the same logic as the parser
+                const elementScopePath = getRelativeScopePath(parentElement.getPathLocation());
+                // Check if this parent element has a scope entry
+                // The parser extracts template literals as single messages
+                // Static variables are resolved directly: `Hello, ${name}!` → "Hello, World!" (if name="World")
+                // Runtime variables remain as placeholders: `Hello, ${name}!` → "Hello, {name}!" (if name is runtime)
+                const scopeEntry = fileScopes[elementScopePath];
+                if (!scopeEntry)
+                    return;
+                // Verify the content matches a template literal pattern
+                // Static variables are resolved directly, only runtime variables remain as placeholders
+                const content = scopeEntry.content;
+                if (!content) {
+                    return;
+                }
+                // Extract parameters from template literal expressions
+                // Only include variables that are NOT static (runtime variables)
+                // Static variables are already resolved in the content string
+                const params = {};
+                let hasParams = false;
+                for (let i = 0; i < expr.expressions.length; i++) {
+                    const templateExpr = expr.expressions[i];
+                    if (t.isIdentifier(templateExpr)) {
+                        // Check if this is a runtime variable by looking for placeholder in content
+                        // If the content has a placeholder for this variable, it's runtime
+                        const placeholderPattern = `{${templateExpr.name}}`;
+                        if (content.includes(placeholderPattern)) {
+                            // This is a runtime variable - pass it as a param
                             params[templateExpr.name] = templateExpr;
                             hasParams = true;
                         }
-                        else if (t.isMemberExpression(templateExpr)) {
-                            // Handle member expressions like obj.prop
-                            if (t.isIdentifier(templateExpr.property)) {
-                                params[templateExpr.property.name] = templateExpr;
-                                hasParams = true;
-                            }
+                        // If placeholder not found, variable was resolved statically, skip it
+                    }
+                    else if (t.isMemberExpression(templateExpr)) {
+                        // Member expressions are always runtime
+                        if (t.isIdentifier(templateExpr.property)) {
+                            params[templateExpr.property.name] = templateExpr;
+                            hasParams = true;
                         }
                     }
-                    // Replace template literal with Translated component
-                    // We need to replace the entire JSXExpressionContainer, not just the expression
-                    const translatedComponent = hasParams
-                        ? injectTranslatedWithParams(`${relativePath}::${elementScopePath}`, params)
-                        : injectTranslated(`${relativePath}::${elementScopePath}`);
-                    // Find the index of this child and replace it
-                    const childIndex = path.node.children.indexOf(child);
-                    if (childIndex !== -1) {
-                        path.node.children[childIndex] = translatedComponent;
-                        changed = true;
-                    }
                 }
+                // Replace template literal with Translated component
+                // Single translation key for the entire template literal message
+                const translatedComponent = hasParams
+                    ? injectTranslatedWithParams(`${relativePath}::${elementScopePath}`, params)
+                    : injectTranslated(`${relativePath}::${elementScopePath}`);
+                // Replace the JSXExpressionContainer with the Translated component
+                path.replaceWith(translatedComponent);
+                // Mark the parent element as processed so Pass 1 doesn't replace it again
+                // This prevents conflicts when the template literal is the only content
+                processedElements.add(elementScopePath);
+                changed = true;
             },
         });
         // Pass 0: Handle runtime ternaries first.

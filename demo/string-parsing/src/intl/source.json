@@ -513,19 +513,11 @@
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "type": "element",
-          "hash": "613969df8ffc1c390f81917c0cddee77",
+          "hash": "65a8e27d8879283831b664bd8b7f0ad4",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Hello, {name}!"
-        },
-        "program/body0/declaration/body/body1/argument/children3/children1_var_name": {
-          "type": "element",
-          "hash": "f5a7924e621e84c9280a9a27e1bcb7f6",
-          "context": "Variable \"name\" used in template literal",
-          "skip": false,
-          "overrides": {},
-          "content": "World"
+          "content": "Hello, World!"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",

@@ -151,21 +151,25 @@ export function extractExpressionContent(
   }
 
   // Template literal - build representation
-  // Use placeholders for variables so variable values can be translated separately
-  // This allows "John" to be translated to "Juan" independently
+  // Resolve static variables directly, keep runtime variables as placeholders
   if (t.isTemplateLiteral(expression)) {
     let content = '';
     for (let i = 0; i < expression.quasis.length; i++) {
       content += expression.quasis[i].value.raw;
       if (i < expression.expressions.length) {
-        // Always use placeholder for variables - don't resolve their values here
-        // Variable values should be extracted separately and translated independently
         const expr = expression.expressions[i];
         if (t.isIdentifier(expr)) {
-          // Use placeholder format: {variableName}
-          // The variable value will be extracted separately and translated
-          content += `{${expr.name}}`;
+          // Check if this is a static variable (in scope)
+          const varValue = variableScope.get(expr.name);
+          if (varValue !== undefined) {
+            // Static variable: resolve directly
+            content += varValue;
+          } else {
+            // Runtime variable: use placeholder
+            content += `{${expr.name}}`;
+          }
         } else {
+          // Complex expression: use placeholder
           content += `{expr}`;
         }
       }
