@@ -635,37 +635,37 @@
     },
     "app/3-visible-attributes/components/AltAttribute.tsx": {
       "scopes": {
-        "program/body0/declaration/body/body0/argument/children1/children1": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
           "type": "element",
-          "hash": "7ec76e1a5fee298ab636f8738b821136",
+          "hash": "7cd259bf76db2f50019c3a137a3ec9ea",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<img src=\"/image.jpg\" alt=\"Image description\" />"
+          "content": "<Image src=\"/next.svg\" alt=\"Image description\"\n          width= height= />"
         },
-        "program/body0/declaration/body/body0/argument/children3/children1/children1/children1": {
+        "program/body1/declaration/body/body0/argument/children3/children1/children3": {
           "type": "element",
-          "hash": "be53a0541a6d36f6ecb879fa2c584b08",
+          "hash": "4cbf9e0c24f7fe6c0c0694c22a6abf3a",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Image"
+          "content": "Alt text: \"Image description\" (visible if image fails to\n            load or via screen readers)"
         },
-        "program/body0/declaration/body/body0/argument/children3/children1/children3": {
+        "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "0412317bf97e19244da7c2d04aa13ffa",
+          "hash": "a9d9fdc19e57fbca6bee7f1bdf233b18",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Alt text: \"Image description\" (visible if image fails to load or via screen readers)"
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed\n        if the image fails to load and is used by screen readers. Visible to\n        users."
         },
-        "program/body0/declaration/body/body0/argument/children5": {
-          "type": "element",
-          "hash": "6d46e4fdff7b44a91d92077b8826d1fc",
-          "context": "",
+        "program/body1/declaration/body/body0/argument/children3/children1/children1/openingElement/attributes1_attr_alt": {
+          "type": "attribute",
+          "hash": "18f2ae2bda9a34f06975d5c124643168",
+          "context": "Attribute: alt",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed if\n        the image fails to load and is used by screen readers. Visible to users."
+          "content": "Image description"
         }
       }
     },
@@ -702,6 +702,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby, aria-placeholder\n        and other ARIA attributes are used by screen readers and visible to users\n        with disabilities. Subject to localization."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_aria-label": {
+          "type": "attribute",
+          "hash": "3c62b9dcfe365792b2fbb6e15dc82c80",
+          "context": "Attribute: aria-label",
+          "skip": false,
+          "overrides": {},
+          "content": "Close dialog"
         }
       }
     },
@@ -730,6 +738,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_title": {
+          "type": "attribute",
+          "hash": "cafa289476a2aae5108bd795a0ad2f7c",
+          "context": "Attribute: title",
+          "skip": false,
+          "overrides": {},
+          "content": "Tooltip on hover"
         }
       }
     },

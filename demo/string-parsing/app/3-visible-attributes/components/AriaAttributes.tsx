@@ -1,4 +1,5 @@
-// Server Component - no interactivity needed
+'use client';
+
 export default function AriaAttributes() {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
@@ -19,13 +20,13 @@ export default function AriaAttributes() {
         </p>
       </div>
       <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-        <strong>AST Type:</strong> JSXAttribute with StringLiteral or JSXExpressionContainer
+        <strong>AST Type:</strong> JSXAttribute with StringLiteral or
+        JSXExpressionContainer
         <br />
-        <strong>Description:</strong> aria-label, aria-describedby, aria-placeholder
-        and other ARIA attributes are used by screen readers and visible to users
-        with disabilities. Subject to localization.
+        <strong>Description:</strong> aria-label, aria-describedby,
+        aria-placeholder and other ARIA attributes are used by screen readers
+        and visible to users with disabilities. Subject to localization.
       </p>
     </div>
   );
 }
-

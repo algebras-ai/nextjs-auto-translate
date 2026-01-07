@@ -1,6 +1,6 @@
 // types.ts
 export type ScopeData = {
-  type: 'text' | 'element';
+  type: 'text' | 'element' | 'attribute';
   hash: string;
   context: string;
   skip: boolean;

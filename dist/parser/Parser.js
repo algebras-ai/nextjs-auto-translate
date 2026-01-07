@@ -519,6 +519,107 @@ class Parser {
                         }
                     },
                 });
+                // Third pass: Process JSXAttribute nodes for visible attributes
+                // This handles title, alt, and aria-* attributes separately from element content
+                traverse(ast, {
+                    JSXAttribute(path) {
+                        const attrName = path.node.name;
+                        if (!t.isJSXIdentifier(attrName))
+                            return;
+                        const attrNameStr = attrName.name;
+                        // List of visible attributes that should be translated
+                        const visibleAttributes = [
+                            'title',
+                            'alt',
+                            'aria-label',
+                            'aria-describedby',
+                            'aria-placeholder',
+                            'aria-valuetext',
+                            'aria-roledescription',
+                            'aria-live',
+                        ];
+                        // Check if this is a visible attribute
+                        const isVisibleAttribute = visibleAttributes.includes(attrNameStr) ||
+                            attrNameStr.startsWith('aria-');
+                        if (!isVisibleAttribute)
+                            return;
+                        // Get the attribute value
+                        const attrValue = path.node.value;
+                        // Handle string literal attributes: title="Text"
+                        if (t.isStringLiteral(attrValue)) {
+                            const content = attrValue.value;
+                            if (!content.trim())
+                                return;
+                            const hash = crypto_1.default
+                                .createHash('md5')
+                                .update(content)
+                                .digest('hex');
+                            const fullScopePath = path.getPathLocation();
+                            const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
+                            // Use a unique key for attributes to avoid conflicts with element scopes
+                            const attributeKey = `${relativeScopePath}_attr_${attrNameStr}`;
+                            fileScopes[attributeKey] = {
+                                type: 'attribute',
+                                hash,
+                                context: `Attribute: ${attrNameStr}`,
+                                skip: false,
+                                overrides: {},
+                                content,
+                            };
+                            return;
+                        }
+                        // Handle expression attributes: title={variable} or title={`Hello ${name}`}
+                        if (t.isJSXExpressionContainer(attrValue)) {
+                            const expr = attrValue.expression;
+                            // Find the parent function/component to get its variable scope
+                            const functionPath = path.findParent((p) => {
+                                return (p.isFunctionDeclaration() ||
+                                    p.isArrowFunctionExpression() ||
+                                    p.isFunctionExpression() ||
+                                    (p.isVariableDeclarator() &&
+                                        p.node.init &&
+                                        (t.isArrowFunctionExpression(p.node.init) ||
+                                            t.isFunctionExpression(p.node.init))));
+                            });
+                            // Get variable scope for this function, or use file-level scope
+                            const fileScopeKey = `file:${relativeFilePath}`;
+                            const fileLevelScope = functionScopes.get(fileScopeKey) || new Map();
+                            const fileLevelFunctionScope = functionReturnScopes.get(fileScopeKey) || new Map();
+                            let variableScope = new Map(fileLevelScope);
+                            let functionReturnScope = new Map(fileLevelFunctionScope);
+                            if (functionPath) {
+                                const functionLocation = functionPath.getPathLocation();
+                                const functionLevelScope = functionScopes.get(functionLocation) || new Map();
+                                const functionLevelFunctionScope = functionReturnScopes.get(functionLocation) || new Map();
+                                for (const [key, value] of functionLevelScope) {
+                                    variableScope.set(key, value);
+                                }
+                                for (const [key, value] of functionLevelFunctionScope) {
+                                    functionReturnScope.set(key, value);
+                                }
+                            }
+                            // Extract content from expression
+                            const content = (0, utils_1.extractExpressionContent)(expr, variableScope, functionReturnScope);
+                            if (!content.trim())
+                                return;
+                            const hash = crypto_1.default
+                                .createHash('md5')
+                                .update(content)
+                                .digest('hex');
+                            const fullScopePath = path.getPathLocation();
+                            const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
+                            const attributeKey = `${relativeScopePath}_attr_${attrNameStr}`;
+                            fileScopes[attributeKey] = {
+                                type: 'attribute',
+                                hash,
+                                context: `Attribute: ${attrNameStr}`,
+                                skip: false,
+                                overrides: {},
+                                content,
+                            };
+                        }
+                    },
+                });
                 // Only add files that have scopes
                 if (Object.keys(fileScopes).length > 0) {
                     scopeMap.files[relativeFilePath] = {

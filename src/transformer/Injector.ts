@@ -83,6 +83,39 @@ export function ensureImportTranslated(ast: t.File) {
   }
 }
 
+// Ensures import useTranslation hook exists
+export function ensureImportUseTranslation(ast: t.File) {
+  let hasImport = false;
+  traverse(ast, {
+    ImportDeclaration(path: any) {
+      if (
+        path.node.source.value === RUNTIME_PATHS.CLIENT_USE_TRANSLATION &&
+        path.node.specifiers.some(
+          (s: any) =>
+            t.isImportSpecifier(s) &&
+            t.isIdentifier(s.imported) &&
+            s.imported.name === 'useTranslation'
+        )
+      ) {
+        hasImport = true;
+        path.stop();
+      }
+    },
+  });
+  if (!hasImport) {
+    const importDecl = t.importDeclaration(
+      [
+        t.importSpecifier(
+          t.identifier('useTranslation'),
+          t.identifier('useTranslation')
+        ),
+      ],
+      t.stringLiteral(RUNTIME_PATHS.CLIENT_USE_TRANSLATION)
+    );
+    ast.program.body.unshift(importDecl);
+  }
+}
+
 // Ensures import LocalesSwitcher exists
 export function ensureImportLocalesSwitcher(ast: t.File) {
   let hasImport = false;
@@ -670,6 +703,218 @@ export function transformProject(
         changed = true;
       },
     });
+
+    // Third pass: Handle JSXAttribute nodes for visible attributes (title, alt, aria-*)
+    const componentsNeedingHook = new Set<string>();
+
+    traverse(ast, {
+      JSXAttribute(path: NodePath<t.JSXAttribute>) {
+        const attrName = path.node.name;
+        if (!t.isJSXIdentifier(attrName)) return;
+
+        const attrNameStr = attrName.name;
+
+        // List of visible attributes that should be translated
+        const visibleAttributes = [
+          'title',
+          'alt',
+          'aria-label',
+          'aria-describedby',
+          'aria-placeholder',
+          'aria-valuetext',
+          'aria-roledescription',
+          'aria-live',
+        ];
+
+        // Check if this is a visible attribute
+        const isVisibleAttribute =
+          visibleAttributes.includes(attrNameStr) ||
+          attrNameStr.startsWith('aria-');
+
+        if (!isVisibleAttribute) return;
+
+        // Get the scope path for this attribute
+        const fullScopePath = path.getPathLocation();
+        const scopePath = getRelativeScopePath(fullScopePath);
+
+        // Check for attribute entry: {scopePath}_attr_{attrName}
+        const attributeKey = `${scopePath}_attr_${attrNameStr}`;
+        const scopeEntry = fileScopes[attributeKey];
+
+        if (!scopeEntry || scopeEntry.type !== 'attribute') return;
+
+        // Find the parent component/function to track which components need the hook
+        const functionPath = path.findParent((p: any) => {
+          return (
+            p.isFunctionDeclaration() ||
+            p.isArrowFunctionExpression() ||
+            p.isFunctionExpression() ||
+            (p.isVariableDeclarator() &&
+              p.node.init &&
+              (t.isArrowFunctionExpression(p.node.init) ||
+                t.isFunctionExpression(p.node.init)))
+          );
+        });
+
+        if (functionPath) {
+          const functionLocation = functionPath.getPathLocation();
+          componentsNeedingHook.add(functionLocation);
+        }
+
+        // Handle string literal attributes: title="Text"
+        if (t.isStringLiteral(path.node.value)) {
+          // Replace with t() call
+          const tCall = t.callExpression(t.identifier('t'), [
+            t.stringLiteral(`${relativePath}::${attributeKey}`),
+          ]);
+          path.node.value = t.jsxExpressionContainer(tCall);
+          changed = true;
+          return;
+        }
+
+        // Handle expression attributes: title={variable} or title={`Hello ${name}`}
+        if (t.isJSXExpressionContainer(path.node.value)) {
+          const expr = path.node.value.expression;
+
+          // For string literals in expressions, replace with t() call
+          if (t.isStringLiteral(expr)) {
+            const tCall = t.callExpression(t.identifier('t'), [
+              t.stringLiteral(`${relativePath}::${attributeKey}`),
+            ]);
+            path.node.value.expression = tCall;
+            changed = true;
+            return;
+          }
+
+          // For template literals, we need to check if the content matches
+          // If it's a simple template literal that matches the extracted content,
+          // we can replace it with t() call
+          // Otherwise, we keep the expression but wrap it in t() if needed
+          if (t.isTemplateLiteral(expr)) {
+            // For now, if the template literal has no expressions (static),
+            // we can replace it with t() call
+            if (expr.expressions.length === 0) {
+              const tCall = t.callExpression(t.identifier('t'), [
+                t.stringLiteral(`${relativePath}::${attributeKey}`),
+              ]);
+              path.node.value.expression = tCall;
+              changed = true;
+            }
+            // For template literals with expressions, we'd need more complex handling
+            // This is a simplified version - in production you might want to handle
+            // template literals with parameters differently
+            return;
+          }
+        }
+      },
+    });
+
+    // Fourth pass: Add useTranslation hook to components that need it
+    if (componentsNeedingHook.size > 0) {
+      traverse(ast, {
+        FunctionDeclaration(path: NodePath<t.FunctionDeclaration>) {
+          const functionLocation = path.getPathLocation();
+          if (!componentsNeedingHook.has(functionLocation)) return;
+
+          // Check if hook is already called
+          let hasHook = false;
+          path.traverse({
+            VariableDeclarator(declPath: any) {
+              if (
+                t.isIdentifier(declPath.node.id) &&
+                declPath.node.id.name === 't' &&
+                t.isCallExpression(declPath.node.init) &&
+                t.isIdentifier(declPath.node.init.callee) &&
+                declPath.node.init.callee.name === 'useTranslation'
+              ) {
+                hasHook = true;
+              }
+            },
+          });
+
+          if (
+            !hasHook &&
+            path.node.body &&
+            t.isBlockStatement(path.node.body)
+          ) {
+            // Add const { t } = useTranslation(); at the beginning of the function body
+            const hookCall = t.variableDeclaration('const', [
+              t.variableDeclarator(
+                t.objectPattern([
+                  t.objectProperty(
+                    t.identifier('t'),
+                    t.identifier('t'),
+                    false,
+                    true
+                  ),
+                ]),
+                t.callExpression(t.identifier('useTranslation'), [])
+              ),
+            ]);
+            path.node.body.body.unshift(hookCall);
+            changed = true;
+          }
+        },
+        ArrowFunctionExpression(path: NodePath<t.ArrowFunctionExpression>) {
+          // For arrow functions, we need to check if they're component definitions
+          // and if they have a block body
+          if (!t.isBlockStatement(path.node.body)) return;
+
+          const parent = path.parentPath;
+          if (
+            !parent ||
+            (!t.isVariableDeclarator(parent.node) &&
+              !t.isExportDefaultDeclaration(parent.node))
+          ) {
+            return;
+          }
+
+          // Check if this is a component (export default function or const Component = ...)
+          const functionLocation = path.getPathLocation();
+          if (!componentsNeedingHook.has(functionLocation)) return;
+
+          // Check if hook is already called
+          let hasHook = false;
+          path.traverse({
+            VariableDeclarator(declPath: any) {
+              if (
+                t.isIdentifier(declPath.node.id) &&
+                declPath.node.id.name === 't' &&
+                t.isCallExpression(declPath.node.init) &&
+                t.isIdentifier(declPath.node.init.callee) &&
+                declPath.node.init.callee.name === 'useTranslation'
+              ) {
+                hasHook = true;
+              }
+            },
+          });
+
+          if (!hasHook) {
+            // Add const { t } = useTranslation(); at the beginning of the function body
+            const hookCall = t.variableDeclaration('const', [
+              t.variableDeclarator(
+                t.objectPattern([
+                  t.objectProperty(
+                    t.identifier('t'),
+                    t.identifier('t'),
+                    false,
+                    true
+                  ),
+                ]),
+                t.callExpression(t.identifier('useTranslation'), [])
+              ),
+            ]);
+            path.node.body.body.unshift(hookCall);
+            changed = true;
+          }
+        },
+      });
+    }
+
+    // Add useTranslation import if we made attribute changes
+    if (changed && componentsNeedingHook.size > 0) {
+      ensureImportUseTranslation(ast);
+    }
 
     // Add Translated import if we made text changes
     if (changed) {
