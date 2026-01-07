@@ -32,9 +32,9 @@ The following scenarios need to be tested and modernized with `@nextjs-auto-tran
 
 - [✅] **Root Page** (`app/page.tsx`) - Main landing page with scenario overview
 - [✅] **1. Direct Rendering** (`app/1-direct-rendering/page.tsx`) - JSXText between tags (visible text)
-- [ ] **2. Expressions** (`app/2-expressions/page.tsx`) - JSXExpressionContainer with various expression types returning strings
-- [ ] **3. Visible Attributes** (`app/3-visible-attributes/page.tsx`) - JSXAttribute with title, alt, aria-label, aria-describedby, aria-placeholder and other accessibility attributes
-- [ ] **4. Components** (`app/4-components/page.tsx`) - Through props and children that render visible text
+- [✅] **2. Expressions** (`app/2-expressions/page.tsx`) - JSXExpressionContainer with various expression types returning strings
+- [✅] **3. Visible Attributes** (`app/3-visible-attributes/page.tsx`) - JSXAttribute with title, alt, aria-label, aria-describedby, aria-placeholder and other accessibility attributes
+- [✅] **4. Components** (`app/4-components/page.tsx`) - Through props and children that render visible text
 - [ ] **5. Functions** (`app/5-functions/page.tsx`) - Through function calls returning strings for display
 - [ ] **6. Conditional Logic** (`app/6-conditional-logic/page.tsx`) - Through ternary operators and logical expressions returning strings
 - [ ] **7. Loops** (`app/7-loops/page.tsx`) - Through map, forEach and other array methods rendering strings
