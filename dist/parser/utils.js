@@ -326,8 +326,9 @@ function extractExpressionContent(expression, variableScope = new Map(), functio
             // Return the actual string value instead of variable name
             return resolvedValue;
         }
-        // Fallback to variable name if can't resolve
-        return `{${expression.name}}`;
+        // If we can't resolve the value at build time, do NOT emit a placeholder
+        // because the injector would replace runtime output and break UI.
+        return '';
     }
     return '';
 }

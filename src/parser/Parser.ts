@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { SourceStore } from '../storage/SourceStore';
 import { ParserOptions, ScopeData, ScopeMap } from '../types';
+import { shouldTranslateJsxAttribute } from '../utils/jsxAttributeTranslation';
 import {
   buildContent,
   extractExpressionContent,
@@ -567,8 +568,9 @@ export class Parser {
           },
         });
 
-        // Third pass: Process JSXAttribute nodes for visible attributes
-        // This handles title, alt, and aria-* attributes separately from element content
+        // Third pass: Process JSXAttribute nodes for visible attributes and component props
+        // This handles title, alt, aria-* and also string props on custom components
+        // (e.g. <Button label="Click me" />) that render user-visible text.
         traverse(ast, {
           JSXAttribute(path: any) {
             const attrName = path.node.name;
@@ -576,24 +578,19 @@ export class Parser {
 
             const attrNameStr = attrName.name;
 
-            // List of visible attributes that should be translated
-            const visibleAttributes = [
-              'title',
-              'alt',
-              'aria-label',
-              'aria-describedby',
-              'aria-placeholder',
-              'aria-valuetext',
-              'aria-roledescription',
-              'aria-live',
-            ];
+            // Determine which element this attribute belongs to
+            const openingElement = t.isJSXOpeningElement(path.parent)
+              ? (path.parent as t.JSXOpeningElement)
+              : null;
 
-            // Check if this is a visible attribute
-            const isVisibleAttribute =
-              visibleAttributes.includes(attrNameStr) ||
-              attrNameStr.startsWith('aria-');
-
-            if (!isVisibleAttribute) return;
+            if (
+              !shouldTranslateJsxAttribute(
+                attrNameStr,
+                openingElement?.name || null
+              )
+            ) {
+              return;
+            }
 
             // Get the attribute value
             const attrValue = path.node.value;

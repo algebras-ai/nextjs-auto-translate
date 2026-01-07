@@ -620,10 +620,10 @@
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "content": {
-            "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby, aria-placeholder\n        and other ARIA attributes are used by screen readers and visible to users\n        with disabilities. Subject to localization.",
-            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral или JSXExpressionContainer\n <element:br></element:br>\n <element:strong>Описание:</element:strong> aria-label, aria-describedby, aria-placeholder\n и другие атрибуты ARIA используются программами чтения с экрана и видны пользователям с ограниченными возможностями\n. Подлежит локализации."
+            "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby,\n        aria-placeholder and other ARIA attributes are used by screen readers\n        and visible to users with disabilities. Subject to localization.",
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral или\n JSXExpressionContainer\n <element:br></element:br>\n <element:strong>Описание:</element:strong> aria-label, aria-describedby,\n aria-placeholder и другие атрибуты ARIA используются программами чтения с экрана\n и видны пользователям с ограниченными возможностями. Подлежат локализации."
           },
-          "hash": "36cee950119709bc9399ba6893b4e700"
+          "hash": "684d7df5a2b615265243b2efa1ff6e54"
         },
         "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_aria-label": {
           "content": {
@@ -750,20 +750,6 @@
     },
     "app/4-components/components/PropsAsString.tsx": {
       "entries": {
-        "program/body0/body/body0/argument": {
-          "content": {
-            "en": "{label}",
-            "ru": "{label}"
-          },
-          "hash": "dfa8040e56bc3a9b83f5c0a8160d8f33"
-        },
-        "program/body1/body/body0/argument": {
-          "content": {
-            "en": "{message}",
-            "ru": "{message}"
-          },
-          "hash": "f933e224b575d7014aed7bd26d621391"
-        },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<Button label=\"Click me\" />",
@@ -773,22 +759,29 @@
         },
         "program/body2/declaration/body/body0/argument/children5": {
           "content": {
-            "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and rendered\n        as visible text. Important: technical props (id, className, data-*, etc.)\n        are not subject to localization.",
-            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка передается через проп и отображается\n как видимый текст. Важно: технические пропы (id, className, data-* и т.д.) \n не подлежат локализации."
+            "en": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and\n        rendered as visible text. Important: technical props (id, className,\n        data-*, etc.) are not subject to localization.",
+            "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral\n<element:br></element:br>\n<element:strong>Описание:</element:strong> Строка передается через проп и\nотображается как видимый текст. Важно: технические пропы (id, className,\ndata-* и т.д.) не подлежат локализации."
           },
-          "hash": "7a4ebbb5d1d34034a4a490a99f2de95f"
+          "hash": "37f01cb16cf5bf2ad3710cc4e53ab143"
+        },
+        "program/body2/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_label": {
+          "content": {
+            "en": "Click ",
+            "ru": "Нажмите"
+          },
+          "hash": "89e86fca338e017887dbde7965c10b75"
+        },
+        "program/body2/declaration/body/body0/argument/children3/children3/openingElement/attributes0_attr_message": {
+          "content": {
+            "en": "An error occurred",
+            "ru": "Произошла ошибка"
+          },
+          "hash": "a25c753ee3e4be15ec0daa5a40deb7b8"
         }
       }
     },
     "app/4-components/components/RenderingViaComponent.tsx": {
       "entries": {
-        "program/body0/body/body0/argument": {
-          "content": {
-            "en": "{text}",
-            "ru": "{text}"
-          },
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "<TextComponent text=\"Text\" />",
@@ -802,6 +795,13 @@
             "ru": "<element:strong>Тип AST:</element:strong> JSXElement (компонент) \n <element:br></element:br>\n <element:strong>Описание:</element:strong> Компонент получает строку и отображает ее."
           },
           "hash": "030d4c50c353d26b210f2b0fcaf3ac6f"
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_text": {
+          "content": {
+            "en": "Text",
+            "ru": "Текст"
+          },
+          "hash": "9dffbf69ffba8bc38bc4e01abf4b1675"
         }
       }
     },
@@ -1130,35 +1130,35 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{message || \"Default message\"}</div>",
-            "ru": "[RU] <div>{message || \"Default message\"}</div>"
+            "ru": "<div>{message || \"Сообщение по умолчанию\"}</div>"
           },
           "hash": "ffcdb82116109b08123434027f9a1fe8"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Toggle Message",
-            "ru": "[RU] Toggle Message"
+            "ru": "Переключить сообщение"
           },
           "hash": "47be838012c368242e0a1e9651072e90"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
-            "en": "{message}",
-            "ru": "[RU] {message}"
+            "en": "Default message",
+            "ru": "Сообщение по умолчанию"
           },
-          "hash": "f933e224b575d7014aed7bd26d621391"
+          "hash": "2da2fc7f382fa2e5b9d0e433fa71a475"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_or_right": {
           "content": {
             "en": "Default message",
-            "ru": "[RU] Default message"
+            "ru": "Сообщение по умолчанию"
           },
           "hash": "2da2fc7f382fa2e5b9d0e433fa71a475"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Default string is rendered if the main one is missing.",
-            "ru": "[RU] <element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Default string is rendered if the main one is missing."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с логическим выражением\n <element:br></element:br>\n <element:strong>Описание:</element:strong> При отсутствии основной строки отображается строка по умолчанию."
           },
           "hash": "360b45aa5465134ca80b42d1ff2346d0"
         }
@@ -1169,35 +1169,35 @@
         "program/body2/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{getStatusText(status)}</div>",
-            "ru": "[RU] <div>{getStatusText(status)}</div>"
+            "ru": "<div>{getStatusText (status) }</div>"
           },
           "hash": "37a4eb84575a63d00e6101cf3764543e"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children1": {
           "content": {
             "en": "Pending",
-            "ru": "[RU] Pending"
+            "ru": "В ожидании"
           },
           "hash": "2d13df6f8b5e4c5af9f87e0dc39df69d"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children3": {
           "content": {
             "en": "Success",
-            "ru": "[RU] Success"
+            "ru": "Успешно"
           },
           "hash": "505a83f220c02df2f85c3810cd9ceb38"
         },
         "program/body2/declaration/body/body1/argument/children3/children1/children5": {
           "content": {
             "en": "Unknown",
-            "ru": "[RU] Unknown"
+            "ru": "Неизвестно"
           },
           "hash": "88183b946cc5f0e8c96b2e66e1c74a7e"
         },
         "program/body2/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function.",
-            "ru": "[RU] <element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с вызовом функции\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Логика switch-case в функции."
           },
           "hash": "39b8ae3fc0e627ca1178c1f30ea000b4"
         }
@@ -1208,42 +1208,42 @@
         "program/body1/declaration/body/body1/argument/children1/children1": {
           "content": {
             "en": "<div>{isLoading ? \"Loading...\" : \"Ready\"}</div>",
-            "ru": "[RU] <div>{isLoading ? \"Loading...\" : \"Ready\"}</div>"
+            "ru": "<div>{isLoading ? \"Загрузка...\": \"Готово\"}</div>"
           },
           "hash": "52b3ba396713a7036c2b22de5b21a341"
         },
         "program/body1/declaration/body/body1/argument/children3/children1": {
           "content": {
             "en": "Toggle Loading",
-            "ru": "[RU] Toggle Loading"
+            "ru": "Переключить загрузку"
           },
           "hash": "7a2275aa440efd4d337688102ab9a6b3"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "content": {
             "en": "{? \"Loading...\" : \"Ready\"}",
-            "ru": "[RU] {? \"Loading...\" : \"Ready\"}"
+            "ru": "{? \"Загрузка...\": \"Готово\"}"
           },
           "hash": "01ee2b75a7621836af17dfa14af01701"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_consequent": {
           "content": {
             "en": "Loading...",
-            "ru": "[RU] Loading..."
+            "ru": "Загрузка..."
           },
           "hash": "8524de963f07201e5c086830d370797f"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_cond_0_alternate": {
           "content": {
             "en": "Ready",
-            "ru": "[RU] Ready"
+            "ru": "Готово"
           },
           "hash": "e7d31fc0602fb2ede144d18cdffd816b"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional choice of string for rendering.",
-            "ru": "[RU] <element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional choice of string for rendering."
+            "ru": "<element:strong>Тип AST:</element:strong> JSXExpressionContainer с условным выражением\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Условный выбор строки для отображения."
           },
           "hash": "05aef2d629892094ce411d418145f543"
         }
@@ -1254,28 +1254,28 @@
         "program/body5/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "6. Conditional Logic - ternary operators",
-            "ru": "[RU] 6. Conditional Logic - ternary operators"
+            "ru": "6. Условная логика - тернарные операторы"
           },
           "hash": "88fd2126cc45157983d28c10df43ce39"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "6.1 Ternary operator",
-            "ru": "[RU] 6.1 Ternary operator"
+            "ru": "6.1 Тернарный оператор"
           },
           "hash": "d2b328c6df8d0a4482516d6cc88f25e0"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "6.2 Logical AND",
-            "ru": "[RU] 6.2 Logical AND"
+            "ru": "6.2 Логическое И"
           },
           "hash": "049adbb53debca843f43e321cfe6d9d2"
         },
         "program/body5/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "6.3 Logical OR",
-            "ru": "[RU] 6.3 Logical OR"
+            "ru": "6.3 Логическое ИЛИ"
           },
           "hash": "9ccdfa4c5184ab71d9bd723b250e9d29"
         },
@@ -1303,13 +1303,6 @@
             "ru": "[RU] items.filter(item => item.length > 5).map(...)"
           },
           "hash": "36f260dbdecb7f8424c24d1d9d25bbed"
-        },
-        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
-          "content": {
-            "en": "{item}",
-            "ru": "[RU] {item}"
-          },
-          "hash": "e232d42269bb57ff0c0c0778cc43441a"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -1378,13 +1371,6 @@
             "ru": "[RU] items.map((item, index) => <div key={index}>{item}</div>)"
           },
           "hash": "3f1459afe307d7c765931426a118eb3e"
-        },
-        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
-          "content": {
-            "en": "{item}",
-            "ru": "[RU] {item}"
-          },
-          "hash": "e232d42269bb57ff0c0c0778cc43441a"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
@@ -1467,13 +1453,6 @@
             "ru": "[RU] 'use client'; const [text, setText] = useState(\"Client text\");"
           },
           "hash": "869551a7f0a73d24bf74b893224d9a83"
-        },
-        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
-          "content": {
-            "en": "{text}",
-            "ru": "[RU] {text}"
-          },
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "content": {

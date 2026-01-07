@@ -5,10 +5,29 @@ import * as t from '@babel/types';
 import path from 'path';
 import { RUNTIME_PATHS } from '../constants';
 import { ScopeMap } from '../types';
+import { shouldTranslateJsxAttribute } from '../utils/jsxAttributeTranslation';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = (traverseDefault as any).default || traverseDefault;
 const generate = (generateDefault as any).default || generateDefault;
+
+function insertAfterDirectives(ast: t.File, node: t.Statement) {
+  const body = ast.program.body;
+  let idx = 0;
+  while (idx < body.length) {
+    const stmt = body[idx];
+    if (
+      t.isExpressionStatement(stmt) &&
+      t.isStringLiteral(stmt.expression) &&
+      typeof (stmt as any).directive === 'string'
+    ) {
+      idx++;
+      continue;
+    }
+    break;
+  }
+  body.splice(idx, 0, node);
+}
 
 // Injects <Translated tKey="scope" /> in place of JSXText
 export function injectTranslated(scope: string): t.JSXElement {
@@ -79,7 +98,7 @@ export function ensureImportTranslated(ast: t.File) {
       [t.importDefaultSpecifier(t.identifier('Translated'))],
       t.stringLiteral(RUNTIME_PATHS.CLIENT_TRANSLATED)
     );
-    ast.program.body.unshift(importDecl);
+    insertAfterDirectives(ast, importDecl);
   }
 }
 
@@ -112,8 +131,24 @@ export function ensureImportUseTranslation(ast: t.File) {
       ],
       t.stringLiteral(RUNTIME_PATHS.CLIENT_USE_TRANSLATION)
     );
-    ast.program.body.unshift(importDecl);
+    insertAfterDirectives(ast, importDecl);
   }
+}
+
+function ensureUseClientDirective(ast: t.File) {
+  // Next.js requires 'use client' to be the first statement (before imports)
+  const first = ast.program.body[0];
+  const hasUseClient =
+    first &&
+    t.isExpressionStatement(first) &&
+    t.isStringLiteral(first.expression) &&
+    first.expression.value === 'use client';
+
+  if (hasUseClient) return;
+
+  const useClientStmt = t.expressionStatement(t.stringLiteral('use client'));
+  (useClientStmt as any).directive = 'use client';
+  ast.program.body.unshift(useClientStmt);
 }
 
 // Ensures import LocalesSwitcher exists
@@ -140,7 +175,7 @@ export function ensureImportLocalesSwitcher(ast: t.File) {
       [t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))],
       t.stringLiteral(RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER)
     );
-    ast.program.body.unshift(importDecl);
+    insertAfterDirectives(ast, importDecl);
   }
 }
 
@@ -704,7 +739,7 @@ export function transformProject(
       },
     });
 
-    // Third pass: Handle JSXAttribute nodes for visible attributes (title, alt, aria-*)
+    // Third pass: Handle JSXAttribute nodes for visible attributes and component props
     const componentsNeedingHook = new Set<string>();
 
     traverse(ast, {
@@ -714,24 +749,19 @@ export function transformProject(
 
         const attrNameStr = attrName.name;
 
-        // List of visible attributes that should be translated
-        const visibleAttributes = [
-          'title',
-          'alt',
-          'aria-label',
-          'aria-describedby',
-          'aria-placeholder',
-          'aria-valuetext',
-          'aria-roledescription',
-          'aria-live',
-        ];
+        // Determine which element this attribute belongs to
+        const openingElement = t.isJSXOpeningElement(path.parent)
+          ? (path.parent as t.JSXOpeningElement)
+          : null;
 
-        // Check if this is a visible attribute
-        const isVisibleAttribute =
-          visibleAttributes.includes(attrNameStr) ||
-          attrNameStr.startsWith('aria-');
-
-        if (!isVisibleAttribute) return;
+        if (
+          !shouldTranslateJsxAttribute(
+            attrNameStr,
+            openingElement?.name || null
+          )
+        ) {
+          return;
+        }
 
         // Get the scope path for this attribute
         const fullScopePath = path.getPathLocation();
@@ -913,6 +943,7 @@ export function transformProject(
 
     // Add useTranslation import if we made attribute changes
     if (changed && componentsNeedingHook.size > 0) {
+      ensureUseClientDirective(ast);
       ensureImportUseTranslation(ast);
     }
 

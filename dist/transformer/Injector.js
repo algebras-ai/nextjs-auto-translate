@@ -49,9 +49,25 @@ const traverse_1 = __importDefault(require("@babel/traverse"));
 const t = __importStar(require("@babel/types"));
 const path_1 = __importDefault(require("path"));
 const constants_1 = require("../constants");
+const jsxAttributeTranslation_1 = require("../utils/jsxAttributeTranslation");
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = traverse_1.default.default || traverse_1.default;
 const generate = generator_1.default.default || generator_1.default;
+function insertAfterDirectives(ast, node) {
+    const body = ast.program.body;
+    let idx = 0;
+    while (idx < body.length) {
+        const stmt = body[idx];
+        if (t.isExpressionStatement(stmt) &&
+            t.isStringLiteral(stmt.expression) &&
+            typeof stmt.directive === 'string') {
+            idx++;
+            continue;
+        }
+        break;
+    }
+    body.splice(idx, 0, node);
+}
 // Injects <Translated tKey="scope" /> in place of JSXText
 function injectTranslated(scope) {
     return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
@@ -86,7 +102,7 @@ function ensureImportTranslated(ast) {
     });
     if (!hasImport) {
         const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Translated'))], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_TRANSLATED));
-        ast.program.body.unshift(importDecl);
+        insertAfterDirectives(ast, importDecl);
     }
 }
 // Ensures import useTranslation hook exists
@@ -107,8 +123,21 @@ function ensureImportUseTranslation(ast) {
         const importDecl = t.importDeclaration([
             t.importSpecifier(t.identifier('useTranslation'), t.identifier('useTranslation')),
         ], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_USE_TRANSLATION));
-        ast.program.body.unshift(importDecl);
+        insertAfterDirectives(ast, importDecl);
     }
+}
+function ensureUseClientDirective(ast) {
+    // Next.js requires 'use client' to be the first statement (before imports)
+    const first = ast.program.body[0];
+    const hasUseClient = first &&
+        t.isExpressionStatement(first) &&
+        t.isStringLiteral(first.expression) &&
+        first.expression.value === 'use client';
+    if (hasUseClient)
+        return;
+    const useClientStmt = t.expressionStatement(t.stringLiteral('use client'));
+    useClientStmt.directive = 'use client';
+    ast.program.body.unshift(useClientStmt);
 }
 // Ensures import LocalesSwitcher exists
 function ensureImportLocalesSwitcher(ast) {
@@ -126,7 +155,7 @@ function ensureImportLocalesSwitcher(ast) {
     });
     if (!hasImport) {
         const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER));
-        ast.program.body.unshift(importDecl);
+        insertAfterDirectives(ast, importDecl);
     }
 }
 // Create the language switcher element
@@ -576,7 +605,7 @@ function transformProject(code, options) {
                 changed = true;
             },
         });
-        // Third pass: Handle JSXAttribute nodes for visible attributes (title, alt, aria-*)
+        // Third pass: Handle JSXAttribute nodes for visible attributes and component props
         const componentsNeedingHook = new Set();
         traverse(ast, {
             JSXAttribute(path) {
@@ -584,22 +613,13 @@ function transformProject(code, options) {
                 if (!t.isJSXIdentifier(attrName))
                     return;
                 const attrNameStr = attrName.name;
-                // List of visible attributes that should be translated
-                const visibleAttributes = [
-                    'title',
-                    'alt',
-                    'aria-label',
-                    'aria-describedby',
-                    'aria-placeholder',
-                    'aria-valuetext',
-                    'aria-roledescription',
-                    'aria-live',
-                ];
-                // Check if this is a visible attribute
-                const isVisibleAttribute = visibleAttributes.includes(attrNameStr) ||
-                    attrNameStr.startsWith('aria-');
-                if (!isVisibleAttribute)
+                // Determine which element this attribute belongs to
+                const openingElement = t.isJSXOpeningElement(path.parent)
+                    ? path.parent
+                    : null;
+                if (!(0, jsxAttributeTranslation_1.shouldTranslateJsxAttribute)(attrNameStr, openingElement?.name || null)) {
                     return;
+                }
                 // Get the scope path for this attribute
                 const fullScopePath = path.getPathLocation();
                 const scopePath = getRelativeScopePath(fullScopePath);
@@ -742,6 +762,7 @@ function transformProject(code, options) {
         }
         // Add useTranslation import if we made attribute changes
         if (changed && componentsNeedingHook.size > 0) {
+            ensureUseClientDirective(ast);
             ensureImportUseTranslation(ast);
         }
         // Add Translated import if we made text changes

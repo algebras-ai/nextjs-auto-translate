@@ -45,6 +45,7 @@ const crypto_1 = __importDefault(require("crypto"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const SourceStore_1 = require("../storage/SourceStore");
+const jsxAttributeTranslation_1 = require("../utils/jsxAttributeTranslation");
 const utils_1 = require("./utils");
 // @babel/traverse has different exports for ESM vs CommonJS
 const traverse = traverse_1.default.default || traverse_1.default;
@@ -519,30 +520,22 @@ class Parser {
                         }
                     },
                 });
-                // Third pass: Process JSXAttribute nodes for visible attributes
-                // This handles title, alt, and aria-* attributes separately from element content
+                // Third pass: Process JSXAttribute nodes for visible attributes and component props
+                // This handles title, alt, aria-* and also string props on custom components
+                // (e.g. <Button label="Click me" />) that render user-visible text.
                 traverse(ast, {
                     JSXAttribute(path) {
                         const attrName = path.node.name;
                         if (!t.isJSXIdentifier(attrName))
                             return;
                         const attrNameStr = attrName.name;
-                        // List of visible attributes that should be translated
-                        const visibleAttributes = [
-                            'title',
-                            'alt',
-                            'aria-label',
-                            'aria-describedby',
-                            'aria-placeholder',
-                            'aria-valuetext',
-                            'aria-roledescription',
-                            'aria-live',
-                        ];
-                        // Check if this is a visible attribute
-                        const isVisibleAttribute = visibleAttributes.includes(attrNameStr) ||
-                            attrNameStr.startsWith('aria-');
-                        if (!isVisibleAttribute)
+                        // Determine which element this attribute belongs to
+                        const openingElement = t.isJSXOpeningElement(path.parent)
+                            ? path.parent
+                            : null;
+                        if (!(0, jsxAttributeTranslation_1.shouldTranslateJsxAttribute)(attrNameStr, openingElement?.name || null)) {
                             return;
+                        }
                         // Get the attribute value
                         const attrValue = path.node.value;
                         // Handle string literal attributes: title="Text"

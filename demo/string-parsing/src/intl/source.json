@@ -697,11 +697,11 @@
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "36cee950119709bc9399ba6893b4e700",
+          "hash": "684d7df5a2b615265243b2efa1ff6e54",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby, aria-placeholder\n        and other ARIA attributes are used by screen readers and visible to users\n        with disabilities. Subject to localization."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby,\n        aria-placeholder and other ARIA attributes are used by screen readers\n        and visible to users with disabilities. Subject to localization."
         },
         "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_aria-label": {
           "type": "attribute",
@@ -843,22 +843,6 @@
     },
     "app/4-components/components/PropsAsString.tsx": {
       "scopes": {
-        "program/body0/body/body0/argument": {
-          "type": "element",
-          "hash": "dfa8040e56bc3a9b83f5c0a8160d8f33",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{label}"
-        },
-        "program/body1/body/body0/argument": {
-          "type": "element",
-          "hash": "f933e224b575d7014aed7bd26d621391",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{message}"
-        },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "7fbd9728d7eb9a3815f7d4fc34e475c6",
@@ -869,24 +853,32 @@
         },
         "program/body2/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "7a4ebbb5d1d34034a4a490a99f2de95f",
+          "hash": "37f01cb16cf5bf2ad3710cc4e53ab143",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and rendered\n        as visible text. Important: technical props (id, className, data-*, etc.)\n        are not subject to localization."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and\n        rendered as visible text. Important: technical props (id, className,\n        data-*, etc.) are not subject to localization."
+        },
+        "program/body2/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_label": {
+          "type": "attribute",
+          "hash": "89e86fca338e017887dbde7965c10b75",
+          "context": "Attribute: label",
+          "skip": false,
+          "overrides": {},
+          "content": "Click "
+        },
+        "program/body2/declaration/body/body0/argument/children3/children3/openingElement/attributes0_attr_message": {
+          "type": "attribute",
+          "hash": "a25c753ee3e4be15ec0daa5a40deb7b8",
+          "context": "Attribute: message",
+          "skip": false,
+          "overrides": {},
+          "content": "An error occurred"
         }
       }
     },
     "app/4-components/components/RenderingViaComponent.tsx": {
       "scopes": {
-        "program/body0/body/body0/argument": {
-          "type": "element",
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{text}"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "fd8e8832adc8806b3349dd4671744fef",
@@ -902,6 +894,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXElement (component)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component receives a string and renders it."
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_text": {
+          "type": "attribute",
+          "hash": "9dffbf69ffba8bc38bc4e01abf4b1675",
+          "context": "Attribute: text",
+          "skip": false,
+          "overrides": {},
+          "content": "Text"
         }
       }
     },
@@ -1285,11 +1285,11 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "type": "element",
-          "hash": "f933e224b575d7014aed7bd26d621391",
+          "hash": "2da2fc7f382fa2e5b9d0e433fa71a475",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{message}"
+          "content": "Default message"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_or_right": {
           "type": "element",
@@ -1467,14 +1467,6 @@
           "overrides": {},
           "content": "items.filter(item => item.length > 5).map(...)"
         },
-        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
-          "type": "element",
-          "hash": "e232d42269bb57ff0c0c0778cc43441a",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{item}"
-        },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "0c8ff2f2a51017a4481475a732091f0b",
@@ -1550,14 +1542,6 @@
           "skip": false,
           "overrides": {},
           "content": "items.map((item, index) => <div key={index}>{item}</div>)"
-        },
-        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
-          "type": "element",
-          "hash": "e232d42269bb57ff0c0c0778cc43441a",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{item}"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1650,14 +1634,6 @@
           "skip": false,
           "overrides": {},
           "content": "'use client'; const [text, setText] = useState(\"Client text\");"
-        },
-        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
-          "type": "element",
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{text}"
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
