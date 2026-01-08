@@ -239,20 +239,38 @@ class Parser {
                         functionReturnScopes.get(scopeKey).set(funcName, onlyValue);
                     },
                     VariableDeclarator(path) {
-                        // Handle: const getGreeting = () => 'Hello'
                         if (!t.isIdentifier(path.node.id) || !path.node.init)
                             return;
-                        const funcName = path.node.id.name;
+                        const varName = path.node.id.name;
                         const init = path.node.init;
-                        const extractDeterministicReturn = () => {
-                            // Arrow function: () => 'Hello'
-                            if (t.isArrowFunctionExpression(init)) {
-                                if (t.isStringLiteral(init.body)) {
-                                    return init.body.value;
+                        const enclosingFunctionPath = path.findParent((p) => {
+                            return (p.isFunctionDeclaration() ||
+                                p.isArrowFunctionExpression() ||
+                                p.isFunctionExpression() ||
+                                (p.isVariableDeclarator() &&
+                                    p.node.init &&
+                                    (t.isArrowFunctionExpression(p.node.init) ||
+                                        t.isFunctionExpression(p.node.init))));
+                        });
+                        const fileScopeKey = `file:${relativeFilePath}`;
+                        const scopeKey = enclosingFunctionPath
+                            ? enclosingFunctionPath.getPathLocation()
+                            : fileScopeKey;
+                        const ensureScopeMap = () => {
+                            if (!functionReturnScopes.has(scopeKey)) {
+                                functionReturnScopes.set(scopeKey, new Map());
+                            }
+                            return functionReturnScopes.get(scopeKey);
+                        };
+                        const extractDeterministicReturnFromFunctionLike = (fn) => {
+                            // Arrow: () => 'Hello'
+                            if (t.isArrowFunctionExpression(fn)) {
+                                if (t.isStringLiteral(fn.body)) {
+                                    return fn.body.value;
                                 }
-                                if (t.isBlockStatement(init.body)) {
+                                if (t.isBlockStatement(fn.body)) {
                                     const returnValues = new Set();
-                                    for (const stmt of init.body.body) {
+                                    for (const stmt of fn.body.body) {
                                         if (!t.isReturnStatement(stmt))
                                             continue;
                                         const arg = stmt.argument;
@@ -268,11 +286,11 @@ class Parser {
                                 }
                                 return null;
                             }
-                            // Function expression: const fn = function(){ return 'Hello' }
-                            if (t.isFunctionExpression(init) &&
-                                t.isBlockStatement(init.body)) {
+                            // FunctionExpression / ObjectMethod: function(){ return 'Hello' }
+                            if ((t.isFunctionExpression(fn) || t.isObjectMethod(fn)) &&
+                                t.isBlockStatement(fn.body)) {
                                 const returnValues = new Set();
-                                for (const stmt of init.body.body) {
+                                for (const stmt of fn.body.body) {
                                     if (!t.isReturnStatement(stmt))
                                         continue;
                                     const arg = stmt.argument;
@@ -288,26 +306,49 @@ class Parser {
                             }
                             return null;
                         };
-                        const onlyValue = extractDeterministicReturn();
+                        // Handle: const obj = { getText: () => 'Hello' } or const obj = { getText() { return 'Hello' } }
+                        if (t.isObjectExpression(init)) {
+                            const scopeMap = ensureScopeMap();
+                            for (const prop of init.properties) {
+                                if (t.isSpreadElement(prop))
+                                    continue;
+                                // obj: { getText: () => 'Hello' }
+                                if (t.isObjectProperty(prop)) {
+                                    if (!t.isIdentifier(prop.key))
+                                        continue;
+                                    const methodName = prop.key.name;
+                                    const value = prop.value;
+                                    if (!t.isArrowFunctionExpression(value) &&
+                                        !t.isFunctionExpression(value)) {
+                                        continue;
+                                    }
+                                    const onlyValue = extractDeterministicReturnFromFunctionLike(value);
+                                    if (!onlyValue)
+                                        continue;
+                                    scopeMap.set(`${varName}.${methodName}`, onlyValue);
+                                }
+                                // obj: { getText() { return 'Hello' } }
+                                if (t.isObjectMethod(prop)) {
+                                    if (!t.isIdentifier(prop.key))
+                                        continue;
+                                    const methodName = prop.key.name;
+                                    const onlyValue = extractDeterministicReturnFromFunctionLike(prop);
+                                    if (!onlyValue)
+                                        continue;
+                                    scopeMap.set(`${varName}.${methodName}`, onlyValue);
+                                }
+                            }
+                            return;
+                        }
+                        // Handle: const getGreeting = () => 'Hello'
+                        if (!t.isArrowFunctionExpression(init) &&
+                            !t.isFunctionExpression(init)) {
+                            return;
+                        }
+                        const onlyValue = extractDeterministicReturnFromFunctionLike(init);
                         if (!onlyValue)
                             return;
-                        const enclosingFunctionPath = path.findParent((p) => {
-                            return (p.isFunctionDeclaration() ||
-                                p.isArrowFunctionExpression() ||
-                                p.isFunctionExpression() ||
-                                (p.isVariableDeclarator() &&
-                                    p.node.init &&
-                                    (t.isArrowFunctionExpression(p.node.init) ||
-                                        t.isFunctionExpression(p.node.init))));
-                        });
-                        const fileScopeKey = `file:${relativeFilePath}`;
-                        const scopeKey = enclosingFunctionPath
-                            ? enclosingFunctionPath.getPathLocation()
-                            : fileScopeKey;
-                        if (!functionReturnScopes.has(scopeKey)) {
-                            functionReturnScopes.set(scopeKey, new Map());
-                        }
-                        functionReturnScopes.get(scopeKey).set(funcName, onlyValue);
+                        ensureScopeMap().set(varName, onlyValue);
                     },
                 });
                 // Second pass: Process JSXElements with variable scope context

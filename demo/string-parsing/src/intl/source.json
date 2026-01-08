@@ -1053,11 +1053,11 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "type": "element",
-          "hash": "6e719ae9b3e951ac29b2c4e5382c5ca9",
+          "hash": "8be6beb3441cafb974df847d128ffe7f",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{obj.getText()}"
+          "content": "Hello World from object method"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -1097,11 +1097,11 @@
         },
         "program/body0/declaration/body/body1/argument/children3/children3": {
           "type": "element",
-          "hash": "c10562818f129f8bf7ed11806f389c85",
+          "hash": "fec89edc451b94e30030ed84b8f33d88",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "  Hello World  "
+          "content": "  Hello Wo"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",

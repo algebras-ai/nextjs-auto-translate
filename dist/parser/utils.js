@@ -136,6 +136,26 @@ function resolveFunctionCall(callExpression, functionScope) {
     return null;
 }
 /**
+ * Resolves a member function call like obj.getText() to its string literal return value,
+ * when we recorded it as a deterministic object-literal method (keyed as "obj.getText").
+ */
+function resolveMemberFunctionCall(callExpression, functionScope) {
+    if (!t.isMemberExpression(callExpression.callee))
+        return null;
+    const callee = callExpression.callee;
+    if (callee.computed)
+        return null;
+    if (!t.isIdentifier(callee.object))
+        return null;
+    if (!t.isIdentifier(callee.property))
+        return null;
+    const key = `${callee.object.name}.${callee.property.name}`;
+    if (functionScope.has(key)) {
+        return functionScope.get(key);
+    }
+    return null;
+}
+/**
  * Extracts a readable representation of an expression
  * for translation purposes.
  */
@@ -229,6 +249,11 @@ function extractExpressionContent(expression, variableScope = new Map(), functio
     if (t.isCallExpression(expression)) {
         // Handle method calls like text.toUpperCase()
         if (t.isMemberExpression(expression.callee)) {
+            // First: resolve deterministic object-literal method calls (e.g. obj.getText() -> "Text")
+            const resolvedMemberCall = resolveMemberFunctionCall(expression, functionScope);
+            if (resolvedMemberCall !== null) {
+                return resolvedMemberCall;
+            }
             const memberExpr = expression.callee;
             // Check if object is an identifier (variable)
             if (t.isIdentifier(memberExpr.object)) {
@@ -258,9 +283,42 @@ function extractExpressionContent(expression, variableScope = new Map(), functio
                             case 'trimRight':
                                 result = resolvedValue.trimEnd();
                                 break;
+                            case 'substring': {
+                                const [start, end] = expression.arguments;
+                                if (start &&
+                                    t.isNumericLiteral(start) &&
+                                    (!end || t.isNumericLiteral(end))) {
+                                    result = resolvedValue.substring(start.value, end?.value);
+                                }
+                                break;
+                            }
+                            case 'slice': {
+                                const [start, end] = expression.arguments;
+                                if ((!start || t.isNumericLiteral(start)) &&
+                                    (!end || t.isNumericLiteral(end))) {
+                                    const startVal = start && t.isNumericLiteral(start)
+                                        ? start.value
+                                        : undefined;
+                                    const endVal = end && t.isNumericLiteral(end) ? end.value : undefined;
+                                    result = resolvedValue.slice(startVal, endVal);
+                                }
+                                break;
+                            }
+                            case 'replace': {
+                                const [searchValue, replaceValue] = expression.arguments;
+                                // Keep this intentionally conservative: only string-to-string replace with literal args.
+                                if (searchValue &&
+                                    replaceValue &&
+                                    t.isStringLiteral(searchValue) &&
+                                    t.isStringLiteral(replaceValue)) {
+                                    result = resolvedValue.replace(searchValue.value, replaceValue.value);
+                                }
+                                break;
+                            }
                             default:
-                                // For other methods, return the resolved value
-                                result = resolvedValue;
+                                // Unsupported/unknown method: don't guess.
+                                // Returning the original string would create a wrong translation entry and replace runtime output.
+                                result = null;
                         }
                         if (result !== null) {
                             return result;
