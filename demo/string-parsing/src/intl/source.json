@@ -1607,6 +1607,14 @@
           "overrides": {},
           "content": "Third"
         },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "type": "element",
+          "hash": "b9f3f5d0e778d934dc50684e5915b6a7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{items.join()}"
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "cc607234bc119b17dce37e86665bb1ff",
@@ -1626,6 +1634,14 @@
           "skip": false,
           "overrides": {},
           "content": "numbers.map(n => `Number: ${n}`)"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body/children1/expression_quasi_0": {
+          "type": "text",
+          "hash": "ce55f1250b51cc2b58a9cdac3cd082de",
+          "context": "map() callback template quasi 0",
+          "skip": false,
+          "overrides": {},
+          "content": "Number: "
         },
         "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
           "type": "element",
@@ -2318,6 +2334,14 @@
           "skip": false,
           "overrides": {},
           "content": "String Rendering Patterns"
+        },
+        "program/body3/declaration/body/body1/argument/children1/children1/children3/children1/expression/arguments0/body/body1/argument/openingElement/attributes2/value/expression_quasi_0": {
+          "type": "text",
+          "hash": "c9352f5abc3aa91696ab90edffde0d35",
+          "context": "map() callback template quasi 0",
+          "skip": false,
+          "overrides": {},
+          "content": "rounded-md px-3 py-2 text-sm font-medium transition-colors "
         }
       }
     }

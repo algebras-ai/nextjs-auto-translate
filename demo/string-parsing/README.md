@@ -37,7 +37,7 @@ The following scenarios need to be tested and modernized with `@nextjs-auto-tran
 - [✅] **4. Components** (`app/4-components/page.tsx`) - Through props and children that render visible text
 - [✅] **5. Functions** (`app/5-functions/page.tsx`) - Through function calls returning strings for display
 - [✅] **6. Conditional Logic** (`app/6-conditional-logic/page.tsx`) - Through ternary operators and logical expressions returning strings
-- [ ] **7. Loops** (`app/7-loops/page.tsx`) - Through map, forEach and other array methods rendering strings
+- [✅] **7. Loops** (`app/7-loops/page.tsx`) - Through map, forEach and other array methods rendering strings
 - [ ] **8. Next.js Specifics** (`app/8-nextjs-specifics/page.tsx`) - Metadata (title, description), Server/Client Components
 - [ ] **9. Forms** (`app/9-forms/page.tsx`) - Placeholder, value, label text, button text, option text
 - [ ] **10. Special Cases** (`app/10-special-cases/page.tsx`) - Portals, Suspense fallback, Error Boundary

@@ -1427,6 +1427,13 @@
           },
           "hash": "168909c0b6f1dfbd48f679d47059c1d6"
         },
+        "program/body0/declaration/body/body1/argument/children3/children1": {
+          "content": {
+            "en": "{items.join()}",
+            "ru": "[RU] {items.join()}"
+          },
+          "hash": "b9f3f5d0e778d934dc50684e5915b6a7"
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "content": {
             "en": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (join)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is combined into one string.",
@@ -1444,6 +1451,13 @@
             "ru": "[RU] numbers.map(n => `Number: ${n}`)"
           },
           "hash": "b4a387a73ec71689484aacbc065e7cb7"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body/children1/expression_quasi_0": {
+          "content": {
+            "en": "Number: ",
+            "ru": "[RU] Number: "
+          },
+          "hash": "ce55f1250b51cc2b58a9cdac3cd082de"
         },
         "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
           "content": {
@@ -2059,6 +2073,13 @@
             "ru": "[RU] String Rendering Patterns"
           },
           "hash": "d67cc33eea225011ccdd58c9e0ca06e9"
+        },
+        "program/body3/declaration/body/body1/argument/children1/children1/children3/children1/expression/arguments0/body/body1/argument/openingElement/attributes2/value/expression_quasi_0": {
+          "content": {
+            "en": "rounded-md px-3 py-2 text-sm font-medium transition-colors ",
+            "ru": "[RU] rounded-md px-3 py-2 text-sm font-medium transition-colors "
+          },
+          "hash": "c9352f5abc3aa91696ab90edffde0d35"
         }
       }
     }

@@ -664,7 +664,8 @@ class Parser {
                                 const cb = callPath.get('arguments.0');
                                 if (!cb)
                                     return;
-                                if (!cb.isArrowFunctionExpression() && !cb.isFunctionExpression()) {
+                                if (!cb.isArrowFunctionExpression() &&
+                                    !cb.isFunctionExpression()) {
                                     return;
                                 }
                                 const body = cb.get('body');
