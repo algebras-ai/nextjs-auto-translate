@@ -1219,6 +1219,30 @@
           "overrides": {},
           "content": "Error"
         },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getMessage_case_loading": {
+          "type": "element",
+          "hash": "8524de963f07201e5c086830d370797f",
+          "context": "CallExpression getMessage case \"loading\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Loading..."
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getMessage_case_error": {
+          "type": "element",
+          "hash": "902b0d55fddef6f8d651fe1035b7d4bd",
+          "context": "CallExpression getMessage case \"error\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Error"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getMessage_default": {
+          "type": "element",
+          "hash": "e7d31fc0602fb2ede144d18cdffd816b",
+          "context": "CallExpression getMessage default",
+          "skip": false,
+          "overrides": {},
+          "content": "Ready"
+        },
         "program/body2/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "57fb5db03701435f5dd6c2743134c9aa",
@@ -1254,6 +1278,14 @@
           "skip": false,
           "overrides": {},
           "content": "Error: {error}"
+        },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_and_right_quasi_0": {
+          "type": "element",
+          "hash": "f97d2eb0a66987899d02bb180936afa3",
+          "context": "Logical expression (&&) right template quasi 0",
+          "skip": false,
+          "overrides": {},
+          "content": "Error: "
         },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1339,6 +1371,30 @@
           "type": "element",
           "hash": "88183b946cc5f0e8c96b2e66e1c74a7e",
           "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Unknown"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getStatusText_case_pending": {
+          "type": "element",
+          "hash": "2d13df6f8b5e4c5af9f87e0dc39df69d",
+          "context": "CallExpression getStatusText case \"pending\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Pending"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getStatusText_case_success": {
+          "type": "element",
+          "hash": "505a83f220c02df2f85c3810cd9ceb38",
+          "context": "CallExpression getStatusText case \"success\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Success"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getStatusText_default": {
+          "type": "element",
+          "hash": "88183b946cc5f0e8c96b2e66e1c74a7e",
+          "context": "CallExpression getStatusText default",
           "skip": false,
           "overrides": {},
           "content": "Unknown"

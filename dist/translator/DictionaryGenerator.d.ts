@@ -22,6 +22,7 @@ export declare class DictionaryGenerator {
     private translationService;
     private translationProvider?;
     constructor(options: DictionaryGeneratorOptions);
+    private preserveEdgeWhitespace;
     /**
      * Try to load existing dictionary.json from outputDir.
      * Returns null if file doesn't exist or cannot be parsed.
