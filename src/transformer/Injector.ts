@@ -425,6 +425,124 @@ export function transformProject(
       return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
     };
 
+    // Pass 0: Translate static string-array literals that the Parser extracted as per-element entries.
+    // This enables loop scenarios like:
+    //   const items = ['First','Second'];
+    //   {items.map((item) => <div>{item}</div>)}
+    //
+    // The Parser creates scope keys:
+    //   {variableDeclaratorScopePath}_arr_{index}
+    // and we rewrite each string literal element into:
+    //   t(`${relativePath}::{key}`)
+    traverse(ast, {
+      VariableDeclarator(path: NodePath<t.VariableDeclarator>) {
+        const init = path.node.init;
+        if (!init || !t.isArrayExpression(init)) return;
+
+        const declScopePath = getRelativeScopePath(path.getPathLocation());
+
+        let didReplace = false;
+        init.elements = init.elements.map((el, index) => {
+          if (!el || !t.isStringLiteral(el)) return el;
+          const key = `${declScopePath}_arr_${index}`;
+          if (!fileScopes[key]) return el;
+
+          didReplace = true;
+          return t.callExpression(t.identifier('t'), [
+            t.stringLiteral(`${relativePath}::${key}`),
+          ]);
+        });
+
+        if (!didReplace) return;
+
+        // This requires t() which comes from the useTranslation() hook.
+        const functionPath = path.findParent((p: any) => {
+          return (
+            p.isFunctionDeclaration() ||
+            p.isArrowFunctionExpression() ||
+            p.isFunctionExpression() ||
+            (p.isVariableDeclarator() &&
+              p.node.init &&
+              (t.isArrowFunctionExpression(p.node.init) ||
+                t.isFunctionExpression(p.node.init)))
+          );
+        });
+        if (functionPath) {
+          componentsNeedingHook.add(functionPath.getPathLocation());
+        }
+
+        changed = true;
+      },
+    });
+
+    // Pass 0a: Rewrite TemplateLiterals into concatenation using translated quasis.
+    // This is the safe way to handle scenario 7.2 (map() with formatting) without trying
+    // to translate runtime values (numbers).
+    //
+    // Example:
+    //   {`Number: ${n}`}
+    // becomes:
+    //   t("file::..._quasi_0") + n
+    //
+    // Parser must have emitted `${baseKey}_quasi_${i}` entries for the quasis.
+    traverse(ast, {
+      TemplateLiteral(path: NodePath<t.TemplateLiteral>) {
+        const template = path.node;
+
+        const baseKey = getRelativeScopePath(path.getPathLocation());
+
+        let out: t.Expression | null = null;
+        let usedT = false;
+
+        for (let i = 0; i < template.quasis.length; i++) {
+          const quasi = template.quasis[i];
+          const quasiText = quasi.value.cooked ?? quasi.value.raw ?? '';
+
+          if (quasiText) {
+            const quasiKey = `${baseKey}_quasi_${i}`;
+
+            const quasiExpr = fileScopes[quasiKey]
+              ? ((usedT = true),
+                t.callExpression(t.identifier('t'), [
+                  t.stringLiteral(`${relativePath}::${quasiKey}`),
+                ]))
+              : t.stringLiteral(quasiText);
+
+            out = out ? t.binaryExpression('+', out, quasiExpr) : quasiExpr;
+          }
+
+          if (i < template.expressions.length) {
+            const interp = template.expressions[i];
+            if (!t.isExpression(interp)) continue;
+            out = out ? t.binaryExpression('+', out, interp) : interp;
+          }
+        }
+
+        // Only replace when we actually used t() (i.e. we have a sourceMap entry),
+        // otherwise leave the original TemplateLiteral untouched.
+        if (!usedT || !out) return;
+
+        // Mark hook needed for whichever component contains this template literal.
+        const functionPath = path.findParent((p: any) => {
+          return (
+            p.isFunctionDeclaration() ||
+            p.isArrowFunctionExpression() ||
+            p.isFunctionExpression() ||
+            (p.isVariableDeclarator() &&
+              p.node.init &&
+              (t.isArrowFunctionExpression(p.node.init) ||
+                t.isFunctionExpression(p.node.init)))
+          );
+        });
+        if (functionPath) {
+          componentsNeedingHook.add(functionPath.getPathLocation());
+        }
+
+        path.replaceWith(out);
+        changed = true;
+      },
+    });
+
     // Pass 0a: Handle template literals with parameters (professional approach)
     // TemplateLiteral → combine into single message → replace expressions with placeholders → extract one translation key
     // Transform template literals to use <Translated params={{...}} />

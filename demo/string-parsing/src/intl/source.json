@@ -1523,6 +1523,46 @@
           "overrides": {},
           "content": "items.filter(item => item.length > 5).map(...)"
         },
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_3": {
+          "type": "text",
+          "hash": "6e599f7a2a9186d391be4537f105be98",
+          "context": "Static string-array element (items[3]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Fourth"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_4": {
+          "type": "text",
+          "hash": "0abdfd715970bd0ef7d5574daa0e6d0b",
+          "context": "Static string-array element (items[4]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Fifth"
+        },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "0c8ff2f2a51017a4481475a732091f0b",
@@ -1543,13 +1583,29 @@
           "overrides": {},
           "content": "items.join(\", \")"
         },
-        "program/body0/declaration/body/body1/argument/children3/children1": {
-          "type": "element",
-          "hash": "b9f3f5d0e778d934dc50684e5915b6a7",
-          "context": "",
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by join()",
           "skip": false,
           "overrides": {},
-          "content": "{items.join()}"
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by join()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by join()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1593,19 +1649,43 @@
       "scopes": {
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "type": "element",
-          "hash": "3f1459afe307d7c765931426a118eb3e",
+          "hash": "8bfb3bf7988d241c6c406ac52548bb7a",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "items.map((item, index) => <div key={index}>{item}</div>)"
+          "content": "items.map((item, index) => <div key={index}>{item\n          }</div>)"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
-          "hash": "1c0cf192a506bd844454dc1d168a470b",
+          "hash": "2a40cce947c1c98831ff50a5ba95f929",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map."
         }
       }
     },
@@ -1618,6 +1698,30 @@
           "skip": false,
           "overrides": {},
           "content": "items.reduce((acc, item) => `${acc}, ${item}`, \"\")"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by reduce()",
+          "skip": false,
+          "overrides": {},
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by reduce()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by reduce()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",

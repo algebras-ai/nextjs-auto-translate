@@ -127,6 +127,13 @@ export class Parser {
         // Key: function path location, Value: Map<variableName, stringValue>
         const functionScopes = new Map<string, Map<string, string>>();
 
+        // Map to store static string-array scopes per function/component
+        // Key: function path location (or file scope key), Value: Map<variableName, { declScopePath, values }>
+        const functionStringArrayScopes = new Map<
+          string,
+          Map<string, { declScopePath: string; values: string[] }>
+        >();
+
         // Map to store function return scopes per function/component
         // Key: function path location, Value: Map<functionName, stringReturnValue>
         const functionReturnScopes = new Map<string, Map<string, string>>();
@@ -181,6 +188,63 @@ export class Parser {
                 }
                 const scope = functionScopes.get(fileScopeKey)!;
                 scope.set(varName, stringValue);
+              }
+            }
+
+            // Track variable declarations with static string-array initializers
+            // Example: const items = ['First', 'Second'];
+            if (
+              t.isIdentifier(path.node.id) &&
+              path.node.init &&
+              t.isArrayExpression(path.node.init) &&
+              path.node.init.elements.length > 0 &&
+              path.node.init.elements.every(
+                (el: any) => el && t.isStringLiteral(el)
+              )
+            ) {
+              const varName = path.node.id.name;
+
+              const values = (path.node.init.elements as any[])
+                .filter(Boolean)
+                .filter((el) => t.isStringLiteral(el))
+                .map((el) => (el as t.StringLiteral).value)
+                .filter((v) => v.trim().length > 0);
+
+              if (values.length === 0) return;
+
+              const declScopePath = getRelativeScopePath(
+                path.getPathLocation()
+              );
+
+              // Find the parent function/component
+              const functionPath = path.findParent((p: any) => {
+                return (
+                  p.isFunctionDeclaration() ||
+                  p.isArrowFunctionExpression() ||
+                  p.isFunctionExpression() ||
+                  (p.isVariableDeclarator() &&
+                    p.node.init &&
+                    (t.isArrowFunctionExpression(p.node.init) ||
+                      t.isFunctionExpression(p.node.init)))
+                );
+              });
+
+              if (functionPath) {
+                const functionLocation = functionPath.getPathLocation();
+                if (!functionStringArrayScopes.has(functionLocation)) {
+                  functionStringArrayScopes.set(functionLocation, new Map());
+                }
+                functionStringArrayScopes
+                  .get(functionLocation)!
+                  .set(varName, { declScopePath, values });
+              } else {
+                const fileScopeKey = `file:${relativeFilePath}`;
+                if (!functionStringArrayScopes.has(fileScopeKey)) {
+                  functionStringArrayScopes.set(fileScopeKey, new Map());
+                }
+                functionStringArrayScopes
+                  .get(fileScopeKey)!
+                  .set(varName, { declScopePath, values });
               }
             }
           },
@@ -531,12 +595,18 @@ export class Parser {
             const fileScopeKey = `file:${relativeFilePath}`;
             const fileLevelScope =
               functionScopes.get(fileScopeKey) || new Map();
+            const fileLevelStringArrayScope =
+              functionStringArrayScopes.get(fileScopeKey) || new Map();
             const fileLevelFunctionScope =
               functionReturnScopes.get(fileScopeKey) || new Map();
             const fileLevelConditionalReturnScope =
               functionConditionalReturnScopes.get(fileScopeKey) || new Map();
 
             let variableScope = new Map<string, string>(fileLevelScope);
+            let stringArrayScope = new Map<
+              string,
+              { declScopePath: string; values: string[] }
+            >(fileLevelStringArrayScope);
             let functionReturnScope = new Map<string, string>(
               fileLevelFunctionScope
             );
@@ -549,6 +619,8 @@ export class Parser {
               const functionLocation = functionPath.getPathLocation();
               const functionLevelScope =
                 functionScopes.get(functionLocation) || new Map();
+              const functionLevelStringArrayScope =
+                functionStringArrayScopes.get(functionLocation) || new Map();
               const functionLevelFunctionScope =
                 functionReturnScopes.get(functionLocation) || new Map();
               const functionLevelConditionalReturnScope =
@@ -558,6 +630,9 @@ export class Parser {
               for (const [key, value] of functionLevelScope) {
                 variableScope.set(key, value);
               }
+              for (const [key, value] of functionLevelStringArrayScope) {
+                stringArrayScope.set(key, value);
+              }
               for (const [key, value] of functionLevelFunctionScope) {
                 functionReturnScope.set(key, value);
               }
@@ -565,6 +640,147 @@ export class Parser {
                 functionConditionalReturnScope.set(key, value);
               }
             }
+
+            // Extract static string arrays used in rendered loop/array calls.
+            // This enables translating cases like:
+            //   const items = ['First','Second'];
+            //   {items.map((item) => <div>{item}</div>)}
+            //
+            // We create per-element entries (keyed off the VariableDeclarator scope path),
+            // and the Injector rewrites the array literals to t(file::key) calls.
+            const loopMethods = new Set([
+              'map',
+              'filter',
+              'forEach',
+              'reduce',
+              'join',
+            ]);
+
+            const getRootIdentifierName = (node: any): string | null => {
+              if (!node) return null;
+              if (t.isIdentifier(node)) return node.name;
+              if (t.isMemberExpression(node)) {
+                return getRootIdentifierName(node.object);
+              }
+              if (
+                t.isCallExpression(node) &&
+                t.isMemberExpression(node.callee)
+              ) {
+                return getRootIdentifierName(node.callee.object);
+              }
+              return null;
+            };
+
+            for (const child of path.node.children) {
+              if (!t.isJSXExpressionContainer(child)) continue;
+              const expr = child.expression;
+              if (!t.isCallExpression(expr)) continue;
+              if (!t.isMemberExpression(expr.callee)) continue;
+
+              const memberExpr = expr.callee;
+              if (!t.isIdentifier(memberExpr.property)) continue;
+              const methodName = memberExpr.property.name;
+              if (!loopMethods.has(methodName)) continue;
+
+              const rootName = getRootIdentifierName(memberExpr.object);
+              if (!rootName) continue;
+
+              const info = stringArrayScope.get(rootName);
+              if (!info) continue;
+
+              info.values.forEach((value, index) => {
+                const key = `${info.declScopePath}_arr_${index}`;
+                if (fileScopes[key]) return;
+
+                const hash = crypto
+                  .createHash('md5')
+                  .update(value)
+                  .digest('hex');
+
+                fileScopes[key] = {
+                  type: 'text',
+                  hash,
+                  context: `Static string-array element (${rootName}[${index}]) used by ${methodName}()`,
+                  skip: false,
+                  overrides: {},
+                  content: value,
+                };
+              });
+            }
+
+            // Extract static quasis from template literals used inside map() callbacks rendered in JSX.
+            // Scenario 7.2:
+            //   {numbers.map((n) => <div>{`Number: ${n}`}</div>)}
+            //
+            // We do NOT attempt to translate runtime interpolations like `n`.
+            // Instead, we create per-quasi entries:
+            //   {templateLiteralPath}_quasi_{i}
+            // and the Injector rewrites the template literal to:
+            //   t(file::..._quasi_0) + n (+ ...)
+            path.traverse({
+              CallExpression(callPath: any) {
+                const callee = callPath.node.callee;
+                if (!t.isMemberExpression(callee)) return;
+                if (!t.isIdentifier(callee.property)) return;
+                if (callee.property.name !== 'map') return;
+
+                // Only when this call is rendered via JSXExpressionContainer
+                const parent = callPath.parentPath;
+                if (!parent || !parent.isJSXExpressionContainer()) return;
+
+                // Ensure we only process map() calls whose nearest JSXElement is this `path`
+                const nearestJsx = callPath.findParent((p: any) =>
+                  p.isJSXElement ? p.isJSXElement() : false
+                );
+                if (nearestJsx && nearestJsx !== path) return;
+
+                // Visit template literals under the callback body
+                const cb = callPath.get('arguments.0');
+                if (!cb) return;
+                if (
+                  !cb.isArrowFunctionExpression() &&
+                  !cb.isFunctionExpression()
+                ) {
+                  return;
+                }
+
+                const body = cb.get('body');
+                if (!body) return;
+
+                body.traverse({
+                  TemplateLiteral(tplPath: any) {
+                    const baseKey = getRelativeScopePath(
+                      tplPath.getPathLocation()
+                    );
+                    const quasis = tplPath.node.quasis || [];
+
+                    for (let i = 0; i < quasis.length; i++) {
+                      const quasi = quasis[i];
+                      const quasiText =
+                        quasi.value?.cooked ?? quasi.value?.raw ?? '';
+                      if (!quasiText) continue;
+
+                      const key = `${baseKey}_quasi_${i}`;
+                      if (fileScopes[key]) continue;
+
+                      const hash = crypto
+                        .createHash('md5')
+                        .update(quasiText)
+                        .digest('hex');
+
+                      fileScopes[key] = {
+                        type: 'text',
+                        hash,
+                        context: `map() callback template quasi ${i}`,
+                        skip: false,
+                        overrides: {},
+                        content: quasiText,
+                      };
+                    }
+                  },
+                });
+              },
+            });
 
             // Debug: Log variable scope for template literals
             // This helps verify that variables are in scope when processing template literals
