@@ -30,5 +30,6 @@ exports.RUNTIME_PATHS = {
     SERVER_INTL_WRAPPER: `${exports.PACKAGE_NAME}/runtime/server/IntlWrapper`,
     CLIENT_TRANSLATED: `${exports.PACKAGE_NAME}/runtime/client/components/Translated`,
     CLIENT_LOCALE_SWITCHER: `${exports.PACKAGE_NAME}/runtime/client/components/LocaleSwitcher`,
+    CLIENT_USE_TRANSLATION: `${exports.PACKAGE_NAME}/runtime/client/hooks/useTranslation`,
     TURBOPACK_TRANSFORMER: `${exports.PACKAGE_NAME}/turbopack/auto-intl-transformer`,
 };

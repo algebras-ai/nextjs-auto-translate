@@ -30,5 +30,6 @@ export const RUNTIME_PATHS = {
   SERVER_INTL_WRAPPER: `${PACKAGE_NAME}/runtime/server/IntlWrapper`,
   CLIENT_TRANSLATED: `${PACKAGE_NAME}/runtime/client/components/Translated`,
   CLIENT_LOCALE_SWITCHER: `${PACKAGE_NAME}/runtime/client/components/LocaleSwitcher`,
+  CLIENT_USE_TRANSLATION: `${PACKAGE_NAME}/runtime/client/hooks/useTranslation`,
   TURBOPACK_TRANSFORMER: `${PACKAGE_NAME}/turbopack/auto-intl-transformer`,
 } as const;

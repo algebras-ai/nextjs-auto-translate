@@ -1,7 +1,9 @@
 import * as t from '@babel/types';
 import { ScopeMap } from '../types';
 export declare function injectTranslated(scope: string): t.JSXElement;
+export declare function injectTranslatedWithParams(scope: string, params: Record<string, t.Expression>): t.JSXElement;
 export declare function ensureImportTranslated(ast: t.File): void;
+export declare function ensureImportUseTranslation(ast: t.File): void;
 export declare function ensureImportLocalesSwitcher(ast: t.File): void;
 export declare function injectLocaleSwitcher(ast: t.File): void;
 export declare function transformProject(code: string, options: {

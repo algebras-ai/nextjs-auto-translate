@@ -1,5 +1,5 @@
 // Server Component - no interactivity needed
-const obj = { getText: () => 'Text' };
+const obj = { getText: () => 'Hello World from object method' };
 
 export default function ObjectMethod() {
   return (
@@ -21,4 +21,3 @@ export default function ObjectMethod() {
     </div>
   );
 }
-

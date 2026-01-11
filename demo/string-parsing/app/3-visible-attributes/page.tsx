@@ -1,6 +1,7 @@
-import TitleAttribute from './components/TitleAttribute';
+'use client';
 import AltAttribute from './components/AltAttribute';
 import AriaAttributes from './components/AriaAttributes';
+import TitleAttribute from './components/TitleAttribute';
 
 export default function VisibleAttributesPage() {
   return (
@@ -33,4 +34,3 @@ export default function VisibleAttributesPage() {
     </div>
   );
 }
-

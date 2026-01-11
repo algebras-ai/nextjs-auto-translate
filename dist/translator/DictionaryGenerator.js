@@ -25,6 +25,12 @@ class DictionaryGenerator {
         this.options = options;
         this.translationProvider = options.translationProvider;
     }
+    preserveEdgeWhitespace(source, translated) {
+        const leading = source.match(/^\s+/)?.[0] ?? '';
+        const trailing = source.match(/\s+$/)?.[0] ?? '';
+        const core = translated.trim();
+        return `${leading}${core}${trailing}`;
+    }
     /**
      * Try to load existing dictionary.json from outputDir.
      * Returns null if file doesn't exist or cannot be parsed.
@@ -107,7 +113,7 @@ class DictionaryGenerator {
                         existingEntry.content &&
                         existingEntry.content[locale]) {
                         // Reuse existing translation
-                        content[locale] = existingEntry.content[locale];
+                        content[locale] = this.preserveEdgeWhitespace(scopeData.content, existingEntry.content[locale]);
                     }
                     else {
                         // Need translation for this locale/scope
@@ -155,7 +161,7 @@ class DictionaryGenerator {
                     const entry = file.entries[scopePath];
                     if (!entry)
                         continue;
-                    entry.content[locale] = translated;
+                    entry.content[locale] = this.preserveEdgeWhitespace(batchTexts[j], translated);
                 }
             }
         }

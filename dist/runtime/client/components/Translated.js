@@ -5,7 +5,7 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
 const Provider_1 = require("../Provider");
 const Translated = (props) => {
-    const { tKey } = props;
+    const { tKey, params } = props;
     const [fileKey, entryKey] = tKey.split('::');
     const { dictionary, locale } = (0, Provider_1.useAlgebrasIntl)();
     // Check if the file exists in dictionary
@@ -38,6 +38,12 @@ const Translated = (props) => {
             const varName = match[1];
             // Skip if already processed
             if (placeholders.has(varName)) {
+                continue;
+            }
+            // 1) If runtime params are provided (e.g. map() interpolations), prefer them.
+            if (params && Object.prototype.hasOwnProperty.call(params, varName)) {
+                const raw = params[varName];
+                placeholders.set(varName, raw === null || raw === undefined ? '' : String(raw));
                 continue;
             }
             // Try to find the translated variable value in the dictionary

@@ -5,10 +5,11 @@ import { useAlgebrasIntl } from '../Provider';
 
 interface TranslatedProps {
   tKey: string;
+  params?: Record<string, unknown>;
 }
 
 const Translated = (props: TranslatedProps) => {
-  const { tKey } = props;
+  const { tKey, params } = props;
   const [fileKey, entryKey] = tKey.split('::');
 
   const { dictionary, locale } = useAlgebrasIntl();
@@ -50,6 +51,16 @@ const Translated = (props: TranslatedProps) => {
 
       // Skip if already processed
       if (placeholders.has(varName)) {
+        continue;
+      }
+
+      // 1) If runtime params are provided (e.g. map() interpolations), prefer them.
+      if (params && Object.prototype.hasOwnProperty.call(params, varName)) {
+        const raw = (params as Record<string, unknown>)[varName];
+        placeholders.set(
+          varName,
+          raw === null || raw === undefined ? '' : String(raw)
+        );
         continue;
       }
 

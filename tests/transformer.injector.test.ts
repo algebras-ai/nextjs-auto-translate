@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { transformProject } from '../src/transformer/Injector';
 
 describe('transformProject - stability', () => {

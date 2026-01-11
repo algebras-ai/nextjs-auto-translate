@@ -10,7 +10,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = autoIntl({
   defaultLocale: LanguageCode.en,
-  targetLocales: [LanguageCode.es],
+  targetLocales: [LanguageCode.ru],
   outputDir: './src/intl',
   includeNodeModules: false,
   // The plugin automatically reads ALGEBRAS_API_KEY and ALGEBRAS_API_URL from .env

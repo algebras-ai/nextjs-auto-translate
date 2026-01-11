@@ -133,6 +133,27 @@ function resolveFunctionCall(
 }
 
 /**
+ * Resolves a member function call like obj.getText() to its string literal return value,
+ * when we recorded it as a deterministic object-literal method (keyed as "obj.getText").
+ */
+function resolveMemberFunctionCall(
+  callExpression: t.CallExpression,
+  functionScope: FunctionScope
+): string | null {
+  if (!t.isMemberExpression(callExpression.callee)) return null;
+  const callee = callExpression.callee;
+  if (callee.computed) return null;
+  if (!t.isIdentifier(callee.object)) return null;
+  if (!t.isIdentifier(callee.property)) return null;
+
+  const key = `${callee.object.name}.${callee.property.name}`;
+  if (functionScope.has(key)) {
+    return functionScope.get(key)!;
+  }
+  return null;
+}
+
+/**
  * Extracts a readable representation of an expression
  * for translation purposes.
  */
@@ -151,21 +172,25 @@ export function extractExpressionContent(
   }
 
   // Template literal - build representation
-  // Use placeholders for variables so variable values can be translated separately
-  // This allows "John" to be translated to "Juan" independently
+  // Resolve static variables directly, keep runtime variables as placeholders
   if (t.isTemplateLiteral(expression)) {
     let content = '';
     for (let i = 0; i < expression.quasis.length; i++) {
       content += expression.quasis[i].value.raw;
       if (i < expression.expressions.length) {
-        // Always use placeholder for variables - don't resolve their values here
-        // Variable values should be extracted separately and translated independently
         const expr = expression.expressions[i];
         if (t.isIdentifier(expr)) {
-          // Use placeholder format: {variableName}
-          // The variable value will be extracted separately and translated
-          content += `{${expr.name}}`;
+          // Check if this is a static variable (in scope)
+          const varValue = variableScope.get(expr.name);
+          if (varValue !== undefined) {
+            // Static variable: resolve directly
+            content += varValue;
+          } else {
+            // Runtime variable: use placeholder
+            content += `{${expr.name}}`;
+          }
         } else {
+          // Complex expression: use placeholder
           content += `{expr}`;
         }
       }
@@ -247,6 +272,15 @@ export function extractExpressionContent(
   if (t.isCallExpression(expression)) {
     // Handle method calls like text.toUpperCase()
     if (t.isMemberExpression(expression.callee)) {
+      // First: resolve deterministic object-literal method calls (e.g. obj.getText() -> "Text")
+      const resolvedMemberCall = resolveMemberFunctionCall(
+        expression,
+        functionScope
+      );
+      if (resolvedMemberCall !== null) {
+        return resolvedMemberCall;
+      }
+
       const memberExpr = expression.callee;
       // Check if object is an identifier (variable)
       if (t.isIdentifier(memberExpr.object)) {
@@ -280,9 +314,53 @@ export function extractExpressionContent(
               case 'trimRight':
                 result = resolvedValue.trimEnd();
                 break;
+              case 'substring': {
+                const [start, end] = expression.arguments;
+                if (
+                  start &&
+                  t.isNumericLiteral(start) &&
+                  (!end || t.isNumericLiteral(end))
+                ) {
+                  result = resolvedValue.substring(start.value, end?.value);
+                }
+                break;
+              }
+              case 'slice': {
+                const [start, end] = expression.arguments;
+                if (
+                  (!start || t.isNumericLiteral(start)) &&
+                  (!end || t.isNumericLiteral(end))
+                ) {
+                  const startVal =
+                    start && t.isNumericLiteral(start)
+                      ? start.value
+                      : undefined;
+                  const endVal =
+                    end && t.isNumericLiteral(end) ? end.value : undefined;
+                  result = resolvedValue.slice(startVal, endVal);
+                }
+                break;
+              }
+              case 'replace': {
+                const [searchValue, replaceValue] = expression.arguments;
+                // Keep this intentionally conservative: only string-to-string replace with literal args.
+                if (
+                  searchValue &&
+                  replaceValue &&
+                  t.isStringLiteral(searchValue) &&
+                  t.isStringLiteral(replaceValue)
+                ) {
+                  result = resolvedValue.replace(
+                    searchValue.value,
+                    replaceValue.value
+                  );
+                }
+                break;
+              }
               default:
-                // For other methods, return the resolved value
-                result = resolvedValue;
+                // Unsupported/unknown method: don't guess.
+                // Returning the original string would create a wrong translation entry and replace runtime output.
+                result = null;
             }
             if (result !== null) {
               return result;
@@ -350,8 +428,9 @@ export function extractExpressionContent(
       // Return the actual string value instead of variable name
       return resolvedValue;
     }
-    // Fallback to variable name if can't resolve
-    return `{${expression.name}}`;
+    // If we can't resolve the value at build time, do NOT emit a placeholder
+    // because the injector would replace runtime output and break UI.
+    return '';
   }
 
   return '';
