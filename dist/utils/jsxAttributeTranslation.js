@@ -38,6 +38,8 @@ const t = __importStar(require("@babel/types"));
 const VISIBLE_ATTRIBUTE_NAMES = new Set([
     'title',
     'alt',
+    'placeholder',
+    'defaultValue',
     'aria-label',
     'aria-describedby',
     'aria-placeholder',
@@ -120,10 +122,29 @@ function isTranslatablePropName(attrName) {
         return false;
     return true;
 }
-function shouldTranslateJsxAttribute(attrName, openingElementName) {
+function shouldTranslateJsxAttribute(attrName, openingElementName, attributes) {
     // Always translate known visible attributes on DOM elements and components
     if (VISIBLE_ATTRIBUTE_NAMES.has(attrName) || attrName.startsWith('aria-')) {
         return true;
+    }
+    // Special case: value attribute on input type="submit" or type="button"
+    // These display the button text and should be translated
+    if (attrName === 'value' &&
+        openingElementName &&
+        t.isJSXIdentifier(openingElementName) &&
+        openingElementName.name === 'input' &&
+        attributes) {
+        const typeAttr = attributes.find((attr) => t.isJSXAttribute(attr) &&
+            t.isJSXIdentifier(attr.name) &&
+            attr.name.name === 'type');
+        if (typeAttr && t.isJSXAttribute(typeAttr) && typeAttr.value) {
+            if (t.isStringLiteral(typeAttr.value)) {
+                const typeValue = typeAttr.value.value;
+                if (typeValue === 'submit' || typeValue === 'button') {
+                    return true;
+                }
+            }
+        }
     }
     // For custom components, treat string props as user-visible unless explicitly technical.
     if (isComponentJsxName(openingElementName)) {

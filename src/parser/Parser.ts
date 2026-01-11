@@ -1105,7 +1105,8 @@ export class Parser {
             if (
               !shouldTranslateJsxAttribute(
                 attrNameStr,
-                openingElement?.name || null
+                openingElement?.name || null,
+                openingElement?.attributes as t.JSXAttribute[]
               )
             ) {
               return;

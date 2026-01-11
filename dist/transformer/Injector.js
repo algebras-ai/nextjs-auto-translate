@@ -791,7 +791,7 @@ function transformProject(code, options) {
                 const openingElement = t.isJSXOpeningElement(path.parent)
                     ? path.parent
                     : null;
-                if (!(0, jsxAttributeTranslation_1.shouldTranslateJsxAttribute)(attrNameStr, openingElement?.name || null)) {
+                if (!(0, jsxAttributeTranslation_1.shouldTranslateJsxAttribute)(attrNameStr, openingElement?.name || null, openingElement?.attributes)) {
                     return;
                 }
                 // Get the scope path for this attribute

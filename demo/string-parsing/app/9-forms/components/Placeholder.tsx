@@ -15,7 +15,8 @@ export default function Placeholder() {
         />
       </div>
       <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-        <strong>AST Type:</strong> JSXAttribute with StringLiteral or JSXExpressionContainer
+        <strong>AST Type:</strong> JSXAttribute with StringLiteral or
+        JSXExpressionContainer
         <br />
         <strong>Description:</strong> Hint string in input field is visible to
         users before entering text.
@@ -23,4 +24,3 @@ export default function Placeholder() {
     </div>
   );
 }
-

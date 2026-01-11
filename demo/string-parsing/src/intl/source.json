@@ -1974,6 +1974,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children3/openingElement/attributes1_attr_value": {
+          "type": "attribute",
+          "hash": "723f11de57922cb639a4f2fd8d813532",
+          "context": "Attribute: value",
+          "skip": false,
+          "overrides": {},
+          "content": "Submit form"
         }
       }
     },
@@ -2038,6 +2046,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children3/openingElement/attributes1_attr_placeholder": {
+          "type": "attribute",
+          "hash": "9c5b386159b32cc72deadb789afd7109",
+          "context": "Attribute: placeholder",
+          "skip": false,
+          "overrides": {},
+          "content": "Input field"
         }
       }
     },
@@ -2094,6 +2110,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes1_attr_placeholder": {
+          "type": "attribute",
+          "hash": "d6513d3686b9b49e5c14360dfda0fd94",
+          "context": "Attribute: placeholder",
+          "skip": false,
+          "overrides": {},
+          "content": "Enter text"
         }
       }
     },
@@ -2150,26 +2174,42 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users."
+        },
+        "program/body1/declaration/body/body1/argument/children3/children1/openingElement/attributes0_attr_placeholder": {
+          "type": "attribute",
+          "hash": "4e9ce95a0f4e750b14ad77bc86d62479",
+          "context": "Attribute: placeholder",
+          "skip": false,
+          "overrides": {},
+          "content": "Enter your comment"
         }
       }
     },
     "app/9-forms/components/Value.tsx": {
       "scopes": {
-        "program/body1/declaration/body/body1/argument/children1/children1": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
           "type": "element",
-          "hash": "f88c66a8224e127edfcab35d35ed6e16",
+          "hash": "17dbbbd94d77f06d0bc32d5168e8c25e",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<input value={inputValue} />"
+          "content": "<input defaultValue=\"Default value\" />"
         },
-        "program/body1/declaration/body/body1/argument/children5": {
+        "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "68925826615bc26889af5771322a121e",
+          "hash": "530aa568c38e85b1111f8d0959f30497",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with JSXExpressionContainer or StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field value is visible to users in\n        the field. Used for pre-filled fields or controlled components."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field default value is visible to\n        users in the field. Used for pre-filled uncontrolled fields."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes1_attr_defaultValue": {
+          "type": "attribute",
+          "hash": "31ce3cdcd67850870b616f75b555bbc5",
+          "context": "Attribute: defaultValue",
+          "skip": false,
+          "overrides": {},
+          "content": "Default value"
         }
       }
     },
