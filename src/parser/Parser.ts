@@ -845,8 +845,7 @@ export class Parser {
                     t.isLogicalExpression(expr) ||
                     (t.isBinaryExpression(expr) && expr.operator === '+') ||
                     t.isCallExpression(expr) ||
-                    t.isIdentifier(expr) ||
-                    t.isMemberExpression(expr)
+                    t.isIdentifier(expr)
                   ) {
                     return true;
                   }

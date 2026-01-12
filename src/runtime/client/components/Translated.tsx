@@ -3,38 +3,59 @@
 import { createElement } from 'react';
 import { useAlgebrasIntl } from '../Provider';
 
+const loggedMissingKeys = new Set<string>();
+
 interface TranslatedProps {
   tKey: string;
   params?: Record<string, unknown>;
+  children?: React.ReactNode;
 }
 
 const Translated = (props: TranslatedProps) => {
-  const { tKey, params } = props;
+  const { tKey, params, children } = props;
   const [fileKey, entryKey] = tKey.split('::');
 
   const { dictionary, locale } = useAlgebrasIntl();
 
   // Check if the file exists in dictionary
   if (!dictionary.files[fileKey]) {
-    console.error(`File "${fileKey}" not found in dictionary`);
-    console.error(`Available files:`, Object.keys(dictionary.files));
-    console.error(`tKey was:`, tKey);
-    return <>🚫 File not found: {fileKey}</>;
+    if (process.env.NODE_ENV === 'development') {
+      const logKey = `file-missing::${tKey}`;
+      if (!loggedMissingKeys.has(logKey)) {
+        loggedMissingKeys.add(logKey);
+        console.error(`File "${fileKey}" not found in dictionary`);
+        console.error(`Available files:`, Object.keys(dictionary.files));
+        console.error(`tKey was:`, tKey);
+      }
+    }
+    return <>{children ?? null}</>;
   }
 
   // Check if the entry exists in the file
   if (!dictionary.files[fileKey].entries[entryKey]) {
-    console.error(`Entry "${entryKey}" not found in file "${fileKey}"`);
-    return <>🚫 Entry not found: {entryKey}</>;
+    if (process.env.NODE_ENV === 'development') {
+      const logKey = `entry-missing::${tKey}`;
+      if (!loggedMissingKeys.has(logKey)) {
+        loggedMissingKeys.add(logKey);
+        console.error(`Entry "${entryKey}" not found in file "${fileKey}"`);
+      }
+    }
+    return <>{children ?? null}</>;
   }
 
   // Check if the locale content exists
   const content = dictionary.files[fileKey].entries[entryKey].content[locale];
   if (!content) {
-    console.error(
-      `Content for locale "${locale}" not found in "${fileKey}::${entryKey}"`
-    );
-    return <>🚫 Content not found for locale: {locale}</>;
+    if (process.env.NODE_ENV === 'development') {
+      const logKey = `content-missing::${tKey}::${locale}`;
+      if (!loggedMissingKeys.has(logKey)) {
+        loggedMissingKeys.add(logKey);
+        console.error(
+          `Content for locale "${locale}" not found in "${fileKey}::${entryKey}"`
+        );
+      }
+    }
+    return <>{children ?? null}</>;
   }
 
   // Replace placeholders like {variableName} with translated variable values

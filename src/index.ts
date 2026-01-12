@@ -18,6 +18,7 @@ export { DictionaryGenerator } from './translator/DictionaryGenerator';
 
 let hasScheduled = false;
 let cachedSourceMap: ScopeMap | null = null;
+let prepareSourceMapPromise: Promise<void> | null = null;
 
 function isProcessAlive(pid: number): boolean {
   try {
@@ -55,46 +56,58 @@ export default function myPlugin(options: PluginOptions) {
   const parserLockPath = path.resolve(process.cwd(), outputDir, '.lock');
 
   async function prepareSourceMap() {
-    try {
-      const parser = new Parser({ includeNodeModules, outputDir });
-      const sourceMap = parser.parseProject();
-      cachedSourceMap = sourceMap;
+    // Avoid concurrent runs (webpack + turbopack can both schedule this).
+    // Concurrency + Parser's lock file can cause stale dictionaries to overwrite fresh ones.
+    if (prepareSourceMapPromise) return prepareSourceMapPromise;
 
-      // Create translation provider if API key is provided
-      let translationProvider: AlgebrasTranslationProvider | undefined;
-      const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
-      const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
+    prepareSourceMapPromise = (async () => {
+      try {
+        const parser = new Parser({ includeNodeModules, outputDir });
+        const sourceMap = parser.parseProject();
+        cachedSourceMap = sourceMap;
 
-      if (apiKey) {
-        translationProvider = new AlgebrasTranslationProvider({
-          apiKey,
-          apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
+        // Create translation provider if API key is provided
+        let translationProvider: AlgebrasTranslationProvider | undefined;
+        const apiKey =
+          options.translationApiKey || process.env.ALGEBRAS_API_KEY;
+        const apiUrl =
+          options.translationApiUrl || process.env.ALGEBRAS_API_URL;
+
+        if (apiKey) {
+          translationProvider = new AlgebrasTranslationProvider({
+            apiKey,
+            apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
+          });
+        } else {
+          console.warn('[AlgebrasIntl] ⚠️  No API key found!');
+          console.warn(
+            '[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config'
+          );
+          console.warn('[AlgebrasIntl] Falling back to mock translations...\n');
+        }
+
+        const dictionaryGenerator = new DictionaryGenerator({
+          defaultLocale,
+          targetLocales,
+          outputDir,
+          translationProvider,
         });
-      } else {
-        console.warn('[AlgebrasIntl] ⚠️  No API key found!');
-        console.warn(
-          '[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config'
+        await dictionaryGenerator.generateDictionary(sourceMap);
+
+        fs.writeFileSync(
+          path.resolve(outputDir, 'source.json'),
+          JSON.stringify(sourceMap, null, 2),
+          'utf-8'
         );
-        console.warn('[AlgebrasIntl] Falling back to mock translations...\n');
+      } catch (err) {
+        console.error('❌ Failed to parse/generate source map:', err);
+        cachedSourceMap = null;
+      } finally {
+        prepareSourceMapPromise = null;
       }
+    })();
 
-      const dictionaryGenerator = new DictionaryGenerator({
-        defaultLocale,
-        targetLocales,
-        outputDir,
-        translationProvider,
-      });
-      await dictionaryGenerator.generateDictionary(sourceMap);
-
-      fs.writeFileSync(
-        path.resolve(outputDir, 'source.json'),
-        JSON.stringify(sourceMap, null, 2),
-        'utf-8'
-      );
-    } catch (err) {
-      console.error('❌ Failed to parse/generate source map:', err);
-      cachedSourceMap = null;
-    }
+    return prepareSourceMapPromise;
   }
 
   function wrapWebpack(

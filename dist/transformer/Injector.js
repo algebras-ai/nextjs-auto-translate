@@ -68,13 +68,19 @@ function insertAfterDirectives(ast, node) {
     }
     body.splice(idx, 0, node);
 }
-// Injects <Translated tKey="scope" /> in place of JSXText
-function injectTranslated(scope) {
-    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
-    ), null, [], true);
+// Injects <Translated tKey="scope" /> (optionally with fallback children)
+function injectTranslated(scope, fallbackChildren = []) {
+    const attributes = [
+        t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
+    ];
+    if (fallbackChildren.length > 0) {
+        return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, false), t.jsxClosingElement(t.jsxIdentifier('Translated')), fallbackChildren, false);
+    }
+    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true), // self-closing
+    null, [], true);
 }
 // Injects <Translated tKey="scope" params={{...}} /> for template literals with parameters
-function injectTranslatedWithParams(scope, params) {
+function injectTranslatedWithParams(scope, params, fallbackChildren = []) {
     const attributes = [
         t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
     ];
@@ -83,6 +89,9 @@ function injectTranslatedWithParams(scope, params) {
         const properties = Object.entries(params).map(([key, value]) => t.objectProperty(t.identifier(key), value));
         const paramsObject = t.objectExpression(properties);
         attributes.push(t.jsxAttribute(t.jsxIdentifier('params'), t.jsxExpressionContainer(paramsObject)));
+    }
+    if (fallbackChildren.length > 0) {
+        return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, false), t.jsxClosingElement(t.jsxIdentifier('Translated')), fallbackChildren, false);
     }
     return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true), null, [], true);
 }
@@ -448,9 +457,10 @@ function transformProject(code, options) {
                 }
                 // Replace template literal with Translated component
                 // Single translation key for the entire template literal message
+                const fallbackChildren = [t.jsxExpressionContainer(expr)];
                 const translatedComponent = hasParams
-                    ? injectTranslatedWithParams(`${relativePath}::${elementScopePath}`, params)
-                    : injectTranslated(`${relativePath}::${elementScopePath}`);
+                    ? injectTranslatedWithParams(`${relativePath}::${elementScopePath}`, params, fallbackChildren)
+                    : injectTranslated(`${relativePath}::${elementScopePath}`, fallbackChildren);
                 // Replace the JSXExpressionContainer with the Translated component
                 path.replaceWith(translatedComponent);
                 // Mark the parent element as processed so Pass 1 doesn't replace it again
@@ -476,11 +486,23 @@ function transformProject(code, options) {
                     const consequentKey = `${elementScopePath}_cond_${conditionalIndex}_consequent`;
                     const alternateKey = `${elementScopePath}_cond_${conditionalIndex}_alternate`;
                     if (fileScopes[consequentKey]) {
-                        expr.consequent = injectTranslated(`${relativePath}::${consequentKey}`);
+                        const original = expr.consequent;
+                        const fallback = [
+                            t.isJSXElement(original) || t.isJSXFragment(original)
+                                ? original
+                                : t.jsxExpressionContainer(original),
+                        ];
+                        expr.consequent = injectTranslated(`${relativePath}::${consequentKey}`, fallback);
                         didInject = true;
                     }
                     if (fileScopes[alternateKey]) {
-                        expr.alternate = injectTranslated(`${relativePath}::${alternateKey}`);
+                        const original = expr.alternate;
+                        const fallback = [
+                            t.isJSXElement(original) || t.isJSXFragment(original)
+                                ? original
+                                : t.jsxExpressionContainer(original),
+                        ];
+                        expr.alternate = injectTranslated(`${relativePath}::${alternateKey}`, fallback);
                         didInject = true;
                     }
                     conditionalIndex++;
@@ -523,7 +545,9 @@ function transformProject(code, options) {
                     if (t.isStringLiteral(expr.right)) {
                         const rightKey = `${elementScopePath}_logic_${logicalIndex}_${opName}_right`;
                         if (fileScopes[rightKey]) {
-                            expr.right = injectTranslated(`${relativePath}::${rightKey}`);
+                            const original = expr.right;
+                            const fallback = [t.jsxExpressionContainer(original)];
+                            expr.right = injectTranslated(`${relativePath}::${rightKey}`, fallback);
                             didInject = true;
                         }
                         logicalIndex++;
@@ -733,8 +757,9 @@ function transformProject(code, options) {
                 });
                 if (hasTranslatableContent) {
                     // Replace all children with a single Translated component
+                    const fallbackChildren = [...path.node.children];
                     path.node.children = [
-                        injectTranslated(`${relativePath}::${scopePath}`),
+                        injectTranslated(`${relativePath}::${scopePath}`, fallbackChildren),
                     ];
                     processedElements.add(scopePath);
                     changed = true;
@@ -776,7 +801,9 @@ function transformProject(code, options) {
                     parentPath = parentPath.parentPath;
                 }
                 // Replace text with <Translated tKey="scope" />
-                path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`));
+                path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`, [
+                    t.jsxText(path.node.value),
+                ]));
                 changed = true;
             },
         });

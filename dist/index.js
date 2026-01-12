@@ -23,6 +23,7 @@ Object.defineProperty(exports, "DictionaryGenerator", { enumerable: true, get: f
 // export { default as AlgebrasIntlProvider } from "./runtime/server/Provider";
 let hasScheduled = false;
 let cachedSourceMap = null;
+let prepareSourceMapPromise = null;
 function isProcessAlive(pid) {
     try {
         process.kill(pid, 0);
@@ -38,38 +39,48 @@ function myPlugin(options) {
     const scheduledFlagPath = path_1.default.resolve(process.cwd(), outputDir, '.scheduled');
     const parserLockPath = path_1.default.resolve(process.cwd(), outputDir, '.lock');
     async function prepareSourceMap() {
-        try {
-            const parser = new Parser_1.Parser({ includeNodeModules, outputDir });
-            const sourceMap = parser.parseProject();
-            cachedSourceMap = sourceMap;
-            // Create translation provider if API key is provided
-            let translationProvider;
-            const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
-            const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
-            if (apiKey) {
-                translationProvider = new AlgebrasTranslationProvider_1.AlgebrasTranslationProvider({
-                    apiKey,
-                    apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
+        // Avoid concurrent runs (webpack + turbopack can both schedule this).
+        // Concurrency + Parser's lock file can cause stale dictionaries to overwrite fresh ones.
+        if (prepareSourceMapPromise)
+            return prepareSourceMapPromise;
+        prepareSourceMapPromise = (async () => {
+            try {
+                const parser = new Parser_1.Parser({ includeNodeModules, outputDir });
+                const sourceMap = parser.parseProject();
+                cachedSourceMap = sourceMap;
+                // Create translation provider if API key is provided
+                let translationProvider;
+                const apiKey = options.translationApiKey || process.env.ALGEBRAS_API_KEY;
+                const apiUrl = options.translationApiUrl || process.env.ALGEBRAS_API_URL;
+                if (apiKey) {
+                    translationProvider = new AlgebrasTranslationProvider_1.AlgebrasTranslationProvider({
+                        apiKey,
+                        apiUrl: apiUrl || 'https://platform.algebras.ai/api/v1',
+                    });
+                }
+                else {
+                    console.warn('[AlgebrasIntl] ⚠️  No API key found!');
+                    console.warn('[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config');
+                    console.warn('[AlgebrasIntl] Falling back to mock translations...\n');
+                }
+                const dictionaryGenerator = new DictionaryGenerator_1.DictionaryGenerator({
+                    defaultLocale,
+                    targetLocales,
+                    outputDir,
+                    translationProvider,
                 });
+                await dictionaryGenerator.generateDictionary(sourceMap);
+                fs_1.default.writeFileSync(path_1.default.resolve(outputDir, 'source.json'), JSON.stringify(sourceMap, null, 2), 'utf-8');
             }
-            else {
-                console.warn('[AlgebrasIntl] ⚠️  No API key found!');
-                console.warn('[AlgebrasIntl] Set ALGEBRAS_API_KEY in your .env file or pass translationApiKey in config');
-                console.warn('[AlgebrasIntl] Falling back to mock translations...\n');
+            catch (err) {
+                console.error('❌ Failed to parse/generate source map:', err);
+                cachedSourceMap = null;
             }
-            const dictionaryGenerator = new DictionaryGenerator_1.DictionaryGenerator({
-                defaultLocale,
-                targetLocales,
-                outputDir,
-                translationProvider,
-            });
-            await dictionaryGenerator.generateDictionary(sourceMap);
-            fs_1.default.writeFileSync(path_1.default.resolve(outputDir, 'source.json'), JSON.stringify(sourceMap, null, 2), 'utf-8');
-        }
-        catch (err) {
-            console.error('❌ Failed to parse/generate source map:', err);
-            cachedSourceMap = null;
-        }
+            finally {
+                prepareSourceMapPromise = null;
+            }
+        })();
+        return prepareSourceMapPromise;
     }
     function wrapWebpack(nextWebpack) {
         // Call prepareSourceMap without awaiting (runs in background)

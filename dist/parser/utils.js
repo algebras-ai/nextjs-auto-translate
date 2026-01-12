@@ -71,11 +71,6 @@ function isTranslatableExpression(expression) {
             isTranslatableExpression(expression.right);
         return leftIsValid || rightIsValid;
     }
-    // String method calls (e.g., text.toUpperCase())
-    if (t.isMemberExpression(expression) &&
-        !t.isPrivateName(expression.property)) {
-        return true;
-    }
     // Function calls that might return strings
     // But skip array methods like map(), filter(), forEach() - they return JSX elements
     if (t.isCallExpression(expression)) {
@@ -241,9 +236,13 @@ function extractExpressionContent(expression, variableScope = new Map(), functio
     // Member expression - method calls
     if (t.isMemberExpression(expression) &&
         !t.isPrivateName(expression.property)) {
-        if (t.isIdentifier(expression.property)) {
-            return `{variable.${expression.property.name}()}`;
-        }
+        // Member expressions like `scenario.title` or `data.title` are runtime values.
+        // We must NOT convert them into placeholders like `{variable.title()}`
+        // because that would replace actual runtime output with unresolved text.
+        //
+        // If you want these values translated, translate them at the origin where
+        // the string literal exists (or extend scope analysis to resolve them).
+        return '';
     }
     // Call expression - function calls
     if (t.isCallExpression(expression)) {
@@ -331,10 +330,10 @@ function extractExpressionContent(expression, variableScope = new Map(), functio
             }
             // Fallback: return method call format
             if (t.isIdentifier(memberExpr.property)) {
-                if (t.isIdentifier(memberExpr.object)) {
-                    return `{${memberExpr.object.name}.${memberExpr.property.name}()}`;
-                }
-                return `{variable.${memberExpr.property.name}()}`;
+                // If we can't resolve this method call deterministically at build time,
+                // don't emit placeholders like `{obj.method()}`. They would end up
+                // rendered literally and/or replace real runtime output.
+                return '';
             }
         }
         // Handle regular function calls

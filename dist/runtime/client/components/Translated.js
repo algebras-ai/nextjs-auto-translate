@@ -4,27 +4,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
 const Provider_1 = require("../Provider");
+const loggedMissingKeys = new Set();
 const Translated = (props) => {
-    const { tKey, params } = props;
+    const { tKey, params, children } = props;
     const [fileKey, entryKey] = tKey.split('::');
     const { dictionary, locale } = (0, Provider_1.useAlgebrasIntl)();
     // Check if the file exists in dictionary
     if (!dictionary.files[fileKey]) {
-        console.error(`File "${fileKey}" not found in dictionary`);
-        console.error(`Available files:`, Object.keys(dictionary.files));
-        console.error(`tKey was:`, tKey);
-        return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: ["\uD83D\uDEAB File not found: ", fileKey] });
+        if (process.env.NODE_ENV === 'development') {
+            const logKey = `file-missing::${tKey}`;
+            if (!loggedMissingKeys.has(logKey)) {
+                loggedMissingKeys.add(logKey);
+                console.error(`File "${fileKey}" not found in dictionary`);
+                console.error(`Available files:`, Object.keys(dictionary.files));
+                console.error(`tKey was:`, tKey);
+            }
+        }
+        return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children ?? null });
     }
     // Check if the entry exists in the file
     if (!dictionary.files[fileKey].entries[entryKey]) {
-        console.error(`Entry "${entryKey}" not found in file "${fileKey}"`);
-        return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: ["\uD83D\uDEAB Entry not found: ", entryKey] });
+        if (process.env.NODE_ENV === 'development') {
+            const logKey = `entry-missing::${tKey}`;
+            if (!loggedMissingKeys.has(logKey)) {
+                loggedMissingKeys.add(logKey);
+                console.error(`Entry "${entryKey}" not found in file "${fileKey}"`);
+            }
+        }
+        return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children ?? null });
     }
     // Check if the locale content exists
     const content = dictionary.files[fileKey].entries[entryKey].content[locale];
     if (!content) {
-        console.error(`Content for locale "${locale}" not found in "${fileKey}::${entryKey}"`);
-        return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: ["\uD83D\uDEAB Content not found for locale: ", locale] });
+        if (process.env.NODE_ENV === 'development') {
+            const logKey = `content-missing::${tKey}::${locale}`;
+            if (!loggedMissingKeys.has(logKey)) {
+                loggedMissingKeys.add(logKey);
+                console.error(`Content for locale "${locale}" not found in "${fileKey}::${entryKey}"`);
+            }
+        }
+        return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children ?? null });
     }
     // Replace placeholders like {variableName} with translated variable values
     // Professional approach: Extract all placeholders first, then replace them all at once

@@ -11,6 +11,8 @@ import { shouldTranslateJsxAttribute } from '../utils/jsxAttributeTranslation';
 const traverse = (traverseDefault as any).default || traverseDefault;
 const generate = (generateDefault as any).default || generateDefault;
 
+type JsxChild = t.JSXElement['children'][number];
+
 function insertAfterDirectives(ast: t.File, node: t.Statement) {
   const body = ast.program.body;
   let idx = 0;
@@ -29,14 +31,26 @@ function insertAfterDirectives(ast: t.File, node: t.Statement) {
   body.splice(idx, 0, node);
 }
 
-// Injects <Translated tKey="scope" /> in place of JSXText
-export function injectTranslated(scope: string): t.JSXElement {
+// Injects <Translated tKey="scope" /> (optionally with fallback children)
+export function injectTranslated(
+  scope: string,
+  fallbackChildren: JsxChild[] = []
+): t.JSXElement {
+  const attributes = [
+    t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
+  ];
+
+  if (fallbackChildren.length > 0) {
+    return t.jsxElement(
+      t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, false),
+      t.jsxClosingElement(t.jsxIdentifier('Translated')),
+      fallbackChildren,
+      false
+    );
+  }
+
   return t.jsxElement(
-    t.jsxOpeningElement(
-      t.jsxIdentifier('Translated'),
-      [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))],
-      true // self-closing
-    ),
+    t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true), // self-closing
     null,
     [],
     true
@@ -46,7 +60,8 @@ export function injectTranslated(scope: string): t.JSXElement {
 // Injects <Translated tKey="scope" params={{...}} /> for template literals with parameters
 export function injectTranslatedWithParams(
   scope: string,
-  params: Record<string, t.Expression>
+  params: Record<string, t.Expression>,
+  fallbackChildren: JsxChild[] = []
 ): t.JSXElement {
   const attributes: t.JSXAttribute[] = [
     t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
@@ -63,6 +78,15 @@ export function injectTranslatedWithParams(
         t.jsxIdentifier('params'),
         t.jsxExpressionContainer(paramsObject)
       )
+    );
+  }
+
+  if (fallbackChildren.length > 0) {
+    return t.jsxElement(
+      t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, false),
+      t.jsxClosingElement(t.jsxIdentifier('Translated')),
+      fallbackChildren,
+      false
     );
   }
 
@@ -547,12 +571,17 @@ export function transformProject(
 
         // Replace template literal with Translated component
         // Single translation key for the entire template literal message
+        const fallbackChildren: JsxChild[] = [t.jsxExpressionContainer(expr)];
         const translatedComponent = hasParams
           ? injectTranslatedWithParams(
               `${relativePath}::${elementScopePath}`,
-              params
+              params,
+              fallbackChildren
             )
-          : injectTranslated(`${relativePath}::${elementScopePath}`);
+          : injectTranslated(
+              `${relativePath}::${elementScopePath}`,
+              fallbackChildren
+            );
 
         // Replace the JSXExpressionContainer with the Translated component
         path.replaceWith(translatedComponent);
@@ -584,14 +613,28 @@ export function transformProject(
           const alternateKey = `${elementScopePath}_cond_${conditionalIndex}_alternate`;
 
           if (fileScopes[consequentKey]) {
+            const original = expr.consequent;
+            const fallback: JsxChild[] = [
+              t.isJSXElement(original) || t.isJSXFragment(original)
+                ? original
+                : t.jsxExpressionContainer(original as unknown as t.Expression),
+            ];
             expr.consequent = injectTranslated(
-              `${relativePath}::${consequentKey}`
+              `${relativePath}::${consequentKey}`,
+              fallback
             );
             didInject = true;
           }
           if (fileScopes[alternateKey]) {
+            const original = expr.alternate;
+            const fallback: JsxChild[] = [
+              t.isJSXElement(original) || t.isJSXFragment(original)
+                ? original
+                : t.jsxExpressionContainer(original as unknown as t.Expression),
+            ];
             expr.alternate = injectTranslated(
-              `${relativePath}::${alternateKey}`
+              `${relativePath}::${alternateKey}`,
+              fallback
             );
             didInject = true;
           }
@@ -641,7 +684,12 @@ export function transformProject(
           if (t.isStringLiteral(expr.right)) {
             const rightKey = `${elementScopePath}_logic_${logicalIndex}_${opName}_right`;
             if (fileScopes[rightKey]) {
-              expr.right = injectTranslated(`${relativePath}::${rightKey}`);
+              const original = expr.right;
+              const fallback: JsxChild[] = [t.jsxExpressionContainer(original)];
+              expr.right = injectTranslated(
+                `${relativePath}::${rightKey}`,
+                fallback
+              );
               didInject = true;
             }
             logicalIndex++;
@@ -898,8 +946,9 @@ export function transformProject(
 
         if (hasTranslatableContent) {
           // Replace all children with a single Translated component
+          const fallbackChildren = [...path.node.children];
           path.node.children = [
-            injectTranslated(`${relativePath}::${scopePath}`),
+            injectTranslated(`${relativePath}::${scopePath}`, fallbackChildren),
           ];
           processedElements.add(scopePath);
           changed = true;
@@ -944,7 +993,11 @@ export function transformProject(
         }
 
         // Replace text with <Translated tKey="scope" />
-        path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`));
+        path.replaceWith(
+          injectTranslated(`${relativePath}::${scopePath}`, [
+            t.jsxText(path.node.value),
+          ])
+        );
         changed = true;
       },
     });
