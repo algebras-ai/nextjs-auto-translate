@@ -2381,11 +2381,11 @@
         },
         "program/body1/declaration/body/body0/argument/children1/children3/children11/children3": {
           "type": "element",
-          "hash": "860d7d3a6ac6dc896a74876202e99de7",
+          "hash": "75845c573390c940fdee6119f986efc5",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Through ternary operators and logical expressions returning strings"
+          "content": "Through ternary operators and logical expressions returning\n              strings"
         },
         "program/body1/declaration/body/body0/argument/children1/children3/children13/children1": {
           "type": "element",

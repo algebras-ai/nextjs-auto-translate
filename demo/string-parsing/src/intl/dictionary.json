@@ -2114,10 +2114,10 @@
         },
         "program/body1/declaration/body/body0/argument/children1/children3/children11/children3": {
           "content": {
-            "en": "Through ternary operators and logical expressions returning strings",
-            "ru": "Через тернарные операторы и логические выражения, возвращающие строки"
+            "en": "Through ternary operators and logical expressions returning\n              strings",
+            "ru": "Через тернарные операторы и логические выражения, возвращающие\n строки"
           },
-          "hash": "860d7d3a6ac6dc896a74876202e99de7"
+          "hash": "75845c573390c940fdee6119f986efc5"
         },
         "program/body1/declaration/body/body0/argument/children1/children3/children13/children1": {
           "content": {
