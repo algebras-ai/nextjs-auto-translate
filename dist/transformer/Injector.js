@@ -37,7 +37,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.injectTranslated = injectTranslated;
+exports.injectTranslatedWithParams = injectTranslatedWithParams;
 exports.ensureImportTranslated = ensureImportTranslated;
+exports.ensureImportUseTranslation = ensureImportUseTranslation;
 exports.ensureImportLocalesSwitcher = ensureImportLocalesSwitcher;
 exports.injectLocaleSwitcher = injectLocaleSwitcher;
 exports.transformProject = transformProject;
@@ -47,13 +49,51 @@ const traverse_1 = __importDefault(require("@babel/traverse"));
 const t = __importStar(require("@babel/types"));
 const path_1 = __importDefault(require("path"));
 const constants_1 = require("../constants");
+const jsxAttributeTranslation_1 = require("../utils/jsxAttributeTranslation");
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = traverse_1.default.default || traverse_1.default;
 const generate = generator_1.default.default || generator_1.default;
-// Injects <Translated tKey="scope" /> in place of JSXText
-function injectTranslated(scope) {
-    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), [t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope))], true // self-closing
-    ), null, [], true);
+function insertAfterDirectives(ast, node) {
+    const body = ast.program.body;
+    let idx = 0;
+    while (idx < body.length) {
+        const stmt = body[idx];
+        if (t.isExpressionStatement(stmt) &&
+            t.isStringLiteral(stmt.expression) &&
+            typeof stmt.directive === 'string') {
+            idx++;
+            continue;
+        }
+        break;
+    }
+    body.splice(idx, 0, node);
+}
+// Injects <Translated tKey="scope" /> (optionally with fallback children)
+function injectTranslated(scope, fallbackChildren = []) {
+    const attributes = [
+        t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
+    ];
+    if (fallbackChildren.length > 0) {
+        return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, false), t.jsxClosingElement(t.jsxIdentifier('Translated')), fallbackChildren, false);
+    }
+    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true), // self-closing
+    null, [], true);
+}
+// Injects <Translated tKey="scope" params={{...}} /> for template literals with parameters
+function injectTranslatedWithParams(scope, params, fallbackChildren = []) {
+    const attributes = [
+        t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
+    ];
+    // Create params object expression
+    if (Object.keys(params).length > 0) {
+        const properties = Object.entries(params).map(([key, value]) => t.objectProperty(t.identifier(key), value));
+        const paramsObject = t.objectExpression(properties);
+        attributes.push(t.jsxAttribute(t.jsxIdentifier('params'), t.jsxExpressionContainer(paramsObject)));
+    }
+    if (fallbackChildren.length > 0) {
+        return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, false), t.jsxClosingElement(t.jsxIdentifier('Translated')), fallbackChildren, false);
+    }
+    return t.jsxElement(t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true), null, [], true);
 }
 // Ensures import Translated from the package runtime path exists
 function ensureImportTranslated(ast) {
@@ -71,8 +111,42 @@ function ensureImportTranslated(ast) {
     });
     if (!hasImport) {
         const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Translated'))], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_TRANSLATED));
-        ast.program.body.unshift(importDecl);
+        insertAfterDirectives(ast, importDecl);
     }
+}
+// Ensures import useTranslation hook exists
+function ensureImportUseTranslation(ast) {
+    let hasImport = false;
+    traverse(ast, {
+        ImportDeclaration(path) {
+            if (path.node.source.value === constants_1.RUNTIME_PATHS.CLIENT_USE_TRANSLATION &&
+                path.node.specifiers.some((s) => t.isImportSpecifier(s) &&
+                    t.isIdentifier(s.imported) &&
+                    s.imported.name === 'useTranslation')) {
+                hasImport = true;
+                path.stop();
+            }
+        },
+    });
+    if (!hasImport) {
+        const importDecl = t.importDeclaration([
+            t.importSpecifier(t.identifier('useTranslation'), t.identifier('useTranslation')),
+        ], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_USE_TRANSLATION));
+        insertAfterDirectives(ast, importDecl);
+    }
+}
+function ensureUseClientDirective(ast) {
+    // Next.js requires 'use client' to be the first statement (before imports)
+    const first = ast.program.body[0];
+    const hasUseClient = first &&
+        t.isExpressionStatement(first) &&
+        t.isStringLiteral(first.expression) &&
+        first.expression.value === 'use client';
+    if (hasUseClient)
+        return;
+    const useClientStmt = t.expressionStatement(t.stringLiteral('use client'));
+    useClientStmt.directive = 'use client';
+    ast.program.body.unshift(useClientStmt);
 }
 // Ensures import LocalesSwitcher exists
 function ensureImportLocalesSwitcher(ast) {
@@ -90,7 +164,7 @@ function ensureImportLocalesSwitcher(ast) {
     });
     if (!hasImport) {
         const importDecl = t.importDeclaration([t.importDefaultSpecifier(t.identifier('LocalesSwitcher'))], t.stringLiteral(constants_1.RUNTIME_PATHS.CLIENT_LOCALE_SWITCHER));
-        ast.program.body.unshift(importDecl);
+        insertAfterDirectives(ast, importDecl);
     }
 }
 // Create the language switcher element
@@ -261,6 +335,7 @@ function transformProject(code, options) {
     if (isInSourceMap) {
         const fileScopes = options.sourceMap.files[relativePath]?.scopes || {};
         const processedElements = new Set();
+        const componentsNeedingHook = new Set();
         // Compute a stable scope path compatible with Parser's getRelativeScopePath().
         // Parser stores scope keys like: program/bodyX/... (no dots, no [N]).
         const getRelativeScopePath = (fullPath) => {
@@ -272,15 +347,134 @@ function transformProject(code, options) {
             }
             return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
         };
+        // Pass 0: Translate static string-array literals that the Parser extracted as per-element entries.
+        // This enables loop scenarios like:
+        //   const items = ['First','Second'];
+        //   {items.map((item) => <div>{item}</div>)}
+        //
+        // The Parser creates scope keys:
+        //   {variableDeclaratorScopePath}_arr_{index}
+        // and we rewrite each string literal element into:
+        //   t(`${relativePath}::{key}`)
+        traverse(ast, {
+            VariableDeclarator(path) {
+                const init = path.node.init;
+                if (!init || !t.isArrayExpression(init))
+                    return;
+                const declScopePath = getRelativeScopePath(path.getPathLocation());
+                let didReplace = false;
+                init.elements = init.elements.map((el, index) => {
+                    if (!el || !t.isStringLiteral(el))
+                        return el;
+                    const key = `${declScopePath}_arr_${index}`;
+                    if (!fileScopes[key])
+                        return el;
+                    didReplace = true;
+                    return t.callExpression(t.identifier('t'), [
+                        t.stringLiteral(`${relativePath}::${key}`),
+                    ]);
+                });
+                if (!didReplace)
+                    return;
+                // This requires t() which comes from the useTranslation() hook.
+                const functionPath = path.findParent((p) => {
+                    return (p.isFunctionDeclaration() ||
+                        p.isArrowFunctionExpression() ||
+                        p.isFunctionExpression() ||
+                        (p.isVariableDeclarator() &&
+                            p.node.init &&
+                            (t.isArrowFunctionExpression(p.node.init) ||
+                                t.isFunctionExpression(p.node.init))));
+                });
+                if (functionPath) {
+                    componentsNeedingHook.add(functionPath.getPathLocation());
+                }
+                changed = true;
+            },
+        });
+        // Pass 0a: Handle template literals with parameters (professional approach)
+        // TemplateLiteral → combine into single message → replace expressions with placeholders → extract one translation key
+        // Transform template literals to use <Translated params={{...}} />
+        // This follows ICU MessageFormat standard where variables are runtime parameters
+        traverse(ast, {
+            JSXExpressionContainer(path) {
+                const expr = path.node.expression;
+                if (!t.isTemplateLiteral(expr))
+                    return;
+                // Find the parent JSXElement to get the scope path
+                // The parser creates scope entries for JSXElements that contain template literals
+                let parentElement = null;
+                let currentPath = path.parentPath;
+                while (currentPath) {
+                    if (currentPath.isJSXElement && currentPath.isJSXElement()) {
+                        parentElement = currentPath;
+                        break;
+                    }
+                    currentPath = currentPath.parentPath;
+                }
+                if (!parentElement)
+                    return;
+                // Get the scope path using the same logic as the parser
+                const elementScopePath = getRelativeScopePath(parentElement.getPathLocation());
+                // Check if this parent element has a scope entry
+                // The parser extracts template literals as single messages
+                // Static variables are resolved directly: `Hello, ${name}!` → "Hello, World!" (if name="World")
+                // Runtime variables remain as placeholders: `Hello, ${name}!` → "Hello, {name}!" (if name is runtime)
+                const scopeEntry = fileScopes[elementScopePath];
+                if (!scopeEntry)
+                    return;
+                // Verify the content matches a template literal pattern
+                // Static variables are resolved directly, only runtime variables remain as placeholders
+                const content = scopeEntry.content;
+                if (!content) {
+                    return;
+                }
+                // Extract parameters from template literal expressions
+                // Only include variables that are NOT static (runtime variables)
+                // Static variables are already resolved in the content string
+                const params = {};
+                let hasParams = false;
+                for (let i = 0; i < expr.expressions.length; i++) {
+                    const templateExpr = expr.expressions[i];
+                    if (t.isIdentifier(templateExpr)) {
+                        // Check if this is a runtime variable by looking for placeholder in content
+                        // If the content has a placeholder for this variable, it's runtime
+                        const placeholderPattern = `{${templateExpr.name}}`;
+                        if (content.includes(placeholderPattern)) {
+                            // This is a runtime variable - pass it as a param
+                            params[templateExpr.name] = templateExpr;
+                            hasParams = true;
+                        }
+                        // If placeholder not found, variable was resolved statically, skip it
+                    }
+                    else if (t.isMemberExpression(templateExpr)) {
+                        // Member expressions are always runtime
+                        if (t.isIdentifier(templateExpr.property)) {
+                            params[templateExpr.property.name] = templateExpr;
+                            hasParams = true;
+                        }
+                    }
+                }
+                // Replace template literal with Translated component
+                // Single translation key for the entire template literal message
+                const fallbackChildren = [t.jsxExpressionContainer(expr)];
+                const translatedComponent = hasParams
+                    ? injectTranslatedWithParams(`${relativePath}::${elementScopePath}`, params, fallbackChildren)
+                    : injectTranslated(`${relativePath}::${elementScopePath}`, fallbackChildren);
+                // Replace the JSXExpressionContainer with the Translated component
+                path.replaceWith(translatedComponent);
+                // Mark the parent element as processed so Pass 1 doesn't replace it again
+                // This prevents conflicts when the template literal is the only content
+                processedElements.add(elementScopePath);
+                changed = true;
+            },
+        });
         // Pass 0: Handle runtime ternaries first.
         // We inject <Translated /> into the consequent/alternate branches and mark the
         // containing element as "processed" so it won't be replaced wholesale later.
         traverse(ast, {
             JSXElement(path) {
-                const elementScopePath = path
-                    .getPathLocation()
-                    .replace(/\[(\d+)\]/g, '$1')
-                    .replace(/\./g, '/');
+                const elementScopePath = getRelativeScopePath(path.getPathLocation());
                 let conditionalIndex = 0;
                 let didInject = false;
                 for (const child of path.node.children) {
@@ -292,11 +486,23 @@ function transformProject(code, options) {
                     const consequentKey = `${elementScopePath}_cond_${conditionalIndex}_consequent`;
                     const alternateKey = `${elementScopePath}_cond_${conditionalIndex}_alternate`;
                     if (fileScopes[consequentKey]) {
-                        expr.consequent = injectTranslated(`${relativePath}::${consequentKey}`);
+                        const original = expr.consequent;
+                        const fallback = [
+                            t.isJSXElement(original) || t.isJSXFragment(original)
+                                ? original
+                                : t.jsxExpressionContainer(original),
+                        ];
+                        expr.consequent = injectTranslated(`${relativePath}::${consequentKey}`, fallback);
                         didInject = true;
                     }
                     if (fileScopes[alternateKey]) {
-                        expr.alternate = injectTranslated(`${relativePath}::${alternateKey}`);
+                        const original = expr.alternate;
+                        const fallback = [
+                            t.isJSXElement(original) || t.isJSXFragment(original)
+                                ? original
+                                : t.jsxExpressionContainer(original),
+                        ];
+                        expr.alternate = injectTranslated(`${relativePath}::${alternateKey}`, fallback);
                         didInject = true;
                     }
                     conditionalIndex++;
@@ -311,13 +517,13 @@ function transformProject(code, options) {
         // We only translate the RIGHT operand when it is a string literal:
         // - condition && "Text"  -> condition && <Translated .../>
         // - value || "Fallback"  -> value || <Translated .../>
+        //
+        // Also supports TemplateLiteral on the right side by translating only static quasis
+        // (e.g. "Error: "), keeping interpolations untouched, and preserving short-circuit behavior.
         // We mark the containing element as processed to prevent wholesale replacement.
         traverse(ast, {
             JSXElement(path) {
-                const elementScopePath = path
-                    .getPathLocation()
-                    .replace(/\[(\d+)\]/g, '$1')
-                    .replace(/\./g, '/');
+                const elementScopePath = getRelativeScopePath(path.getPathLocation());
                 let logicalIndex = 0;
                 let didInject = false;
                 for (const child of path.node.children) {
@@ -326,11 +532,6 @@ function transformProject(code, options) {
                     const expr = child.expression;
                     if (!t.isLogicalExpression(expr))
                         continue;
-                    // Only safe if right operand is a string literal
-                    if (!t.isStringLiteral(expr.right)) {
-                        logicalIndex++;
-                        continue;
-                    }
                     const opName = expr.operator === '&&'
                         ? 'and'
                         : expr.operator === '||'
@@ -340,12 +541,151 @@ function transformProject(code, options) {
                         logicalIndex++;
                         continue;
                     }
-                    const rightKey = `${elementScopePath}_logic_${logicalIndex}_${opName}_right`;
-                    if (fileScopes[rightKey]) {
-                        expr.right = injectTranslated(`${relativePath}::${rightKey}`);
-                        didInject = true;
+                    // Case 1: right operand is a string literal -> inject <Translated />
+                    if (t.isStringLiteral(expr.right)) {
+                        const rightKey = `${elementScopePath}_logic_${logicalIndex}_${opName}_right`;
+                        if (fileScopes[rightKey]) {
+                            const original = expr.right;
+                            const fallback = [t.jsxExpressionContainer(original)];
+                            expr.right = injectTranslated(`${relativePath}::${rightKey}`, fallback);
+                            didInject = true;
+                        }
+                        logicalIndex++;
+                        continue;
+                    }
+                    // Case 2: right operand is a template literal -> translate only static quasis via t()
+                    // and keep the original expressions as-is.
+                    if (t.isTemplateLiteral(expr.right)) {
+                        const template = expr.right;
+                        let out = null;
+                        let usedT = false;
+                        for (let i = 0; i < template.quasis.length; i++) {
+                            const quasi = template.quasis[i];
+                            const quasiText = quasi.value.cooked ?? quasi.value.raw ?? '';
+                            if (quasiText) {
+                                const quasiKey = `${elementScopePath}_logic_${logicalIndex}_${opName}_right_quasi_${i}`;
+                                const quasiExpr = fileScopes[quasiKey]
+                                    ? t.callExpression(t.identifier('t'), [
+                                        t.stringLiteral(`${relativePath}::${quasiKey}`),
+                                    ])
+                                    : t.stringLiteral(quasiText);
+                                if (fileScopes[quasiKey]) {
+                                    usedT = true;
+                                }
+                                out = out ? t.binaryExpression('+', out, quasiExpr) : quasiExpr;
+                            }
+                            if (i < template.expressions.length) {
+                                const interp = template.expressions[i];
+                                if (!t.isExpression(interp)) {
+                                    // Shouldn't happen for real TemplateLiteral expressions, but can occur in TS AST edge cases.
+                                    continue;
+                                }
+                                out = out ? t.binaryExpression('+', out, interp) : interp;
+                            }
+                        }
+                        if (usedT && out) {
+                            expr.right = out;
+                            didInject = true;
+                            // This requires t() which comes from the useTranslation() hook.
+                            const functionPath = path.findParent((p) => {
+                                return (p.isFunctionDeclaration() ||
+                                    p.isArrowFunctionExpression() ||
+                                    p.isFunctionExpression() ||
+                                    (p.isVariableDeclarator() &&
+                                        p.node.init &&
+                                        (t.isArrowFunctionExpression(p.node.init) ||
+                                            t.isFunctionExpression(p.node.init))));
+                            });
+                            if (functionPath) {
+                                componentsNeedingHook.add(functionPath.getPathLocation());
+                            }
+                        }
+                        logicalIndex++;
+                        continue;
                     }
                     logicalIndex++;
+                }
+                if (didInject) {
+                    processedElements.add(elementScopePath);
+                    changed = true;
+                }
+            },
+        });
+        // Pass 0c: Handle conditional-return function call expressions.
+        // Example: {getMessage(status)} or {getStatusText(status)}
+        // We translate by rewriting into a runtime lookup:
+        //   ({ 'loading': t(key1), 'error': t(key2) }[status] || t(defaultKey))
+        // This preserves runtime behavior without trying to statically evaluate the call.
+        traverse(ast, {
+            JSXElement(path) {
+                const elementScopePath = getRelativeScopePath(path.getPathLocation());
+                let callIndex = 0;
+                let didInject = false;
+                for (const child of path.node.children) {
+                    if (!t.isJSXExpressionContainer(child))
+                        continue;
+                    const expr = child.expression;
+                    if (!t.isCallExpression(expr))
+                        continue;
+                    if (!t.isIdentifier(expr.callee)) {
+                        callIndex++;
+                        continue;
+                    }
+                    const funcName = expr.callee.name;
+                    const arg0 = expr.arguments[0];
+                    if (!arg0 || !t.isExpression(arg0)) {
+                        callIndex++;
+                        continue;
+                    }
+                    const prefix = `${elementScopePath}_call_${callIndex}_${funcName}_`;
+                    const casePrefix = `${prefix}case_`;
+                    const defaultKey = `${prefix}default`;
+                    if (!fileScopes[defaultKey]) {
+                        callIndex++;
+                        continue;
+                    }
+                    const caseEntries = [];
+                    for (const scopeKey of Object.keys(fileScopes)) {
+                        if (!scopeKey.startsWith(casePrefix))
+                            continue;
+                        const encoded = scopeKey.slice(casePrefix.length);
+                        let decoded = encoded;
+                        try {
+                            decoded = decodeURIComponent(encoded);
+                        }
+                        catch {
+                            // Keep encoded if decoding fails
+                        }
+                        caseEntries.push({ caseValue: decoded, scopeKey });
+                    }
+                    if (caseEntries.length === 0) {
+                        callIndex++;
+                        continue;
+                    }
+                    const objExpr = t.objectExpression(caseEntries.map(({ caseValue, scopeKey }) => t.objectProperty(t.stringLiteral(caseValue), t.callExpression(t.identifier('t'), [
+                        t.stringLiteral(`${relativePath}::${scopeKey}`),
+                    ]))));
+                    const lookupExpr = t.memberExpression(objExpr, arg0, true);
+                    const defaultExpr = t.callExpression(t.identifier('t'), [
+                        t.stringLiteral(`${relativePath}::${defaultKey}`),
+                    ]);
+                    // Use || fallback to default when status is unknown.
+                    child.expression = t.logicalExpression('||', lookupExpr, defaultExpr);
+                    didInject = true;
+                    // This requires t() which comes from the useTranslation() hook.
+                    const functionPath = path.findParent((p) => {
+                        return (p.isFunctionDeclaration() ||
+                            p.isArrowFunctionExpression() ||
+                            p.isFunctionExpression() ||
+                            (p.isVariableDeclarator() &&
+                                p.node.init &&
+                                (t.isArrowFunctionExpression(p.node.init) ||
+                                    t.isFunctionExpression(p.node.init))));
+                    });
+                    if (functionPath) {
+                        componentsNeedingHook.add(functionPath.getPathLocation());
+                    }
+                    callIndex++;
                 }
                 if (didInject) {
                     processedElements.add(elementScopePath);
@@ -417,8 +757,9 @@ function transformProject(code, options) {
                 });
                 if (hasTranslatableContent) {
                     // Replace all children with a single Translated component
+                    const fallbackChildren = [...path.node.children];
                     path.node.children = [
-                        injectTranslated(`${relativePath}::${scopePath}`),
+                        injectTranslated(`${relativePath}::${scopePath}`, fallbackChildren),
                     ];
                     processedElements.add(scopePath);
                     changed = true;
@@ -460,10 +801,171 @@ function transformProject(code, options) {
                     parentPath = parentPath.parentPath;
                 }
                 // Replace text with <Translated tKey="scope" />
-                path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`));
+                path.replaceWith(injectTranslated(`${relativePath}::${scopePath}`, [
+                    t.jsxText(path.node.value),
+                ]));
                 changed = true;
             },
         });
+        // Third pass: Handle JSXAttribute nodes for visible attributes and component props
+        traverse(ast, {
+            JSXAttribute(path) {
+                const attrName = path.node.name;
+                if (!t.isJSXIdentifier(attrName))
+                    return;
+                const attrNameStr = attrName.name;
+                // Determine which element this attribute belongs to
+                const openingElement = t.isJSXOpeningElement(path.parent)
+                    ? path.parent
+                    : null;
+                if (!(0, jsxAttributeTranslation_1.shouldTranslateJsxAttribute)(attrNameStr, openingElement?.name || null, openingElement?.attributes)) {
+                    return;
+                }
+                // Get the scope path for this attribute
+                const fullScopePath = path.getPathLocation();
+                const scopePath = getRelativeScopePath(fullScopePath);
+                // Check for attribute entry: {scopePath}_attr_{attrName}
+                const attributeKey = `${scopePath}_attr_${attrNameStr}`;
+                const scopeEntry = fileScopes[attributeKey];
+                if (!scopeEntry || scopeEntry.type !== 'attribute')
+                    return;
+                // Find the parent component/function to track which components need the hook
+                const functionPath = path.findParent((p) => {
+                    return (p.isFunctionDeclaration() ||
+                        p.isArrowFunctionExpression() ||
+                        p.isFunctionExpression() ||
+                        (p.isVariableDeclarator() &&
+                            p.node.init &&
+                            (t.isArrowFunctionExpression(p.node.init) ||
+                                t.isFunctionExpression(p.node.init))));
+                });
+                if (functionPath) {
+                    const functionLocation = functionPath.getPathLocation();
+                    componentsNeedingHook.add(functionLocation);
+                }
+                // Handle string literal attributes: title="Text"
+                if (t.isStringLiteral(path.node.value)) {
+                    // Replace with t() call
+                    const tCall = t.callExpression(t.identifier('t'), [
+                        t.stringLiteral(`${relativePath}::${attributeKey}`),
+                    ]);
+                    path.node.value = t.jsxExpressionContainer(tCall);
+                    changed = true;
+                    return;
+                }
+                // Handle expression attributes: title={variable} or title={`Hello ${name}`}
+                if (t.isJSXExpressionContainer(path.node.value)) {
+                    const expr = path.node.value.expression;
+                    // For string literals in expressions, replace with t() call
+                    if (t.isStringLiteral(expr)) {
+                        const tCall = t.callExpression(t.identifier('t'), [
+                            t.stringLiteral(`${relativePath}::${attributeKey}`),
+                        ]);
+                        path.node.value.expression = tCall;
+                        changed = true;
+                        return;
+                    }
+                    // For template literals, we need to check if the content matches
+                    // If it's a simple template literal that matches the extracted content,
+                    // we can replace it with t() call
+                    // Otherwise, we keep the expression but wrap it in t() if needed
+                    if (t.isTemplateLiteral(expr)) {
+                        // For now, if the template literal has no expressions (static),
+                        // we can replace it with t() call
+                        if (expr.expressions.length === 0) {
+                            const tCall = t.callExpression(t.identifier('t'), [
+                                t.stringLiteral(`${relativePath}::${attributeKey}`),
+                            ]);
+                            path.node.value.expression = tCall;
+                            changed = true;
+                        }
+                        // For template literals with expressions, we'd need more complex handling
+                        // This is a simplified version - in production you might want to handle
+                        // template literals with parameters differently
+                        return;
+                    }
+                }
+            },
+        });
+        // Fourth pass: Add useTranslation hook to components that need it
+        if (componentsNeedingHook.size > 0) {
+            traverse(ast, {
+                FunctionDeclaration(path) {
+                    const functionLocation = path.getPathLocation();
+                    if (!componentsNeedingHook.has(functionLocation))
+                        return;
+                    // Check if hook is already called
+                    let hasHook = false;
+                    path.traverse({
+                        VariableDeclarator(declPath) {
+                            if (t.isIdentifier(declPath.node.id) &&
+                                declPath.node.id.name === 't' &&
+                                t.isCallExpression(declPath.node.init) &&
+                                t.isIdentifier(declPath.node.init.callee) &&
+                                declPath.node.init.callee.name === 'useTranslation') {
+                                hasHook = true;
+                            }
+                        },
+                    });
+                    if (!hasHook &&
+                        path.node.body &&
+                        t.isBlockStatement(path.node.body)) {
+                        // Add const { t } = useTranslation(); at the beginning of the function body
+                        const hookCall = t.variableDeclaration('const', [
+                            t.variableDeclarator(t.objectPattern([
+                                t.objectProperty(t.identifier('t'), t.identifier('t'), false, true),
+                            ]), t.callExpression(t.identifier('useTranslation'), [])),
+                        ]);
+                        path.node.body.body.unshift(hookCall);
+                        changed = true;
+                    }
+                },
+                ArrowFunctionExpression(path) {
+                    // For arrow functions, we need to check if they're component definitions
+                    // and if they have a block body
+                    if (!t.isBlockStatement(path.node.body))
+                        return;
+                    const parent = path.parentPath;
+                    if (!parent ||
+                        (!t.isVariableDeclarator(parent.node) &&
+                            !t.isExportDefaultDeclaration(parent.node))) {
+                        return;
+                    }
+                    // Check if this is a component (export default function or const Component = ...)
+                    const functionLocation = path.getPathLocation();
+                    if (!componentsNeedingHook.has(functionLocation))
+                        return;
+                    // Check if hook is already called
+                    let hasHook = false;
+                    path.traverse({
+                        VariableDeclarator(declPath) {
+                            if (t.isIdentifier(declPath.node.id) &&
+                                declPath.node.id.name === 't' &&
+                                t.isCallExpression(declPath.node.init) &&
+                                t.isIdentifier(declPath.node.init.callee) &&
+                                declPath.node.init.callee.name === 'useTranslation') {
+                                hasHook = true;
+                            }
+                        },
+                    });
+                    if (!hasHook) {
+                        // Add const { t } = useTranslation(); at the beginning of the function body
+                        const hookCall = t.variableDeclaration('const', [
+                            t.variableDeclarator(t.objectPattern([
+                                t.objectProperty(t.identifier('t'), t.identifier('t'), false, true),
+                            ]), t.callExpression(t.identifier('useTranslation'), [])),
+                        ]);
+                        path.node.body.body.unshift(hookCall);
+                        changed = true;
+                    }
+                },
+            });
+        }
+        // Add useTranslation import if we made attribute changes
+        if (changed && componentsNeedingHook.size > 0) {
+            ensureUseClientDirective(ast);
+            ensureImportUseTranslation(ast);
+        }
         // Add Translated import if we made text changes
         if (changed) {
             ensureImportTranslated(ast);

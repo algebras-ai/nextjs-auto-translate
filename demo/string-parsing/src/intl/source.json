@@ -513,19 +513,11 @@
         },
         "program/body0/declaration/body/body1/argument/children3/children1": {
           "type": "element",
-          "hash": "613969df8ffc1c390f81917c0cddee77",
+          "hash": "65a8e27d8879283831b664bd8b7f0ad4",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Hello, {name}!"
-        },
-        "program/body0/declaration/body/body1/argument/children3/children1_var_name": {
-          "type": "element",
-          "hash": "f5a7924e621e84c9280a9a27e1bcb7f6",
-          "context": "Variable \"name\" used in template literal",
-          "skip": false,
-          "overrides": {},
-          "content": "World"
+          "content": "Hello, World!"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -643,37 +635,37 @@
     },
     "app/3-visible-attributes/components/AltAttribute.tsx": {
       "scopes": {
-        "program/body0/declaration/body/body0/argument/children1/children1": {
+        "program/body1/declaration/body/body0/argument/children1/children1": {
           "type": "element",
-          "hash": "7ec76e1a5fee298ab636f8738b821136",
+          "hash": "7cd259bf76db2f50019c3a137a3ec9ea",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<img src=\"/image.jpg\" alt=\"Image description\" />"
+          "content": "<Image src=\"/next.svg\" alt=\"Image description\"\n          width= height= />"
         },
-        "program/body0/declaration/body/body0/argument/children3/children1/children1/children1": {
+        "program/body1/declaration/body/body0/argument/children3/children1/children3": {
           "type": "element",
-          "hash": "be53a0541a6d36f6ecb879fa2c584b08",
+          "hash": "4cbf9e0c24f7fe6c0c0694c22a6abf3a",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Image"
+          "content": "Alt text: \"Image description\" (visible if image fails to\n            load or via screen readers)"
         },
-        "program/body0/declaration/body/body0/argument/children3/children1/children3": {
+        "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "0412317bf97e19244da7c2d04aa13ffa",
+          "hash": "a9d9fdc19e57fbca6bee7f1bdf233b18",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Alt text: \"Image description\" (visible if image fails to load or via screen readers)"
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed\n        if the image fails to load and is used by screen readers. Visible to\n        users."
         },
-        "program/body0/declaration/body/body0/argument/children5": {
-          "type": "element",
-          "hash": "6d46e4fdff7b44a91d92077b8826d1fc",
-          "context": "",
+        "program/body1/declaration/body/body0/argument/children3/children1/children1/openingElement/attributes1_attr_alt": {
+          "type": "attribute",
+          "hash": "18f2ae2bda9a34f06975d5c124643168",
+          "context": "Attribute: alt",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed if\n        the image fails to load and is used by screen readers. Visible to users."
+          "content": "Image description"
         }
       }
     },
@@ -705,11 +697,19 @@
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "36cee950119709bc9399ba6893b4e700",
+          "hash": "684d7df5a2b615265243b2efa1ff6e54",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby, aria-placeholder\n        and other ARIA attributes are used by screen readers and visible to users\n        with disabilities. Subject to localization."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby,\n        aria-placeholder and other ARIA attributes are used by screen readers\n        and visible to users with disabilities. Subject to localization."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_aria-label": {
+          "type": "attribute",
+          "hash": "3c62b9dcfe365792b2fbb6e15dc82c80",
+          "context": "Attribute: aria-label",
+          "skip": false,
+          "overrides": {},
+          "content": "Close dialog"
         }
       }
     },
@@ -738,6 +738,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_title": {
+          "type": "attribute",
+          "hash": "cafa289476a2aae5108bd795a0ad2f7c",
+          "context": "Attribute: title",
+          "skip": false,
+          "overrides": {},
+          "content": "Tooltip on hover"
         }
       }
     },
@@ -835,22 +843,6 @@
     },
     "app/4-components/components/PropsAsString.tsx": {
       "scopes": {
-        "program/body0/body/body0/argument": {
-          "type": "element",
-          "hash": "dfa8040e56bc3a9b83f5c0a8160d8f33",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{label}"
-        },
-        "program/body1/body/body0/argument": {
-          "type": "element",
-          "hash": "f933e224b575d7014aed7bd26d621391",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{message}"
-        },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "7fbd9728d7eb9a3815f7d4fc34e475c6",
@@ -861,24 +853,32 @@
         },
         "program/body2/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "7a4ebbb5d1d34034a4a490a99f2de95f",
+          "hash": "37f01cb16cf5bf2ad3710cc4e53ab143",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and rendered\n        as visible text. Important: technical props (id, className, data-*, etc.)\n        are not subject to localization."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and\n        rendered as visible text. Important: technical props (id, className,\n        data-*, etc.) are not subject to localization."
+        },
+        "program/body2/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_label": {
+          "type": "attribute",
+          "hash": "89e86fca338e017887dbde7965c10b75",
+          "context": "Attribute: label",
+          "skip": false,
+          "overrides": {},
+          "content": "Click "
+        },
+        "program/body2/declaration/body/body0/argument/children3/children3/openingElement/attributes0_attr_message": {
+          "type": "attribute",
+          "hash": "a25c753ee3e4be15ec0daa5a40deb7b8",
+          "context": "Attribute: message",
+          "skip": false,
+          "overrides": {},
+          "content": "An error occurred"
         }
       }
     },
     "app/4-components/components/RenderingViaComponent.tsx": {
       "scopes": {
-        "program/body0/body/body0/argument": {
-          "type": "element",
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{text}"
-        },
         "program/body1/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "fd8e8832adc8806b3349dd4671744fef",
@@ -894,6 +894,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXElement (component)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component receives a string and renders it."
+        },
+        "program/body1/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_text": {
+          "type": "attribute",
+          "hash": "9dffbf69ffba8bc38bc4e01abf4b1675",
+          "context": "Attribute: text",
+          "skip": false,
+          "overrides": {},
+          "content": "Text"
         }
       }
     },
@@ -1045,11 +1053,11 @@
         },
         "program/body1/declaration/body/body0/argument/children3/children1": {
           "type": "element",
-          "hash": "6e719ae9b3e951ac29b2c4e5382c5ca9",
+          "hash": "8be6beb3441cafb974df847d128ffe7f",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{obj.getText()}"
+          "content": "Hello World from object method"
         },
         "program/body1/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -1089,11 +1097,11 @@
         },
         "program/body0/declaration/body/body1/argument/children3/children3": {
           "type": "element",
-          "hash": "c10562818f129f8bf7ed11806f389c85",
+          "hash": "fec89edc451b94e30030ed84b8f33d88",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "  Hello World  "
+          "content": "  Hello Wo"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1211,6 +1219,30 @@
           "overrides": {},
           "content": "Error"
         },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getMessage_case_loading": {
+          "type": "element",
+          "hash": "8524de963f07201e5c086830d370797f",
+          "context": "CallExpression getMessage case \"loading\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Loading..."
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getMessage_case_error": {
+          "type": "element",
+          "hash": "902b0d55fddef6f8d651fe1035b7d4bd",
+          "context": "CallExpression getMessage case \"error\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Error"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getMessage_default": {
+          "type": "element",
+          "hash": "e7d31fc0602fb2ede144d18cdffd816b",
+          "context": "CallExpression getMessage default",
+          "skip": false,
+          "overrides": {},
+          "content": "Ready"
+        },
         "program/body2/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "57fb5db03701435f5dd6c2743134c9aa",
@@ -1247,6 +1279,14 @@
           "overrides": {},
           "content": "Error: {error}"
         },
+        "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_and_right_quasi_0": {
+          "type": "element",
+          "hash": "f97d2eb0a66987899d02bb180936afa3",
+          "context": "Logical expression (&&) right template quasi 0",
+          "skip": false,
+          "overrides": {},
+          "content": "Error: "
+        },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "4c198bec289cff0461dd4583452ac761",
@@ -1277,11 +1317,11 @@
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1": {
           "type": "element",
-          "hash": "f933e224b575d7014aed7bd26d621391",
+          "hash": "2da2fc7f382fa2e5b9d0e433fa71a475",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{message}"
+          "content": "Default message"
         },
         "program/body1/declaration/body/body1/argument/children3/children3/children1_logic_0_or_right": {
           "type": "element",
@@ -1331,6 +1371,30 @@
           "type": "element",
           "hash": "88183b946cc5f0e8c96b2e66e1c74a7e",
           "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Unknown"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getStatusText_case_pending": {
+          "type": "element",
+          "hash": "2d13df6f8b5e4c5af9f87e0dc39df69d",
+          "context": "CallExpression getStatusText case \"pending\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Pending"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getStatusText_case_success": {
+          "type": "element",
+          "hash": "505a83f220c02df2f85c3810cd9ceb38",
+          "context": "CallExpression getStatusText case \"success\"",
+          "skip": false,
+          "overrides": {},
+          "content": "Success"
+        },
+        "program/body2/declaration/body/body1/argument/children3/children3/children1_call_0_getStatusText_default": {
+          "type": "element",
+          "hash": "88183b946cc5f0e8c96b2e66e1c74a7e",
+          "context": "CallExpression getStatusText default",
           "skip": false,
           "overrides": {},
           "content": "Unknown"
@@ -1459,13 +1523,45 @@
           "overrides": {},
           "content": "items.filter(item => item.length > 5).map(...)"
         },
-        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
-          "type": "element",
-          "hash": "e232d42269bb57ff0c0c0778cc43441a",
-          "context": "",
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by map()",
           "skip": false,
           "overrides": {},
-          "content": "{item}"
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_3": {
+          "type": "text",
+          "hash": "6e599f7a2a9186d391be4537f105be98",
+          "context": "Static string-array element (items[3]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Fourth"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_4": {
+          "type": "text",
+          "hash": "0abdfd715970bd0ef7d5574daa0e6d0b",
+          "context": "Static string-array element (items[4]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Fifth"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1487,13 +1583,29 @@
           "overrides": {},
           "content": "items.join(\", \")"
         },
-        "program/body0/declaration/body/body1/argument/children3/children1": {
-          "type": "element",
-          "hash": "b9f3f5d0e778d934dc50684e5915b6a7",
-          "context": "",
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by join()",
           "skip": false,
           "overrides": {},
-          "content": "{items.join()}"
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by join()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by join()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1514,6 +1626,14 @@
           "skip": false,
           "overrides": {},
           "content": "numbers.map(n => `Number: ${n}`)"
+        },
+        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body/children1/expression_quasi_0": {
+          "type": "text",
+          "hash": "ce55f1250b51cc2b58a9cdac3cd082de",
+          "context": "map() callback template quasi 0",
+          "skip": false,
+          "overrides": {},
+          "content": "Number: "
         },
         "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
           "type": "element",
@@ -1537,27 +1657,43 @@
       "scopes": {
         "program/body0/declaration/body/body1/argument/children1/children1": {
           "type": "element",
-          "hash": "3f1459afe307d7c765931426a118eb3e",
+          "hash": "8bfb3bf7988d241c6c406ac52548bb7a",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "items.map((item, index) => <div key={index}>{item}</div>)"
+          "content": "items.map((item, index) => <div key={index}>{item\n          }</div>)"
         },
-        "program/body0/declaration/body/body1/argument/children3/children1/children1/expression/arguments0/body": {
-          "type": "element",
-          "hash": "e232d42269bb57ff0c0c0778cc43441a",
-          "context": "",
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by map()",
           "skip": false,
           "overrides": {},
-          "content": "{item}"
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by map()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
-          "hash": "1c0cf192a506bd844454dc1d168a470b",
+          "hash": "2a40cce947c1c98831ff50a5ba95f929",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map."
         }
       }
     },
@@ -1570,6 +1706,30 @@
           "skip": false,
           "overrides": {},
           "content": "items.reduce((acc, item) => `${acc}, ${item}`, \"\")"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_0": {
+          "type": "text",
+          "hash": "7fb55ed0b7a30342ba6da306428cae04",
+          "context": "Static string-array element (items[0]) used by reduce()",
+          "skip": false,
+          "overrides": {},
+          "content": "First"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_1": {
+          "type": "text",
+          "hash": "c22cf8376b1893dcfcef0649fe1a7d87",
+          "context": "Static string-array element (items[1]) used by reduce()",
+          "skip": false,
+          "overrides": {},
+          "content": "Second"
+        },
+        "program/body0/declaration/body/body0/declarations0_arr_2": {
+          "type": "text",
+          "hash": "168909c0b6f1dfbd48f679d47059c1d6",
+          "context": "Static string-array element (items[2]) used by reduce()",
+          "skip": false,
+          "overrides": {},
+          "content": "Third"
         },
         "program/body0/declaration/body/body1/argument/children5": {
           "type": "element",
@@ -1643,14 +1803,6 @@
           "overrides": {},
           "content": "'use client'; const [text, setText] = useState(\"Client text\");"
         },
-        "program/body1/declaration/body/body1/argument/children3/children3/children1": {
-          "type": "element",
-          "hash": "fc15de30ae7054a098c468cc3fbb6c9c",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{text}"
-        },
         "program/body1/declaration/body/body1/argument/children5": {
           "type": "element",
           "hash": "79d6ca48c8008c1e949169553fc664d1",
@@ -1719,14 +1871,6 @@
     },
     "app/8-nextjs-specifics/components/ServerComponent.tsx": {
       "scopes": {
-        "program/body1/body/body1/argument": {
-          "type": "element",
-          "hash": "49fa0401b23e77c4ec3d102089ca1fe9",
-          "context": "",
-          "skip": false,
-          "overrides": {},
-          "content": "{variable.title()}"
-        },
         "program/body2/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "ee999648e11f3e8deeb481fad34f3a68",
@@ -1814,6 +1958,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children3/openingElement/attributes1_attr_value": {
+          "type": "attribute",
+          "hash": "723f11de57922cb639a4f2fd8d813532",
+          "context": "Attribute: value",
+          "skip": false,
+          "overrides": {},
+          "content": "Submit form"
         }
       }
     },
@@ -1878,6 +2030,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/children3/openingElement/attributes1_attr_placeholder": {
+          "type": "attribute",
+          "hash": "9c5b386159b32cc72deadb789afd7109",
+          "context": "Attribute: placeholder",
+          "skip": false,
+          "overrides": {},
+          "content": "Input field"
         }
       }
     },
@@ -1929,11 +2089,19 @@
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "a47f9ae133bb19c711b486ba2a597cb1",
+          "hash": "6c0ffe7c1fb3dd260d6e591f0c50638c",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes1_attr_placeholder": {
+          "type": "attribute",
+          "hash": "d6513d3686b9b49e5c14360dfda0fd94",
+          "context": "Attribute: placeholder",
+          "skip": false,
+          "overrides": {},
+          "content": "Enter text"
         }
       }
     },
@@ -1990,26 +2158,42 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users."
+        },
+        "program/body1/declaration/body/body1/argument/children3/children1/openingElement/attributes0_attr_placeholder": {
+          "type": "attribute",
+          "hash": "4e9ce95a0f4e750b14ad77bc86d62479",
+          "context": "Attribute: placeholder",
+          "skip": false,
+          "overrides": {},
+          "content": "Enter your comment"
         }
       }
     },
     "app/9-forms/components/Value.tsx": {
       "scopes": {
-        "program/body1/declaration/body/body1/argument/children1/children1": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
           "type": "element",
-          "hash": "f88c66a8224e127edfcab35d35ed6e16",
+          "hash": "17dbbbd94d77f06d0bc32d5168e8c25e",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<input value={inputValue} />"
+          "content": "<input defaultValue=\"Default value\" />"
         },
-        "program/body1/declaration/body/body1/argument/children5": {
+        "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
-          "hash": "68925826615bc26889af5771322a121e",
+          "hash": "530aa568c38e85b1111f8d0959f30497",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with JSXExpressionContainer or StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field value is visible to users in\n        the field. Used for pre-filled fields or controlled components."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field default value is visible to\n        users in the field. Used for pre-filled uncontrolled fields."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes1_attr_defaultValue": {
+          "type": "attribute",
+          "hash": "31ce3cdcd67850870b616f75b555bbc5",
+          "context": "Attribute: defaultValue",
+          "skip": false,
+          "overrides": {},
+          "content": "Default value"
         }
       }
     },
@@ -2091,7 +2275,7 @@
     },
     "app/page.tsx": {
       "scopes": {
-        "program/body2/declaration/body/body0/argument/children1/children1/children1": {
+        "program/body1/declaration/body/body0/argument/children1/children1/children1": {
           "type": "element",
           "hash": "d67cc33eea225011ccdd58c9e0ca06e9",
           "context": "",
@@ -2099,7 +2283,7 @@
           "overrides": {},
           "content": "String Rendering Patterns"
         },
-        "program/body2/declaration/body/body0/argument/children1/children1/children3": {
+        "program/body1/declaration/body/body0/argument/children1/children1/children3": {
           "type": "element",
           "hash": "fff863e8613d1ed5d434154d04034652",
           "context": "",
@@ -2107,23 +2291,167 @@
           "overrides": {},
           "content": "This demonstration shows all possible scenarios and patterns of how\n            strings can appear in the final DOM in React and Next.js\n            applications and be visible to users on screen (without using\n            devtools)."
         },
-        "program/body2/declaration/body/body0/argument/children1/children3/children1/expression/arguments0/body/children1": {
+        "program/body1/declaration/body/body0/argument/children1/children3/children1/children1": {
           "type": "element",
-          "hash": "49fa0401b23e77c4ec3d102089ca1fe9",
+          "hash": "7753cab87064841ac08330b7903c23f4",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{variable.title()}"
+          "content": "1. Direct Rendering"
         },
-        "program/body2/declaration/body/body0/argument/children1/children3/children1/expression/arguments0/body/children3": {
+        "program/body1/declaration/body/body0/argument/children1/children3/children1/children3": {
           "type": "element",
-          "hash": "661a0bf8d631e7119a245b0f78ae1ff5",
+          "hash": "5f1916927704dca2e8ced3edef613278",
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "{variable.description()}"
+          "content": "JSXText between tags (visible text)"
         },
-        "program/body2/declaration/body/body0/argument/children1/children5/children1": {
+        "program/body1/declaration/body/body0/argument/children1/children3/children3/children1": {
+          "type": "element",
+          "hash": "aa3330666ce5cb4e2af6d124eaea850e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2. Expressions"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children3/children3": {
+          "type": "element",
+          "hash": "dede56d2ddf969882179fd7611e6f3a7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "JSXExpressionContainer with various expression types returning\n              strings"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children5/children1": {
+          "type": "element",
+          "hash": "7d5731d461aa34dfe8d42adf990aac6b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "3. Visible Attributes"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children5/children3": {
+          "type": "element",
+          "hash": "bccfa1e64c356bd0c42918c17e03f716",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "JSXAttribute with title, alt, aria-label, aria-describedby,\n              aria-placeholder and other accessibility attributes"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children7/children1": {
+          "type": "element",
+          "hash": "d818411a7fadf39d7d254950f90fccd3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4. Components"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children7/children3": {
+          "type": "element",
+          "hash": "47b840d31c2b347044c5455a4f0b8374",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Through props and children that render visible text"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "d6e05261a7f4843df8296f36319c9c1b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "5. Functions"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children9/children3": {
+          "type": "element",
+          "hash": "172147bf604ce6d9733509a166e9b45b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Through function calls returning strings for display"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children11/children1": {
+          "type": "element",
+          "hash": "9c02a0b4114f56828488c2d480e91624",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "6. Conditional Logic"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children11/children3": {
+          "type": "element",
+          "hash": "860d7d3a6ac6dc896a74876202e99de7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Through ternary operators and logical expressions returning strings"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children13/children1": {
+          "type": "element",
+          "hash": "1c9808157ad813946569332d5d35dfba",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "7. Loops"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children13/children3": {
+          "type": "element",
+          "hash": "2bbab19efad5542ff13a38d2dcb70001",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Through map, forEach and other array methods rendering strings"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children15/children1": {
+          "type": "element",
+          "hash": "591167f480486b955a2788d63f84118f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "8. Next.js Specifics"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children15/children3": {
+          "type": "element",
+          "hash": "aeaaf0d7f559afc890833e182401ba42",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Metadata (title, description), Server/Client Components"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children17/children1": {
+          "type": "element",
+          "hash": "8e44440825308b758cbff00c9f861ec4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "9. Forms"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children17/children3": {
+          "type": "element",
+          "hash": "555e7d63fb94a39c14271deb58b3cbbb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Placeholder, value, label text, button text, option text"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children19/children1": {
+          "type": "element",
+          "hash": "776624b96f5e8bc9501d36218cfc8a64",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "10. Special Cases"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children3/children19/children3": {
+          "type": "element",
+          "hash": "4fe2f214967fca9b735b5b28a15f60aa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Portals, Suspense fallback, Error Boundary"
+        },
+        "program/body1/declaration/body/body0/argument/children1/children5/children1": {
           "type": "element",
           "hash": "e479ded3cbe39f719577358b3b16467a",
           "context": "",
@@ -2131,7 +2459,7 @@
           "overrides": {},
           "content": "Exclusions (not localized):"
         },
-        "program/body2/declaration/body/body0/argument/children1/children5/children3/children1": {
+        "program/body1/declaration/body/body0/argument/children1/children5/children3/children1": {
           "type": "element",
           "hash": "34f1d87dc7adb94ec8823b2350f93c63",
           "context": "",
@@ -2139,7 +2467,7 @@
           "overrides": {},
           "content": "Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>"
         },
-        "program/body2/declaration/body/body0/argument/children1/children5/children3/children3": {
+        "program/body1/declaration/body/body0/argument/children1/children5/children3/children3": {
           "type": "element",
           "hash": "9fc4ad506e787fe8e987a79fcba3bfe0",
           "context": "",
@@ -2147,7 +2475,7 @@
           "overrides": {},
           "content": "Pure API responses without UI"
         },
-        "program/body2/declaration/body/body0/argument/children1/children5/children3/children5": {
+        "program/body1/declaration/body/body0/argument/children1/children5/children3/children5": {
           "type": "element",
           "hash": "b2219a195bef487ca6079bd6c767a388",
           "context": "",
@@ -2155,7 +2483,7 @@
           "overrides": {},
           "content": "Code comments"
         },
-        "program/body2/declaration/body/body0/argument/children1/children5/children3/children7": {
+        "program/body1/declaration/body/body0/argument/children1/children5/children3/children7": {
           "type": "element",
           "hash": "2d37acd08c33d221bbdbc873439d6864",
           "context": "",
@@ -2174,6 +2502,14 @@
           "skip": false,
           "overrides": {},
           "content": "String Rendering Patterns"
+        },
+        "program/body3/declaration/body/body1/argument/children1/children1/children3/children1/expression/arguments0/body/body1/argument/openingElement/attributes2/value/expression_quasi_0": {
+          "type": "text",
+          "hash": "c9352f5abc3aa91696ab90edffde0d35",
+          "context": "map() callback template quasi 0",
+          "skip": false,
+          "overrides": {},
+          "content": "rounded-md px-3 py-2 text-sm font-medium transition-colors "
         }
       }
     }
