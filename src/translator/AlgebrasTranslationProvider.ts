@@ -51,6 +51,7 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
   private ignoreCache?: boolean;
   private cache: Map<string, string> = new Map();
   private quotaExceeded: boolean = false;
+  private rateLimitExceeded: boolean = false;
 
   constructor(options: AlgebrasTranslationOptions) {
     this.apiKey = options.apiKey;
@@ -100,10 +101,11 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
       return { translations: [] };
     }
 
-    // If quota is already exceeded, skip API call and return fallback translations
-    if (this.quotaExceeded) {
+    // If quota or rate limit is already exceeded, skip API call and return fallback translations
+    if (this.quotaExceeded || this.rateLimitExceeded) {
+      const reason = this.quotaExceeded ? 'Quota' : 'Rate limit';
       console.log(
-        `[AlgebrasTranslation] Quota exceeded - using fallback translations for ${texts.length} texts to ${targetLanguage}...`
+        `[AlgebrasTranslation] ${reason} exceeded - using fallback translations for ${texts.length} texts to ${targetLanguage}...`
       );
       return {
         translations: texts.map(
@@ -152,6 +154,24 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
 
       if (!response.ok) {
         const errorText = await response.text();
+
+        // Check if this is a rate limit error (429)
+        if (response.status === 429) {
+          this.rateLimitExceeded = true;
+          console.error(
+            '\n⚠️  [AlgebrasTranslation] Rate limit exceeded detected!'
+          );
+          console.error('   Too many requests - rate limit reached');
+          console.error(
+            '   All subsequent translations will use fallback translations\n'
+          );
+          // Return fallback instead of throwing
+          return {
+            translations: texts.map(
+              (text) => `[${targetLanguage.toUpperCase()}] ${text}`
+            ),
+          };
+        }
 
         // Check if this is a quota exceeded error
         if (response.status === 402) {
@@ -211,8 +231,29 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
       return { translations };
     } catch (error) {
       // Also check error message in catch block in case error was thrown before parsing
-      if (!this.quotaExceeded && error instanceof Error) {
+      if (
+        !this.quotaExceeded &&
+        !this.rateLimitExceeded &&
+        error instanceof Error
+      ) {
         const errorMessage = error.message;
+
+        // Check for rate limit in error message
+        if (
+          errorMessage.includes('429') ||
+          errorMessage.includes('Too Many Requests') ||
+          errorMessage.includes('rate limit') ||
+          errorMessage.includes('Too many requests')
+        ) {
+          this.rateLimitExceeded = true;
+          console.error(
+            '\n⚠️  [AlgebrasTranslation] Rate limit exceeded detected!'
+          );
+          console.error(
+            '   All subsequent translations will use fallback translations\n'
+          );
+        }
+
         if (
           errorMessage.includes('402') ||
           errorMessage.includes('Payment Required')
@@ -271,10 +312,11 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
       console.error('   Number of texts:', texts.length);
       console.error('   Error details:', error);
 
-      // If quota is exceeded, log a specific message
-      if (this.quotaExceeded) {
+      // If quota or rate limit is exceeded, log a specific message
+      if (this.quotaExceeded || this.rateLimitExceeded) {
+        const reason = this.quotaExceeded ? 'Quota' : 'Rate limit';
         console.error(
-          '   ⚠️  Quota exceeded - using fallback translations for remaining items\n'
+          `   ⚠️  ${reason} exceeded - using fallback translations for remaining items\n`
         );
       } else {
         console.error('   ⚠️  Falling back to mock translations\n');
@@ -315,10 +357,11 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
 
     // Process each target language
     for (const targetLang of targetLanguages) {
-      // If quota is exceeded, skip API calls and use fallback for all remaining languages
-      if (this.quotaExceeded) {
+      // If quota or rate limit is exceeded, skip API calls and use fallback for all remaining languages
+      if (this.quotaExceeded || this.rateLimitExceeded) {
+        const reason = this.quotaExceeded ? 'Quota' : 'Rate limit';
         console.log(
-          `[AlgebrasTranslation] Quota exceeded - using fallback translations for all texts to ${targetLang}...`
+          `[AlgebrasTranslation] ${reason} exceeded - using fallback translations for all texts to ${targetLang}...`
         );
 
         // Generate fallback translations for all texts in this language
@@ -338,10 +381,11 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
 
       // Process in batches for this language
       for (let i = 0; i < texts.length; i += batchSize) {
-        // Check quota status before each batch
-        if (this.quotaExceeded) {
+        // Check quota/rate limit status before each batch
+        if (this.quotaExceeded || this.rateLimitExceeded) {
+          const reason = this.quotaExceeded ? 'Quota' : 'Rate limit';
           console.log(
-            `[AlgebrasTranslation] Quota exceeded during batch processing - using fallback translations for remaining batches...`
+            `[AlgebrasTranslation] ${reason} exceeded during batch processing - using fallback translations for remaining batches...`
           );
 
           // Generate fallback translations for all remaining texts in this language
@@ -375,11 +419,12 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
           results.get(key)!.set(targetLang, translated);
         }
 
-        // Check if quota was exceeded during this batch call
+        // Check if quota or rate limit was exceeded during this batch call
         // If so, stop making API calls and use fallback for remaining items
-        if (this.quotaExceeded) {
+        if (this.quotaExceeded || this.rateLimitExceeded) {
+          const reason = this.quotaExceeded ? 'Quota' : 'Rate limit';
           console.log(
-            `[AlgebrasTranslation] Quota exceeded detected - using fallback translations for remaining items...`
+            `[AlgebrasTranslation] ${reason} exceeded detected - using fallback translations for remaining items...`
           );
 
           // Generate fallback translations for all remaining texts in this language
@@ -393,15 +438,20 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
           break; // Stop processing remaining batches for this language
         }
 
-        // Small delay to avoid rate limiting (only if quota not exceeded)
-        if (!this.quotaExceeded && i + batchSize < texts.length) {
+        // Small delay to avoid rate limiting (only if quota/rate limit not exceeded)
+        if (
+          !this.quotaExceeded &&
+          !this.rateLimitExceeded &&
+          i + batchSize < texts.length
+        ) {
           await new Promise((resolve) => setTimeout(resolve, 500));
         }
       }
 
-      // Delay between languages to avoid rate limiting (only if quota not exceeded)
+      // Delay between languages to avoid rate limiting (only if quota/rate limit not exceeded)
       if (
         !this.quotaExceeded &&
+        !this.rateLimitExceeded &&
         targetLanguages.indexOf(targetLang) < targetLanguages.length - 1
       ) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
