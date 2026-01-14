@@ -35,14 +35,27 @@ export class Parser {
     const files: string[] = [];
 
     const isIgnored = (filePath: string): boolean => {
+      // Normalize path separators to forward slashes for consistent matching
+      // This handles Windows paths (backslashes) correctly
+      const normalizedPath = filePath.replace(/\\/g, '/');
+
       return ignorePatterns.some((pattern) => {
         // Convert glob pattern to regex-like matching
-        const regexPattern = pattern
+        let regexPattern = pattern
           .replace(/\*\*/g, '.*')
           .replace(/\*/g, '[^/]*')
           .replace(/\//g, '\\/');
+
+        // Fix: Patterns starting with **/ should also match at the beginning of the path
+        // This handles cases like **/node_modules/** matching "node_modules/..." (no leading /)
+        // path.relative() returns paths without leading slash, so we need to handle both cases
+        if (regexPattern.startsWith('.*\\/')) {
+          // Allow matching at start of string (^) OR after a forward slash (.*\/)
+          regexPattern = '(^|.*\\/)' + regexPattern.substring(4);
+        }
+
         const regex = new RegExp(regexPattern);
-        return regex.test(filePath);
+        return regex.test(normalizedPath);
       });
     };
 
