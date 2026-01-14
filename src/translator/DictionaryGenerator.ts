@@ -52,6 +52,36 @@ export class DictionaryGenerator {
   }
 
   /**
+   * Check if translation provider has exceeded quota or rate limit
+   */
+  private isProviderLimitExceeded(): boolean {
+    if (!this.translationProvider) {
+      return false;
+    }
+    const provider = this.translationProvider as any;
+    return (
+      provider.quotaExceeded === true || provider.rateLimitExceeded === true
+    );
+  }
+
+  /**
+   * Get the reason for limit exceeded (for logging)
+   */
+  private getLimitExceededReason(): string | null {
+    if (!this.translationProvider) {
+      return null;
+    }
+    const provider = this.translationProvider as any;
+    if (provider.quotaExceeded) {
+      return 'Quota';
+    }
+    if (provider.rateLimitExceeded) {
+      return 'Rate limit';
+    }
+    return null;
+  }
+
+  /**
    * Try to load existing dictionary.json from outputDir.
    * Returns null if file doesn't exist or cannot be parsed.
    */
@@ -213,7 +243,45 @@ export class DictionaryGenerator {
         continue;
       }
 
+      // Check if rate limit or quota exceeded before processing locale
+      if (this.isProviderLimitExceeded()) {
+        const reason = this.getLimitExceededReason() || 'Limit';
+        console.log(
+          `[DictionaryGenerator] ${reason} exceeded - skipping remaining translations for ${locale}...`
+        );
+        // Use fallback for all remaining texts in this locale
+        for (let j = 0; j < texts.length; j++) {
+          const key = keys[j];
+          const [filePath, scopePath] = key.split('::');
+          const file = dictionary.files[filePath];
+          if (!file) continue;
+          const entry = file.entries[scopePath];
+          if (!entry) continue;
+          entry.content[locale] = `[${locale.toUpperCase()}] ${texts[j]}`;
+        }
+        continue;
+      }
+
       for (let i = 0; i < texts.length; i += batchSize) {
+        // Check before each batch
+        if (this.isProviderLimitExceeded()) {
+          const reason = this.getLimitExceededReason() || 'Limit';
+          console.log(
+            `[DictionaryGenerator] ${reason} exceeded - using fallback for remaining batches...`
+          );
+          // Use fallback for remaining texts
+          for (let j = i; j < texts.length; j++) {
+            const key = keys[j];
+            const [filePath, scopePath] = key.split('::');
+            const file = dictionary.files[filePath];
+            if (!file) continue;
+            const entry = file.entries[scopePath];
+            if (!entry) continue;
+            entry.content[locale] = `[${locale.toUpperCase()}] ${texts[j]}`;
+          }
+          break;
+        }
+
         const batchTexts = texts.slice(i, i + batchSize);
         const batchKeys = keys.slice(i, i + batchSize);
 
