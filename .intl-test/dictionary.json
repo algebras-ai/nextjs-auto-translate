@@ -5,8 +5,7 @@
       "entries": {
         "a/b/c": {
           "content": {
-            "en": "Hello",
-            "de": "[DE] Hello"
+            "en": "Hello"
           },
           "hash": "h1"
         }

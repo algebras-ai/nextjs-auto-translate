@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import fs from 'fs';
+import path from 'path';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AlgebrasTranslationProvider } from '../src/translator/AlgebrasTranslationProvider';
 import { DictionaryGenerator } from '../src/translator/DictionaryGenerator';
 import type { ScopeMap } from '../src/types';
-import fs from 'fs';
-import path from 'path';
 
 // Mock fetch globally
 global.fetch = vi.fn();
@@ -84,12 +84,12 @@ describe('Rate Limit Handling', () => {
 
     // Second batch should hit rate limit
     const result2 = await provider.translateBatch(['World'], 'es');
-    expect(result2.translations[0]).toBe('[ES] World'); // Fallback
+    expect(result2.translations[0]).toBe('World'); // Fallback to original
     expect((global.fetch as any).mock.calls.length).toBe(2);
 
     // Third batch should NOT make API call (rate limit already exceeded)
     const result3 = await provider.translateBatch(['Test'], 'es');
-    expect(result3.translations[0]).toBe('[ES] Test'); // Fallback
+    expect(result3.translations[0]).toBe('Test'); // Fallback to original
     expect((global.fetch as any).mock.calls.length).toBe(2); // Still 2, no new call
   });
 
@@ -142,8 +142,8 @@ describe('Rate Limit Handling', () => {
     expect(results.get('key19')?.get('es')).toBe('Texto 19');
 
     // Last 5 should be fallback (rate limit hit)
-    expect(results.get('key20')?.get('es')).toBe('[ES] Text 20');
-    expect(results.get('key24')?.get('es')).toBe('[ES] Text 24');
+    expect(results.get('key20')?.get('es')).toBe('Text 20');
+    expect(results.get('key24')?.get('es')).toBe('Text 24');
 
     // Should only make 2 API calls (first batch + rate limit error)
     expect((global.fetch as any).mock.calls.length).toBe(2);
@@ -164,12 +164,12 @@ describe('Rate Limit Handling', () => {
 
     const result = await provider.translateBatch(['Hello'], 'es');
 
-    expect(result.translations[0]).toBe('[ES] Hello'); // Fallback
+    expect(result.translations[0]).toBe('Hello'); // Fallback to original
     expect((global.fetch as any).mock.calls.length).toBe(1);
 
     // Next call should not make API request
     const result2 = await provider.translateBatch(['World'], 'es');
-    expect(result2.translations[0]).toBe('[ES] World');
+    expect(result2.translations[0]).toBe('World');
     expect((global.fetch as any).mock.calls.length).toBe(1); // Still 1
   });
 
@@ -208,7 +208,8 @@ describe('Rate Limit Handling', () => {
     const dict = JSON.parse(fs.readFileSync(dictPath, 'utf-8'));
     const entry = dict.files['src/Test.tsx'].entries['test/scope'].content;
 
-    expect(entry.es).toBe('[ES] Hello World'); // Fallback
+    // Fallback behavior: do not write non-translated locales into the dictionary
+    expect(entry.es).toBeUndefined();
   });
 
   it('should handle rate limit mid-batch in DictionaryGenerator', async () => {
@@ -288,9 +289,9 @@ describe('Rate Limit Handling', () => {
     );
 
     // Last entry should be fallback (rate limit hit)
-    expect(dict.files['src/Test.tsx'].entries['test/scope24'].content.es).toBe(
-      '[ES] Text 24'
-    );
+    expect(
+      dict.files['src/Test.tsx'].entries['test/scope24'].content.es
+    ).toBeUndefined();
   });
 
   it('should distinguish between quota exceeded and rate limit', async () => {
@@ -308,7 +309,7 @@ describe('Rate Limit Handling', () => {
     });
 
     const result1 = await provider.translateBatch(['Hello'], 'es');
-    expect(result1.translations[0]).toBe('[ES] Hello');
+    expect(result1.translations[0]).toBe('Hello');
 
     // Check that rateLimitExceeded is set
     const providerAny = provider as any;
@@ -317,7 +318,7 @@ describe('Rate Limit Handling', () => {
 
     // Next call should not make API request
     const result2 = await provider.translateBatch(['World'], 'es');
-    expect(result2.translations[0]).toBe('[ES] World');
+    expect(result2.translations[0]).toBe('World');
     expect((global.fetch as any).mock.calls.length).toBe(1); // Still 1, no new call
   });
 });
