@@ -45,6 +45,7 @@ export declare class AlgebrasTranslationProvider implements ITranslateProvider {
     private ignoreCache?;
     private cache;
     private quotaExceeded;
+    private rateLimitExceeded;
     constructor(options: AlgebrasTranslationOptions);
     /**
      * Translate a single text to a target language

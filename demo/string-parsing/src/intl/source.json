@@ -658,14 +658,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed\n        if the image fails to load and is used by screen readers. Visible to\n        users."
-        },
-        "program/body1/declaration/body/body0/argument/children3/children1/children1/openingElement/attributes1_attr_alt": {
-          "type": "attribute",
-          "hash": "18f2ae2bda9a34f06975d5c124643168",
-          "context": "Attribute: alt",
-          "skip": false,
-          "overrides": {},
-          "content": "Image description"
         }
       }
     },
@@ -702,14 +694,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby,\n        aria-placeholder and other ARIA attributes are used by screen readers\n        and visible to users with disabilities. Subject to localization."
-        },
-        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_aria-label": {
-          "type": "attribute",
-          "hash": "3c62b9dcfe365792b2fbb6e15dc82c80",
-          "context": "Attribute: aria-label",
-          "skip": false,
-          "overrides": {},
-          "content": "Close dialog"
         }
       }
     },
@@ -738,14 +722,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users."
-        },
-        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_title": {
-          "type": "attribute",
-          "hash": "cafa289476a2aae5108bd795a0ad2f7c",
-          "context": "Attribute: title",
-          "skip": false,
-          "overrides": {},
-          "content": "Tooltip on hover"
         }
       }
     },
@@ -858,22 +834,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and\n        rendered as visible text. Important: technical props (id, className,\n        data-*, etc.) are not subject to localization."
-        },
-        "program/body2/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_label": {
-          "type": "attribute",
-          "hash": "89e86fca338e017887dbde7965c10b75",
-          "context": "Attribute: label",
-          "skip": false,
-          "overrides": {},
-          "content": "Click "
-        },
-        "program/body2/declaration/body/body0/argument/children3/children3/openingElement/attributes0_attr_message": {
-          "type": "attribute",
-          "hash": "a25c753ee3e4be15ec0daa5a40deb7b8",
-          "context": "Attribute: message",
-          "skip": false,
-          "overrides": {},
-          "content": "An error occurred"
         }
       }
     },
@@ -894,14 +854,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXElement (component)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component receives a string and renders it."
-        },
-        "program/body1/declaration/body/body0/argument/children3/children1/openingElement/attributes0_attr_text": {
-          "type": "attribute",
-          "hash": "9dffbf69ffba8bc38bc4e01abf4b1675",
-          "context": "Attribute: text",
-          "skip": false,
-          "overrides": {},
-          "content": "Text"
         }
       }
     },
@@ -1958,14 +1910,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute."
-        },
-        "program/body0/declaration/body/body0/argument/children3/children3/openingElement/attributes1_attr_value": {
-          "type": "attribute",
-          "hash": "723f11de57922cb639a4f2fd8d813532",
-          "context": "Attribute: value",
-          "skip": false,
-          "overrides": {},
-          "content": "Submit form"
         }
       }
     },
@@ -2030,14 +1974,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields."
-        },
-        "program/body0/declaration/body/body0/argument/children3/children1/children3/openingElement/attributes1_attr_placeholder": {
-          "type": "attribute",
-          "hash": "9c5b386159b32cc72deadb789afd7109",
-          "context": "Attribute: placeholder",
-          "skip": false,
-          "overrides": {},
-          "content": "Input field"
         }
       }
     },
@@ -2094,14 +2030,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
-        },
-        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes1_attr_placeholder": {
-          "type": "attribute",
-          "hash": "d6513d3686b9b49e5c14360dfda0fd94",
-          "context": "Attribute: placeholder",
-          "skip": false,
-          "overrides": {},
-          "content": "Enter text"
         }
       }
     },
@@ -2158,14 +2086,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users."
-        },
-        "program/body1/declaration/body/body1/argument/children3/children1/openingElement/attributes0_attr_placeholder": {
-          "type": "attribute",
-          "hash": "4e9ce95a0f4e750b14ad77bc86d62479",
-          "context": "Attribute: placeholder",
-          "skip": false,
-          "overrides": {},
-          "content": "Enter your comment"
         }
       }
     },
@@ -2186,14 +2106,6 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field default value is visible to\n        users in the field. Used for pre-filled uncontrolled fields."
-        },
-        "program/body0/declaration/body/body0/argument/children3/children1/openingElement/attributes1_attr_defaultValue": {
-          "type": "attribute",
-          "hash": "31ce3cdcd67850870b616f75b555bbc5",
-          "context": "Attribute: defaultValue",
-          "skip": false,
-          "overrides": {},
-          "content": "Default value"
         }
       }
     },
