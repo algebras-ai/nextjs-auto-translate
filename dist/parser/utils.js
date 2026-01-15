@@ -497,7 +497,7 @@ function getInstructionFromCommentText(commentText) {
     if (direct)
         return direct;
     // Fallback: extract directive substring if extra text exists
-    const match = commentText.match(/@algb-translate-(?:attr-[\w-]+|props-\[[^\]]+\])/);
+    const match = commentText.match(/@algb-translate-(?:attrs-\[[^\]]+\]|attr-[\w:-]+|props-\[[^\]]+\])/);
     if (!match)
         return null;
     return parseTranslationInstruction(match[0]);
@@ -572,6 +572,19 @@ function parseTranslationInstruction(comment) {
         .replace(/^\/\*+/, '')
         .replace(/\*+\/$/, '')
         .trim();
+    // Match: @algb-translate-attrs-[attr1,attr2,...]
+    // Allows multiple attributes at once, similar to props.
+    const attrsMatch = trimmed.match(/@algb-translate-attrs-\[([^\]]+)\]/);
+    if (attrsMatch) {
+        const attrs = attrsMatch[1]
+            .split(',')
+            .map((a) => a.trim())
+            .filter(Boolean);
+        return {
+            translateAttributes: new Set(attrs),
+            translateProps: new Set(),
+        };
+    }
     // Match: @algb-translate-attr-{attrName}
     // Allow hyphenated/colon attrs like aria-label, xlink:href, etc.
     const attrMatch = trimmed.match(/@algb-translate-attr-([A-Za-z][\w:-]*)/);

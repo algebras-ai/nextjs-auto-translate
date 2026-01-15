@@ -113,6 +113,15 @@ Supports hyphenated attributes too:
 <button aria-label="Close dialog">×</button>;
 ```
 
+### Translate multiple attributes on the same element
+
+```tsx
+{
+  /* @algb-translate-attrs-[title,placeholder,aria-label] */
+}
+<input title="Hello" placeholder="Enter text" aria-label="Search" />;
+```
+
 ### Translate selected props on a component
 
 ```tsx
