@@ -58,6 +58,18 @@ class Parser {
         this.lockPath = path_1.default.resolve(process.cwd(), outputDir, '.lock');
         this.sourceStore = new SourceStore_1.SourceStore(outputDir);
     }
+    isPluginRepoRoot(cwd) {
+        try {
+            const pkgPath = path_1.default.join(cwd, 'package.json');
+            if (!fs_1.default.existsSync(pkgPath))
+                return false;
+            const pkg = JSON.parse(fs_1.default.readFileSync(pkgPath, 'utf-8'));
+            return pkg?.name === '@dima-algebras/algebras-auto-intl';
+        }
+        catch {
+            return false;
+        }
+    }
     findFilesSync(dir, extensions, ignorePatterns) {
         const files = [];
         const isIgnored = (filePath) => {
@@ -65,10 +77,15 @@ class Parser {
             // This handles Windows paths (backslashes) correctly
             const normalizedPath = filePath.replace(/\\/g, '/');
             return ignorePatterns.some((pattern) => {
-                // Convert glob pattern to regex-like matching
-                let regexPattern = pattern
-                    .replace(/\*\*/g, '.*')
+                // Convert glob pattern to regex-like matching.
+                // IMPORTANT: do NOT replace "*" after replacing "**" directly, otherwise ".*" becomes corrupted.
+                // Example bug: "**/node_modules/**" -> ".*\/node_modules\/.*" -> ".[^/]*\/node_modules\/.[^/]*"
+                const GLOBSTAR = '__GLOBSTAR__';
+                const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&'); // keep '*' and '/' as glob tokens
+                let regexPattern = escaped
+                    .replace(/\*\*/g, GLOBSTAR)
                     .replace(/\*/g, '[^/]*')
+                    .replace(new RegExp(GLOBSTAR, 'g'), '.*')
                     .replace(/\//g, '\\/');
                 // Fix: Patterns starting with **/ should also match at the beginning of the path
                 // This handles cases like **/node_modules/** matching "node_modules/..." (no leading /)
@@ -87,7 +104,15 @@ class Parser {
                 for (const entry of entries) {
                     const fullPath = path_1.default.join(currentDir, entry.name);
                     const relativePath = path_1.default.relative(dir, fullPath);
-                    if (isIgnored(relativePath)) {
+                    // IMPORTANT:
+                    // Ignore patterns like "**/node_modules/**" or "**/demo/**" are meant to match directories too.
+                    // When we compute `relativePath` for a directory, it looks like "node_modules" (no trailing "/"),
+                    // so those patterns would never match and we'd still traverse into the folder.
+                    // Appending "/" for directories makes the glob intent work as expected.
+                    const ignorePath = entry.isDirectory()
+                        ? `${relativePath}${path_1.default.sep}`
+                        : relativePath;
+                    if (isIgnored(ignorePath)) {
                         continue;
                     }
                     if (entry.isDirectory()) {
@@ -123,6 +148,11 @@ class Parser {
         try {
             console.log('[Parser] Scanning project for translatable strings...');
             const ignore = ['**/.next/**', '**/dist/**'];
+            // When developing this package locally, avoid scanning its own demo apps.
+            // In real usage (inside a consumer Next.js app), cwd is the app root, not this package.
+            if (this.isPluginRepoRoot(process.cwd())) {
+                ignore.push('**/demo/**');
+            }
             if (!this.options.includeNodeModules) {
                 ignore.push('**/node_modules/**');
             }

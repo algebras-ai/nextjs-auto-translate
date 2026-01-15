@@ -6,6 +6,7 @@ export declare class Parser {
     constructor(options?: ParserOptions & {
         outputDir?: string;
     });
+    private isPluginRepoRoot;
     private findFilesSync;
     parseProject(): ScopeMap;
     private hasChanges;
