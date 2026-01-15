@@ -9,6 +9,7 @@ export default function TitleAttribute() {
         </code>
       </div>
       <div className="rounded bg-gray-50 dark:bg-gray-900 p-4">
+        {/* @algb-translate-attr-title */}
         <div title="Tooltip on hover">Hover over me to see tooltip</div>
       </div>
       <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
