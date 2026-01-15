@@ -46,6 +46,11 @@ export declare class AlgebrasTranslationProvider implements ITranslateProvider {
     private cache;
     private quotaExceeded;
     private rateLimitExceeded;
+    /**
+     * Indicates whether the most recent batch call fell back to non-translated content.
+     * Used by DictionaryGenerator to avoid writing non-translated locale entries.
+     */
+    lastBatchHadError: boolean;
     constructor(options: AlgebrasTranslationOptions);
     /**
      * Translate a single text to a target language
