@@ -24,6 +24,14 @@ export declare class DictionaryGenerator {
     constructor(options: DictionaryGeneratorOptions);
     private preserveEdgeWhitespace;
     /**
+     * Check if translation provider has exceeded quota or rate limit
+     */
+    private isProviderLimitExceeded;
+    /**
+     * Get the reason for limit exceeded (for logging)
+     */
+    private getLimitExceededReason;
+    /**
      * Try to load existing dictionary.json from outputDir.
      * Returns null if file doesn't exist or cannot be parsed.
      */

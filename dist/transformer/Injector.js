@@ -49,7 +49,6 @@ const traverse_1 = __importDefault(require("@babel/traverse"));
 const t = __importStar(require("@babel/types"));
 const path_1 = __importDefault(require("path"));
 const constants_1 = require("../constants");
-const jsxAttributeTranslation_1 = require("../utils/jsxAttributeTranslation");
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = traverse_1.default.default || traverse_1.default;
 const generate = generator_1.default.default || generator_1.default;
@@ -805,86 +804,6 @@ function transformProject(code, options) {
                     t.jsxText(path.node.value),
                 ]));
                 changed = true;
-            },
-        });
-        // Third pass: Handle JSXAttribute nodes for visible attributes and component props
-        traverse(ast, {
-            JSXAttribute(path) {
-                const attrName = path.node.name;
-                if (!t.isJSXIdentifier(attrName))
-                    return;
-                const attrNameStr = attrName.name;
-                // Determine which element this attribute belongs to
-                const openingElement = t.isJSXOpeningElement(path.parent)
-                    ? path.parent
-                    : null;
-                if (!(0, jsxAttributeTranslation_1.shouldTranslateJsxAttribute)(attrNameStr, openingElement?.name || null, openingElement?.attributes)) {
-                    return;
-                }
-                // Get the scope path for this attribute
-                const fullScopePath = path.getPathLocation();
-                const scopePath = getRelativeScopePath(fullScopePath);
-                // Check for attribute entry: {scopePath}_attr_{attrName}
-                const attributeKey = `${scopePath}_attr_${attrNameStr}`;
-                const scopeEntry = fileScopes[attributeKey];
-                if (!scopeEntry || scopeEntry.type !== 'attribute')
-                    return;
-                // Find the parent component/function to track which components need the hook
-                const functionPath = path.findParent((p) => {
-                    return (p.isFunctionDeclaration() ||
-                        p.isArrowFunctionExpression() ||
-                        p.isFunctionExpression() ||
-                        (p.isVariableDeclarator() &&
-                            p.node.init &&
-                            (t.isArrowFunctionExpression(p.node.init) ||
-                                t.isFunctionExpression(p.node.init))));
-                });
-                if (functionPath) {
-                    const functionLocation = functionPath.getPathLocation();
-                    componentsNeedingHook.add(functionLocation);
-                }
-                // Handle string literal attributes: title="Text"
-                if (t.isStringLiteral(path.node.value)) {
-                    // Replace with t() call
-                    const tCall = t.callExpression(t.identifier('t'), [
-                        t.stringLiteral(`${relativePath}::${attributeKey}`),
-                    ]);
-                    path.node.value = t.jsxExpressionContainer(tCall);
-                    changed = true;
-                    return;
-                }
-                // Handle expression attributes: title={variable} or title={`Hello ${name}`}
-                if (t.isJSXExpressionContainer(path.node.value)) {
-                    const expr = path.node.value.expression;
-                    // For string literals in expressions, replace with t() call
-                    if (t.isStringLiteral(expr)) {
-                        const tCall = t.callExpression(t.identifier('t'), [
-                            t.stringLiteral(`${relativePath}::${attributeKey}`),
-                        ]);
-                        path.node.value.expression = tCall;
-                        changed = true;
-                        return;
-                    }
-                    // For template literals, we need to check if the content matches
-                    // If it's a simple template literal that matches the extracted content,
-                    // we can replace it with t() call
-                    // Otherwise, we keep the expression but wrap it in t() if needed
-                    if (t.isTemplateLiteral(expr)) {
-                        // For now, if the template literal has no expressions (static),
-                        // we can replace it with t() call
-                        if (expr.expressions.length === 0) {
-                            const tCall = t.callExpression(t.identifier('t'), [
-                                t.stringLiteral(`${relativePath}::${attributeKey}`),
-                            ]);
-                            path.node.value.expression = tCall;
-                            changed = true;
-                        }
-                        // For template literals with expressions, we'd need more complex handling
-                        // This is a simplified version - in production you might want to handle
-                        // template literals with parameters differently
-                        return;
-                    }
-                }
             },
         });
         // Fourth pass: Add useTranslation hook to components that need it

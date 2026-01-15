@@ -45,7 +45,6 @@ const crypto_1 = __importDefault(require("crypto"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const SourceStore_1 = require("../storage/SourceStore");
-const jsxAttributeTranslation_1 = require("../utils/jsxAttributeTranslation");
 const utils_1 = require("./utils");
 // @babel/traverse has different exports for ESM vs CommonJS
 const traverse = traverse_1.default.default || traverse_1.default;
@@ -62,14 +61,24 @@ class Parser {
     findFilesSync(dir, extensions, ignorePatterns) {
         const files = [];
         const isIgnored = (filePath) => {
+            // Normalize path separators to forward slashes for consistent matching
+            // This handles Windows paths (backslashes) correctly
+            const normalizedPath = filePath.replace(/\\/g, '/');
             return ignorePatterns.some((pattern) => {
                 // Convert glob pattern to regex-like matching
-                const regexPattern = pattern
+                let regexPattern = pattern
                     .replace(/\*\*/g, '.*')
                     .replace(/\*/g, '[^/]*')
                     .replace(/\//g, '\\/');
+                // Fix: Patterns starting with **/ should also match at the beginning of the path
+                // This handles cases like **/node_modules/** matching "node_modules/..." (no leading /)
+                // path.relative() returns paths without leading slash, so we need to handle both cases
+                if (regexPattern.startsWith('.*\\/')) {
+                    // Allow matching at start of string (^) OR after a forward slash (.*\/)
+                    regexPattern = '(^|.*\\/)' + regexPattern.substring(4);
+                }
                 const regex = new RegExp(regexPattern);
-                return regex.test(filePath);
+                return regex.test(normalizedPath);
             });
         };
         const walkDir = (currentDir) => {
@@ -961,99 +970,6 @@ class Parser {
                                 }
                                 callIndex++;
                             });
-                        }
-                    },
-                });
-                // Third pass: Process JSXAttribute nodes for visible attributes and component props
-                // This handles title, alt, aria-* and also string props on custom components
-                // (e.g. <Button label="Click me" />) that render user-visible text.
-                traverse(ast, {
-                    JSXAttribute(path) {
-                        const attrName = path.node.name;
-                        if (!t.isJSXIdentifier(attrName))
-                            return;
-                        const attrNameStr = attrName.name;
-                        // Determine which element this attribute belongs to
-                        const openingElement = t.isJSXOpeningElement(path.parent)
-                            ? path.parent
-                            : null;
-                        if (!(0, jsxAttributeTranslation_1.shouldTranslateJsxAttribute)(attrNameStr, openingElement?.name || null, openingElement?.attributes)) {
-                            return;
-                        }
-                        // Get the attribute value
-                        const attrValue = path.node.value;
-                        // Handle string literal attributes: title="Text"
-                        if (t.isStringLiteral(attrValue)) {
-                            const content = attrValue.value;
-                            if (!content.trim())
-                                return;
-                            const hash = crypto_1.default
-                                .createHash('md5')
-                                .update(content)
-                                .digest('hex');
-                            const fullScopePath = path.getPathLocation();
-                            const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
-                            // Use a unique key for attributes to avoid conflicts with element scopes
-                            const attributeKey = `${relativeScopePath}_attr_${attrNameStr}`;
-                            fileScopes[attributeKey] = {
-                                type: 'attribute',
-                                hash,
-                                context: `Attribute: ${attrNameStr}`,
-                                skip: false,
-                                overrides: {},
-                                content,
-                            };
-                            return;
-                        }
-                        // Handle expression attributes: title={variable} or title={`Hello ${name}`}
-                        if (t.isJSXExpressionContainer(attrValue)) {
-                            const expr = attrValue.expression;
-                            // Find the parent function/component to get its variable scope
-                            const functionPath = path.findParent((p) => {
-                                return (p.isFunctionDeclaration() ||
-                                    p.isArrowFunctionExpression() ||
-                                    p.isFunctionExpression() ||
-                                    (p.isVariableDeclarator() &&
-                                        p.node.init &&
-                                        (t.isArrowFunctionExpression(p.node.init) ||
-                                            t.isFunctionExpression(p.node.init))));
-                            });
-                            // Get variable scope for this function, or use file-level scope
-                            const fileScopeKey = `file:${relativeFilePath}`;
-                            const fileLevelScope = functionScopes.get(fileScopeKey) || new Map();
-                            const fileLevelFunctionScope = functionReturnScopes.get(fileScopeKey) || new Map();
-                            let variableScope = new Map(fileLevelScope);
-                            let functionReturnScope = new Map(fileLevelFunctionScope);
-                            if (functionPath) {
-                                const functionLocation = functionPath.getPathLocation();
-                                const functionLevelScope = functionScopes.get(functionLocation) || new Map();
-                                const functionLevelFunctionScope = functionReturnScopes.get(functionLocation) || new Map();
-                                for (const [key, value] of functionLevelScope) {
-                                    variableScope.set(key, value);
-                                }
-                                for (const [key, value] of functionLevelFunctionScope) {
-                                    functionReturnScope.set(key, value);
-                                }
-                            }
-                            // Extract content from expression
-                            const content = (0, utils_1.extractExpressionContent)(expr, variableScope, functionReturnScope);
-                            if (!content.trim())
-                                return;
-                            const hash = crypto_1.default
-                                .createHash('md5')
-                                .update(content)
-                                .digest('hex');
-                            const fullScopePath = path.getPathLocation();
-                            const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
-                            const attributeKey = `${relativeScopePath}_attr_${attrNameStr}`;
-                            fileScopes[attributeKey] = {
-                                type: 'attribute',
-                                hash,
-                                context: `Attribute: ${attrNameStr}`,
-                                skip: false,
-                                overrides: {},
-                                content,
-                            };
                         }
                     },
                 });
