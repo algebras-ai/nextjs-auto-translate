@@ -629,7 +629,7 @@
           },
           "hash": "c8e2590d8cb41bbafcbd0cbd0752a492"
         },
-        "program/body0/declaration/body/body0/argument/children3/children1": {
+        "program/body0/declaration/body/body0/argument/children3/children3": {
           "content": {
             "en": "Hover over me to see tooltip",
             "ru": "Наведите на меня, чтобы увидеть всплывающую подсказку"
@@ -642,6 +642,13 @@
             "ru": "<element:strong>Тип AST:</element:strong> JSXAttribute со StringLiteral\n <element:br></element:br>\n <element:strong>Описание:</element:strong> Строка в атрибуте title отображается\n во всплывающей подсказке при наведении. Видима пользователям."
           },
           "hash": "1aff1779ce392c4a0e08c090d35a50d2"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children3_attr_title": {
+          "content": {
+            "en": "Tooltip on hover",
+            "ru": "Всплывающая подсказка при наведении"
+          },
+          "hash": "cafa289476a2aae5108bd795a0ad2f7c"
         }
       }
     },

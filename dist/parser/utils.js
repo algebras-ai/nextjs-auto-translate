@@ -36,6 +36,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.extractExpressionContent = extractExpressionContent;
 exports.buildContent = buildContent;
 exports.getRelativeScopePath = getRelativeScopePath;
+exports.parseTranslationInstruction = parseTranslationInstruction;
+exports.findTranslationInstructions = findTranslationInstructions;
 const t = __importStar(require("@babel/types"));
 /**
  * Checks if an expression node can produce a string output
@@ -480,4 +482,159 @@ function getRelativeScopePath(fullPath) {
     }
     // Fallback: use the full path but clean it up
     return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
+}
+function mergeTranslationInstructions(target, next) {
+    for (const a of next.translateAttributes)
+        target.translateAttributes.add(a);
+    for (const p of next.translateProps)
+        target.translateProps.add(p);
+}
+function getInstructionFromCommentText(commentText) {
+    if (!commentText)
+        return null;
+    // Try parsing the whole text first
+    const direct = parseTranslationInstruction(commentText);
+    if (direct)
+        return direct;
+    // Fallback: extract directive substring if extra text exists
+    const match = commentText.match(/@algb-translate-(?:attr-[\w-]+|props-\[[^\]]+\])/);
+    if (!match)
+        return null;
+    return parseTranslationInstruction(match[0]);
+}
+function extractInstructionFromJsxCommentSibling(sibling, sourceCode) {
+    if (!t.isJSXEmptyExpression(sibling.expression))
+        return null;
+    const emptyExpr = sibling.expression;
+    const commentBuckets = [
+        ...(emptyExpr.leadingComments ?? []),
+        ...(emptyExpr.innerComments ?? []),
+        ...(emptyExpr.trailingComments ?? []),
+        ...(sibling.leadingComments ?? []),
+        ...(sibling.innerComments ?? []),
+        ...(sibling.trailingComments ?? []),
+    ];
+    for (const c of commentBuckets) {
+        const comment = c;
+        if (!comment || comment.type !== 'CommentBlock')
+            continue;
+        const instr = getInstructionFromCommentText(comment.value);
+        if (instr)
+            return instr;
+    }
+    // Last resort: slice raw source for this JSXExpressionContainer and look for directive.
+    if (sourceCode && sibling.loc?.start && sibling.loc?.end) {
+        try {
+            const lines = sourceCode.split('\n');
+            const startLine = sibling.loc.start.line - 1;
+            const endLine = sibling.loc.end.line - 1;
+            const startCol = sibling.loc.start.column;
+            const endCol = sibling.loc.end.column;
+            let slice = '';
+            if (startLine === endLine) {
+                const line = lines[startLine] ?? '';
+                slice = line.substring(startCol, endCol);
+            }
+            else {
+                for (let i = startLine; i <= endLine; i++) {
+                    const line = lines[i] ?? '';
+                    if (i === startLine)
+                        slice += line.substring(startCol);
+                    else if (i === endLine)
+                        slice += '\n' + line.substring(0, endCol);
+                    else
+                        slice += '\n' + line;
+                }
+            }
+            return getInstructionFromCommentText(slice);
+        }
+        catch {
+            // ignore
+        }
+    }
+    return null;
+}
+/**
+ * Parse translation instruction comments
+ * Supports:
+ * - @algb-translate-attr-placeholder (in JSX comment)
+ * - @algb-translate-props-[title,description] (in JSX comment)
+ *
+ * Example JSX comments:
+ * {/ * @algb-translate-attr-placeholder * /}
+ * {/ * @algb-translate-props-[title,description] * /}
+ */
+function parseTranslationInstruction(comment) {
+    // Remove comment markers if present
+    let trimmed = comment.trim();
+    // Remove /* and */ if they're part of the comment value
+    trimmed = trimmed
+        .replace(/^\/\*+/, '')
+        .replace(/\*+\/$/, '')
+        .trim();
+    // Match: @algb-translate-attr-{attrName}
+    // Allow hyphenated/colon attrs like aria-label, xlink:href, etc.
+    const attrMatch = trimmed.match(/@algb-translate-attr-([A-Za-z][\w:-]*)/);
+    if (attrMatch) {
+        return {
+            translateAttributes: new Set([attrMatch[1]]),
+            translateProps: new Set(),
+        };
+    }
+    // Match: @algb-translate-props-[prop1,prop2,...]
+    const propsMatch = trimmed.match(/@algb-translate-props-\[([^\]]+)\]/);
+    if (propsMatch) {
+        const props = propsMatch[1]
+            .split(',')
+            .map((p) => p.trim())
+            .filter(Boolean);
+        return {
+            translateAttributes: new Set(),
+            translateProps: new Set(props),
+        };
+    }
+    return null;
+}
+/**
+ * Find translation instructions in JSX comments before a JSX element
+ * Looks for JSXExpressionContainer with JSXEmptyExpression containing comments
+ * @param path - The JSXElement path
+ * @param sourceCode - Optional source code to extract comment text directly
+ */
+function findTranslationInstructions(path, sourceCode) {
+    const parent = path.parentPath;
+    const parentNode = parent?.node;
+    const children = parentNode?.children;
+    if (!Array.isArray(children))
+        return null;
+    const currentIndex = children.findIndex((child) => child === path.node);
+    if (currentIndex < 0)
+        return null;
+    const combined = {
+        translateAttributes: new Set(),
+        translateProps: new Set(),
+    };
+    // Scan backwards only over immediately preceding "whitespace or JSX comment" siblings.
+    for (let i = currentIndex - 1; i >= 0; i--) {
+        const sibling = children[i];
+        // Skip whitespace-only JSXText
+        if (t.isJSXText(sibling) && !sibling.value.trim()) {
+            continue;
+        }
+        // Parse JSX comment containers: {/* ... */}
+        if (t.isJSXExpressionContainer(sibling) &&
+            t.isJSXEmptyExpression(sibling.expression)) {
+            const instr = extractInstructionFromJsxCommentSibling(sibling, sourceCode);
+            if (instr)
+                mergeTranslationInstructions(combined, instr);
+            continue;
+        }
+        // Stop on first non-comment / non-whitespace node.
+        break;
+    }
+    if (combined.translateAttributes.size === 0 &&
+        combined.translateProps.size === 0) {
+        return null;
+    }
+    return combined;
 }

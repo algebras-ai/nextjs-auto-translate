@@ -707,7 +707,7 @@
           "overrides": {},
           "content": "<div title=\"Tooltip on hover\">Content</div>"
         },
-        "program/body0/declaration/body/body0/argument/children3/children1": {
+        "program/body0/declaration/body/body0/argument/children3/children3": {
           "type": "element",
           "hash": "6eecce389dbf7070ffa239a6ffba7051",
           "context": "",
@@ -722,6 +722,14 @@
           "skip": false,
           "overrides": {},
           "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users."
+        },
+        "program/body0/declaration/body/body0/argument/children3/children3_attr_title": {
+          "type": "attribute",
+          "hash": "cafa289476a2aae5108bd795a0ad2f7c",
+          "context": "Attribute: title (translation instruction)",
+          "skip": false,
+          "overrides": {},
+          "content": "Tooltip on hover"
         }
       }
     },

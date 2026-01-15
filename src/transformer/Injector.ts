@@ -4,6 +4,7 @@ import traverseDefault, { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
 import path from 'path';
 import { RUNTIME_PATHS } from '../constants';
+import { findTranslationInstructions } from '../parser/utils';
 import { ScopeMap } from '../types';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
@@ -420,6 +421,7 @@ export function transformProject(
 
   try {
     ast = parse(code, {
+      attachComment: true,
       sourceType: 'module',
       plugins: ['jsx', 'typescript'],
     });
@@ -998,6 +1000,189 @@ export function transformProject(
           ])
         );
         changed = true;
+      },
+    });
+
+    // Third pass: Handle JSXAttribute nodes when translation instructions are present
+    traverse(ast, {
+      JSXElement(path: NodePath<t.JSXElement>) {
+        // Find translation instructions for this element
+        // Pass source code to extract comment text directly if comments aren't attached
+        const instructions = findTranslationInstructions(path, code);
+        if (!instructions) return;
+
+        const openingElement = path.node.openingElement;
+        if (!openingElement || !openingElement.attributes) return;
+
+        // Process attributes if there are attribute instructions
+        if (instructions.translateAttributes.size > 0) {
+          for (const attr of openingElement.attributes) {
+            if (!t.isJSXAttribute(attr)) continue;
+            const attrName = attr.name;
+            if (!t.isJSXIdentifier(attrName)) continue;
+
+            const attrNameStr = attrName.name;
+            if (!instructions.translateAttributes.has(attrNameStr)) {
+              continue;
+            }
+
+            // Get the scope path for this attribute
+            const fullScopePath = path.getPathLocation();
+            const scopePath = getRelativeScopePath(fullScopePath);
+
+            // Check for attribute entry: {scopePath}_attr_{attrName}
+            const attributeKey = `${scopePath}_attr_${attrNameStr}`;
+            const scopeEntry = fileScopes[attributeKey];
+
+            if (!scopeEntry || scopeEntry.type !== 'attribute') continue;
+
+            // Find the parent component/function to track which components need the hook
+            const functionPath = path.findParent((p: any) => {
+              return (
+                p.isFunctionDeclaration() ||
+                p.isArrowFunctionExpression() ||
+                p.isFunctionExpression() ||
+                (p.isVariableDeclarator() &&
+                  p.node.init &&
+                  (t.isArrowFunctionExpression(p.node.init) ||
+                    t.isFunctionExpression(p.node.init)))
+              );
+            });
+
+            if (functionPath) {
+              const functionLocation = functionPath.getPathLocation();
+              componentsNeedingHook.add(functionLocation);
+            }
+
+            // Handle string literal attributes: placeholder="Text"
+            if (t.isStringLiteral(attr.value)) {
+              // Replace with t() call
+              const tCall = t.callExpression(t.identifier('t'), [
+                t.stringLiteral(`${relativePath}::${attributeKey}`),
+              ]);
+              attr.value = t.jsxExpressionContainer(tCall);
+              changed = true;
+              continue;
+            }
+
+            // Handle expression attributes: placeholder={variable} or placeholder={`Hello ${name}`}
+            if (t.isJSXExpressionContainer(attr.value)) {
+              const expr = attr.value.expression;
+
+              // For string literals in expressions, replace with t() call
+              if (t.isStringLiteral(expr)) {
+                const tCall = t.callExpression(t.identifier('t'), [
+                  t.stringLiteral(`${relativePath}::${attributeKey}`),
+                ]);
+                attr.value.expression = tCall;
+                changed = true;
+                continue;
+              }
+
+              // For template literals, we need to check if the content matches
+              // If it's a simple template literal that matches the extracted content,
+              // we can replace it with t() call
+              if (t.isTemplateLiteral(expr)) {
+                // For now, if the template literal has no expressions (static),
+                // we can replace it with t() call
+                if (expr.expressions.length === 0) {
+                  const tCall = t.callExpression(t.identifier('t'), [
+                    t.stringLiteral(`${relativePath}::${attributeKey}`),
+                  ]);
+                  attr.value.expression = tCall;
+                  changed = true;
+                }
+                // For template literals with expressions, we'd need more complex handling
+                continue;
+              }
+            }
+          }
+        }
+
+        // Process props if there are prop instructions
+        if (instructions.translateProps.size > 0) {
+          for (const attr of openingElement.attributes) {
+            if (!t.isJSXAttribute(attr)) continue;
+            const attrName = attr.name;
+            if (!t.isJSXIdentifier(attrName)) continue;
+
+            const attrNameStr = attrName.name;
+            if (!instructions.translateProps.has(attrNameStr)) {
+              continue;
+            }
+
+            // Get the scope path for this prop
+            const fullScopePath = path.getPathLocation();
+            const scopePath = getRelativeScopePath(fullScopePath);
+
+            // Check for prop entry: {scopePath}_prop_{propName}
+            const propKey = `${scopePath}_prop_${attrNameStr}`;
+            const scopeEntry = fileScopes[propKey];
+
+            if (!scopeEntry || scopeEntry.type !== 'attribute') continue;
+
+            // Find the parent component/function to track which components need the hook
+            const functionPath = path.findParent((p: any) => {
+              return (
+                p.isFunctionDeclaration() ||
+                p.isArrowFunctionExpression() ||
+                p.isFunctionExpression() ||
+                (p.isVariableDeclarator() &&
+                  p.node.init &&
+                  (t.isArrowFunctionExpression(p.node.init) ||
+                    t.isFunctionExpression(p.node.init)))
+              );
+            });
+
+            if (functionPath) {
+              const functionLocation = functionPath.getPathLocation();
+              componentsNeedingHook.add(functionLocation);
+            }
+
+            // Handle string literal props: title="Text"
+            if (t.isStringLiteral(attr.value)) {
+              // Replace with t() call
+              const tCall = t.callExpression(t.identifier('t'), [
+                t.stringLiteral(`${relativePath}::${propKey}`),
+              ]);
+              attr.value = t.jsxExpressionContainer(tCall);
+              changed = true;
+              continue;
+            }
+
+            // Handle expression props: title={variable} or title={`Hello ${name}`}
+            if (t.isJSXExpressionContainer(attr.value)) {
+              const expr = attr.value.expression;
+
+              // For string literals in expressions, replace with t() call
+              if (t.isStringLiteral(expr)) {
+                const tCall = t.callExpression(t.identifier('t'), [
+                  t.stringLiteral(`${relativePath}::${propKey}`),
+                ]);
+                attr.value.expression = tCall;
+                changed = true;
+                continue;
+              }
+
+              // For template literals, we need to check if the content matches
+              // If it's a simple template literal that matches the extracted content,
+              // we can replace it with t() call
+              if (t.isTemplateLiteral(expr)) {
+                // For now, if the template literal has no expressions (static),
+                // we can replace it with t() call
+                if (expr.expressions.length === 0) {
+                  const tCall = t.callExpression(t.identifier('t'), [
+                    t.stringLiteral(`${relativePath}::${propKey}`),
+                  ]);
+                  attr.value.expression = tCall;
+                  changed = true;
+                }
+                // For template literals with expressions, we'd need more complex handling
+                continue;
+              }
+            }
+          }
+        }
       },
     });
 

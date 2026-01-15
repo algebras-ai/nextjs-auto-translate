@@ -140,6 +140,7 @@ class Parser {
                     ast = (0, parser_1.parse)(code, {
                         sourceType: 'module',
                         plugins: ['jsx', 'typescript'],
+                        attachComment: true,
                     });
                 }
                 catch {
@@ -970,6 +971,200 @@ class Parser {
                                 }
                                 callIndex++;
                             });
+                        }
+                    },
+                });
+                // Third pass: Process JSXAttribute nodes when translation instructions are present
+                traverse(ast, {
+                    JSXElement(path) {
+                        // Find translation instructions for this element
+                        // Pass source code to extract comment text directly if comments aren't attached
+                        const instructions = (0, utils_1.findTranslationInstructions)(path, code);
+                        if (!instructions)
+                            return;
+                        // Process attributes if there are attribute instructions
+                        if (instructions.translateAttributes.size > 0) {
+                            const openingElement = path.node.openingElement;
+                            if (openingElement && openingElement.attributes) {
+                                for (const attr of openingElement.attributes) {
+                                    if (!t.isJSXAttribute(attr))
+                                        continue;
+                                    const attrName = attr.name;
+                                    if (!t.isJSXIdentifier(attrName))
+                                        continue;
+                                    const attrNameStr = attrName.name;
+                                    if (!instructions.translateAttributes.has(attrNameStr)) {
+                                        continue;
+                                    }
+                                    // Get the attribute value
+                                    const attrValue = attr.value;
+                                    // Handle string literal attributes: placeholder="Text"
+                                    if (t.isStringLiteral(attrValue)) {
+                                        const content = attrValue.value;
+                                        if (!content.trim())
+                                            continue;
+                                        const hash = crypto_1.default
+                                            .createHash('md5')
+                                            .update(content)
+                                            .digest('hex');
+                                        const fullScopePath = path.getPathLocation();
+                                        const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
+                                        // Use a unique key for attributes to avoid conflicts with element scopes
+                                        const attributeKey = `${relativeScopePath}_attr_${attrNameStr}`;
+                                        fileScopes[attributeKey] = {
+                                            type: 'attribute',
+                                            hash,
+                                            context: `Attribute: ${attrNameStr} (translation instruction)`,
+                                            skip: false,
+                                            overrides: {},
+                                            content,
+                                        };
+                                        continue;
+                                    }
+                                    // Handle expression attributes: placeholder={variable} or placeholder={`Hello ${name}`}
+                                    if (t.isJSXExpressionContainer(attrValue)) {
+                                        const expr = attrValue.expression;
+                                        // Find the parent function/component to get its variable scope
+                                        const functionPath = path.findParent((p) => {
+                                            return (p.isFunctionDeclaration() ||
+                                                p.isArrowFunctionExpression() ||
+                                                p.isFunctionExpression() ||
+                                                (p.isVariableDeclarator() &&
+                                                    p.node.init &&
+                                                    (t.isArrowFunctionExpression(p.node.init) ||
+                                                        t.isFunctionExpression(p.node.init))));
+                                        });
+                                        // Get variable scope for this function, or use file-level scope
+                                        const fileScopeKey = `file:${relativeFilePath}`;
+                                        const fileLevelScope = functionScopes.get(fileScopeKey) || new Map();
+                                        const fileLevelFunctionScope = functionReturnScopes.get(fileScopeKey) || new Map();
+                                        let variableScope = new Map(fileLevelScope);
+                                        let functionReturnScope = new Map(fileLevelFunctionScope);
+                                        if (functionPath) {
+                                            const functionLocation = functionPath.getPathLocation();
+                                            const functionLevelScope = functionScopes.get(functionLocation) || new Map();
+                                            const functionLevelFunctionScope = functionReturnScopes.get(functionLocation) || new Map();
+                                            for (const [key, value] of functionLevelScope) {
+                                                variableScope.set(key, value);
+                                            }
+                                            for (const [key, value] of functionLevelFunctionScope) {
+                                                functionReturnScope.set(key, value);
+                                            }
+                                        }
+                                        // Extract content from expression
+                                        const content = (0, utils_1.extractExpressionContent)(expr, variableScope, functionReturnScope);
+                                        if (!content.trim())
+                                            continue;
+                                        const hash = crypto_1.default
+                                            .createHash('md5')
+                                            .update(content)
+                                            .digest('hex');
+                                        const fullScopePath = path.getPathLocation();
+                                        const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
+                                        const attributeKey = `${relativeScopePath}_attr_${attrNameStr}`;
+                                        fileScopes[attributeKey] = {
+                                            type: 'attribute',
+                                            hash,
+                                            context: `Attribute: ${attrNameStr} (translation instruction)`,
+                                            skip: false,
+                                            overrides: {},
+                                            content,
+                                        };
+                                    }
+                                }
+                            }
+                        }
+                        // Process props if there are prop instructions
+                        if (instructions.translateProps.size > 0) {
+                            const openingElement = path.node.openingElement;
+                            if (openingElement && openingElement.attributes) {
+                                for (const attr of openingElement.attributes) {
+                                    if (!t.isJSXAttribute(attr))
+                                        continue;
+                                    const attrName = attr.name;
+                                    if (!t.isJSXIdentifier(attrName))
+                                        continue;
+                                    const attrNameStr = attrName.name;
+                                    if (!instructions.translateProps.has(attrNameStr)) {
+                                        continue;
+                                    }
+                                    // Get the attribute value
+                                    const attrValue = attr.value;
+                                    // Handle string literal props: title="Text"
+                                    if (t.isStringLiteral(attrValue)) {
+                                        const content = attrValue.value;
+                                        if (!content.trim())
+                                            continue;
+                                        const hash = crypto_1.default
+                                            .createHash('md5')
+                                            .update(content)
+                                            .digest('hex');
+                                        const fullScopePath = path.getPathLocation();
+                                        const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
+                                        // Use a unique key for props to avoid conflicts with element scopes
+                                        const propKey = `${relativeScopePath}_prop_${attrNameStr}`;
+                                        fileScopes[propKey] = {
+                                            type: 'attribute',
+                                            hash,
+                                            context: `Prop: ${attrNameStr} (translation instruction)`,
+                                            skip: false,
+                                            overrides: {},
+                                            content,
+                                        };
+                                        continue;
+                                    }
+                                    // Handle expression props: title={variable} or title={`Hello ${name}`}
+                                    if (t.isJSXExpressionContainer(attrValue)) {
+                                        const expr = attrValue.expression;
+                                        // Find the parent function/component to get its variable scope
+                                        const functionPath = path.findParent((p) => {
+                                            return (p.isFunctionDeclaration() ||
+                                                p.isArrowFunctionExpression() ||
+                                                p.isFunctionExpression() ||
+                                                (p.isVariableDeclarator() &&
+                                                    p.node.init &&
+                                                    (t.isArrowFunctionExpression(p.node.init) ||
+                                                        t.isFunctionExpression(p.node.init))));
+                                        });
+                                        // Get variable scope for this function, or use file-level scope
+                                        const fileScopeKey = `file:${relativeFilePath}`;
+                                        const fileLevelScope = functionScopes.get(fileScopeKey) || new Map();
+                                        const fileLevelFunctionScope = functionReturnScopes.get(fileScopeKey) || new Map();
+                                        let variableScope = new Map(fileLevelScope);
+                                        let functionReturnScope = new Map(fileLevelFunctionScope);
+                                        if (functionPath) {
+                                            const functionLocation = functionPath.getPathLocation();
+                                            const functionLevelScope = functionScopes.get(functionLocation) || new Map();
+                                            const functionLevelFunctionScope = functionReturnScopes.get(functionLocation) || new Map();
+                                            for (const [key, value] of functionLevelScope) {
+                                                variableScope.set(key, value);
+                                            }
+                                            for (const [key, value] of functionLevelFunctionScope) {
+                                                functionReturnScope.set(key, value);
+                                            }
+                                        }
+                                        // Extract content from expression
+                                        const content = (0, utils_1.extractExpressionContent)(expr, variableScope, functionReturnScope);
+                                        if (!content.trim())
+                                            continue;
+                                        const hash = crypto_1.default
+                                            .createHash('md5')
+                                            .update(content)
+                                            .digest('hex');
+                                        const fullScopePath = path.getPathLocation();
+                                        const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
+                                        const propKey = `${relativeScopePath}_prop_${attrNameStr}`;
+                                        fileScopes[propKey] = {
+                                            type: 'attribute',
+                                            hash,
+                                            context: `Prop: ${attrNameStr} (translation instruction)`,
+                                            skip: false,
+                                            overrides: {},
+                                            content,
+                                        };
+                                    }
+                                }
+                            }
                         }
                     },
                 });
