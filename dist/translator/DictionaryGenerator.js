@@ -9,12 +9,9 @@ const path_1 = __importDefault(require("path"));
 // Fake translation service - returns original text as placeholder
 class MockTranslationService {
     translate(text, targetLocale) {
-        // For now, just return the original text with a locale prefix
-        // In a real implementation, this would call an actual translation API
-        if (targetLocale === 'en') {
-            return text;
-        }
-        return `[${targetLocale.toUpperCase()}] ${text}`;
+        // Mock translations should never mutate content; return source text.
+        // Real translations are handled by the translationProvider.
+        return text;
     }
 }
 class DictionaryGenerator {
@@ -174,48 +171,32 @@ class DictionaryGenerator {
             if (this.isProviderLimitExceeded()) {
                 const reason = this.getLimitExceededReason() || 'Limit';
                 console.log(`[DictionaryGenerator] ${reason} exceeded - skipping remaining translations for ${locale}...`);
-                // Use fallback for all remaining texts in this locale
-                for (let j = 0; j < texts.length; j++) {
-                    const key = keys[j];
-                    const [filePath, scopePath] = key.split('::');
-                    const file = dictionary.files[filePath];
-                    if (!file)
-                        continue;
-                    const entry = file.entries[scopePath];
-                    if (!entry)
-                        continue;
-                    entry.content[locale] = `[${locale.toUpperCase()}] ${texts[j]}`;
-                }
                 continue;
             }
             for (let i = 0; i < texts.length; i += batchSize) {
                 // Check before each batch
                 if (this.isProviderLimitExceeded()) {
                     const reason = this.getLimitExceededReason() || 'Limit';
-                    console.log(`[DictionaryGenerator] ${reason} exceeded - using fallback for remaining batches...`);
-                    // Use fallback for remaining texts
-                    for (let j = i; j < texts.length; j++) {
-                        const key = keys[j];
-                        const [filePath, scopePath] = key.split('::');
-                        const file = dictionary.files[filePath];
-                        if (!file)
-                            continue;
-                        const entry = file.entries[scopePath];
-                        if (!entry)
-                            continue;
-                        entry.content[locale] = `[${locale.toUpperCase()}] ${texts[j]}`;
-                    }
+                    console.log(`[DictionaryGenerator] ${reason} exceeded - skipping remaining batches...`);
                     break;
                 }
                 const batchTexts = texts.slice(i, i + batchSize);
                 const batchKeys = keys.slice(i, i + batchSize);
                 const batchResult = await this.translationProvider.translateBatch(batchTexts, locale, defaultLocale);
+                // If provider fell back due to API errors/rate limits/quota, do not write
+                // non-translated locales into the dictionary.
+                const provider = this.translationProvider;
+                if (provider.lastBatchHadError) {
+                    continue;
+                }
                 // Map translations back into dictionary
                 for (let j = 0; j < batchKeys.length; j++) {
                     const key = batchKeys[j];
-                    const translated = batchResult.translations[j] !== undefined
-                        ? batchResult.translations[j]
-                        : batchTexts[j]; // fallback to original text if something is missing
+                    const translated = batchResult.translations[j];
+                    if (translated === undefined) {
+                        // Missing translation -> do not write this locale entry.
+                        continue;
+                    }
                     const [filePath, scopePath] = key.split('::');
                     const file = dictionary.files[filePath];
                     if (!file)
@@ -229,6 +210,7 @@ class DictionaryGenerator {
         }
     }
     generateWithMockTranslation(sourceMap, dictionary, allLocales) {
+        const defaultLocale = this.options.defaultLocale;
         // Process each file
         for (const [filePath, fileData] of Object.entries(sourceMap.files)) {
             dictionary.files[filePath] = {
@@ -236,18 +218,11 @@ class DictionaryGenerator {
             };
             // Process each scope in the file
             for (const [scopePath, scopeData] of Object.entries(fileData.scopes)) {
-                const translations = {};
-                // Generate translations for each locale
-                for (const locale of allLocales) {
-                    try {
-                        translations[locale] = this.translationService.translate(scopeData.content, locale);
-                    }
-                    catch (error) {
-                        console.warn(`[DictionaryGenerator] Failed to translate "${scopeData.content}" to ${locale}:`, error);
-                        // Fallback to original content
-                        translations[locale] = scopeData.content;
-                    }
-                }
+                // Only write default/source locale when no provider is available.
+                // Do not write non-translated locales into the dictionary.
+                const translations = {
+                    [defaultLocale]: this.translationService.translate(scopeData.content, defaultLocale),
+                };
                 dictionary.files[filePath].entries[scopePath] = {
                     content: translations,
                     hash: scopeData.hash,

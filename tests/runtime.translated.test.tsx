@@ -1,10 +1,10 @@
+import { cleanup, render, screen } from '@testing-library/react';
 import React from 'react';
-import { describe, it, expect, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
+import { LanguageCode } from '../src/data/languageMap';
 import Translated from '../src/runtime/client/components/Translated';
 import ClientProvider from '../src/runtime/client/Provider';
 import type { DictStructure } from '../src/runtime/types';
-import { LanguageCode } from '../src/data/languageMap';
 
 const makeDict = (): DictStructure => ({
   version: '0.1',
@@ -14,7 +14,7 @@ const makeDict = (): DictStructure => ({
         'x/y': {
           content: {
             [LanguageCode.en]: 'Hello',
-            [LanguageCode.es]: '[ES] Hello',
+            [LanguageCode.es]: 'Hola',
           },
           hash: 'h',
         },
@@ -54,7 +54,7 @@ describe('Translated component', () => {
         <Translated tKey="src/F.tsx::x/y" />
       </TestProvider>
     );
-    expect(screen.getByText('Hello')).toBeInTheDocument();
+    expect(screen.getByText('Hello')).toBeTruthy();
   });
 
   it('renders content for locale es', () => {
@@ -63,7 +63,7 @@ describe('Translated component', () => {
         <Translated tKey="src/F.tsx::x/y" />
       </TestProvider>
     );
-    expect(screen.getByText('[ES] Hello')).toBeInTheDocument();
+    expect(screen.getByText('Hola')).toBeTruthy();
   });
 
   for (let i = 0; i < 8; i++) {
@@ -73,7 +73,7 @@ describe('Translated component', () => {
           <Translated tKey="src/F.tsx::x/y" />
         </TestProvider>
       );
-      expect(screen.getByText('Hello')).toBeInTheDocument();
+      expect(screen.getByText('Hello')).toBeTruthy();
     });
   }
 });

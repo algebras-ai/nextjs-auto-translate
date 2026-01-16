@@ -34,7 +34,8 @@ const Translated = (props) => {
         return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children ?? null });
     }
     // Check if the locale content exists
-    const content = dictionary.files[fileKey].entries[entryKey].content[locale];
+    const entry = dictionary.files[fileKey].entries[entryKey];
+    const content = entry.content[locale];
     if (!content) {
         if (process.env.NODE_ENV === 'development') {
             const logKey = `content-missing::${tKey}::${locale}`;
@@ -43,7 +44,13 @@ const Translated = (props) => {
                 console.error(`Content for locale "${locale}" not found in "${fileKey}::${entryKey}"`);
             }
         }
-        return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children ?? null });
+        // Prefer original source content (typically the first/only locale in content),
+        // otherwise fall back to children (original JSX).
+        const firstLocale = Object.keys(entry.content)[0];
+        const fallbackContent = firstLocale
+            ? entry.content[firstLocale]
+            : undefined;
+        return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: fallbackContent ?? children ?? null });
     }
     // Replace placeholders like {variableName} with translated variable values
     // Professional approach: Extract all placeholders first, then replace them all at once

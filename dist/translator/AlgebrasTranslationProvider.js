@@ -11,6 +11,11 @@ class AlgebrasTranslationProvider {
     cache = new Map();
     quotaExceeded = false;
     rateLimitExceeded = false;
+    /**
+     * Indicates whether the most recent batch call fell back to non-translated content.
+     * Used by DictionaryGenerator to avoid writing non-translated locale entries.
+     */
+    lastBatchHadError = false;
     constructor(options) {
         this.apiKey = options.apiKey;
         this.apiUrl = options.apiUrl || 'https://platform.algebras.ai/api/v1';
@@ -44,12 +49,15 @@ class AlgebrasTranslationProvider {
         if (texts.length === 0) {
             return { translations: [] };
         }
+        // Reset per-call flag
+        this.lastBatchHadError = false;
         // If quota or rate limit is already exceeded, skip API call and return fallback translations
         if (this.quotaExceeded || this.rateLimitExceeded) {
             const reason = this.quotaExceeded ? 'Quota' : 'Rate limit';
             console.log(`[AlgebrasTranslation] ${reason} exceeded - using fallback translations for ${texts.length} texts to ${targetLanguage}...`);
+            this.lastBatchHadError = true;
             return {
-                translations: texts.map((text) => `[${targetLanguage.toUpperCase()}] ${text}`),
+                translations: texts,
             };
         }
         console.log(`[AlgebrasTranslation] Translating ${texts.length} texts from ${sourceLanguage} to ${targetLanguage}...`);
@@ -90,8 +98,9 @@ class AlgebrasTranslationProvider {
                     console.error('   Too many requests - rate limit reached');
                     console.error('   All subsequent translations will use fallback translations\n');
                     // Return fallback instead of throwing
+                    this.lastBatchHadError = true;
                     return {
-                        translations: texts.map((text) => `[${targetLanguage.toUpperCase()}] ${text}`),
+                        translations: texts,
                     };
                 }
                 // Check if this is a quota exceeded error
@@ -113,6 +122,10 @@ class AlgebrasTranslationProvider {
                             console.error('\n⚠️  [AlgebrasTranslation] Quota exceeded detected!');
                             console.error('   All subsequent translations will use fallback translations\n');
                         }
+                    }
+                    if (this.quotaExceeded) {
+                        this.lastBatchHadError = true;
+                        return { translations: texts };
                     }
                 }
                 throw new Error(`Algebras API error: ${response.status} ${response.statusText} - ${errorText}`);
@@ -190,9 +203,10 @@ class AlgebrasTranslationProvider {
             else {
                 console.error('   ⚠️  Falling back to mock translations\n');
             }
-            // Fallback: return original texts with locale prefix
+            // Fallback: return original texts (no locale prefixes)
+            this.lastBatchHadError = true;
             return {
-                translations: texts.map((text) => `[${targetLanguage.toUpperCase()}] ${text}`),
+                translations: texts,
             };
         }
     }
@@ -222,9 +236,7 @@ class AlgebrasTranslationProvider {
                 for (let i = 0; i < texts.length; i++) {
                     const key = keys[i];
                     const text = texts[i];
-                    results
-                        .get(key)
-                        .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+                    results.get(key).set(targetLang, text);
                 }
                 continue;
             }
@@ -239,9 +251,7 @@ class AlgebrasTranslationProvider {
                     for (let j = i; j < texts.length; j++) {
                         const key = keys[j];
                         const text = texts[j];
-                        results
-                            .get(key)
-                            .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+                        results.get(key).set(targetLang, text);
                     }
                     break;
                 }
@@ -264,9 +274,7 @@ class AlgebrasTranslationProvider {
                     for (let j = i + batchSize; j < texts.length; j++) {
                         const key = keys[j];
                         const text = texts[j];
-                        results
-                            .get(key)
-                            .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+                        results.get(key).set(targetLang, text);
                     }
                     break; // Stop processing remaining batches for this language
                 }

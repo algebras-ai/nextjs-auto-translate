@@ -6,8 +6,8 @@
         "a/b/c": {
           "content": {
             "en": "Hello",
-            "es": "[ES] Hello",
-            "it": "[IT] Hello"
+            "es": "Hola",
+            "it": "Ciao Hello"
           },
           "hash": "h1"
         }

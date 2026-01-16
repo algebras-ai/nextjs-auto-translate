@@ -52,6 +52,11 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
   private cache: Map<string, string> = new Map();
   private quotaExceeded: boolean = false;
   private rateLimitExceeded: boolean = false;
+  /**
+   * Indicates whether the most recent batch call fell back to non-translated content.
+   * Used by DictionaryGenerator to avoid writing non-translated locale entries.
+   */
+  public lastBatchHadError: boolean = false;
 
   constructor(options: AlgebrasTranslationOptions) {
     this.apiKey = options.apiKey;
@@ -101,16 +106,18 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
       return { translations: [] };
     }
 
+    // Reset per-call flag
+    this.lastBatchHadError = false;
+
     // If quota or rate limit is already exceeded, skip API call and return fallback translations
     if (this.quotaExceeded || this.rateLimitExceeded) {
       const reason = this.quotaExceeded ? 'Quota' : 'Rate limit';
       console.log(
         `[AlgebrasTranslation] ${reason} exceeded - using fallback translations for ${texts.length} texts to ${targetLanguage}...`
       );
+      this.lastBatchHadError = true;
       return {
-        translations: texts.map(
-          (text) => `[${targetLanguage.toUpperCase()}] ${text}`
-        ),
+        translations: texts,
       };
     }
 
@@ -166,10 +173,9 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
             '   All subsequent translations will use fallback translations\n'
           );
           // Return fallback instead of throwing
+          this.lastBatchHadError = true;
           return {
-            translations: texts.map(
-              (text) => `[${targetLanguage.toUpperCase()}] ${text}`
-            ),
+            translations: texts,
           };
         }
 
@@ -201,6 +207,10 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
                 '   All subsequent translations will use fallback translations\n'
               );
             }
+          }
+          if (this.quotaExceeded) {
+            this.lastBatchHadError = true;
+            return { translations: texts };
           }
         }
 
@@ -322,11 +332,10 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
         console.error('   ⚠️  Falling back to mock translations\n');
       }
 
-      // Fallback: return original texts with locale prefix
+      // Fallback: return original texts (no locale prefixes)
+      this.lastBatchHadError = true;
       return {
-        translations: texts.map(
-          (text) => `[${targetLanguage.toUpperCase()}] ${text}`
-        ),
+        translations: texts,
       };
     }
   }
@@ -368,9 +377,7 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
         for (let i = 0; i < texts.length; i++) {
           const key = keys[i];
           const text = texts[i];
-          results
-            .get(key)!
-            .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+          results.get(key)!.set(targetLang, text);
         }
         continue;
       }
@@ -392,9 +399,7 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
           for (let j = i; j < texts.length; j++) {
             const key = keys[j];
             const text = texts[j];
-            results
-              .get(key)!
-              .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+            results.get(key)!.set(targetLang, text);
           }
           break;
         }
@@ -431,9 +436,7 @@ export class AlgebrasTranslationProvider implements ITranslateProvider {
           for (let j = i + batchSize; j < texts.length; j++) {
             const key = keys[j];
             const text = texts[j];
-            results
-              .get(key)!
-              .set(targetLang, `[${targetLang.toUpperCase()}] ${text}`);
+            results.get(key)!.set(targetLang, text);
           }
           break; // Stop processing remaining batches for this language
         }
