@@ -69,7 +69,9 @@ async function installPackage() {
     }
     console.log('📦 Installing @dima-algebras/algebras-auto-intl...');
     try {
-        (0, child_process_1.execSync)('npm install @dima-algebras/algebras-auto-intl', { stdio: 'inherit' });
+        (0, child_process_1.execSync)('npm install @dima-algebras/algebras-auto-intl', {
+            stdio: 'inherit',
+        });
         console.log('✅ Package installed successfully');
     }
     catch (error) {
