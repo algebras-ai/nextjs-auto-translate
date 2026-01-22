@@ -6,6 +6,9 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "algebras-auto-intl": "./dist/cli/index.js"
+  },
   "exports": {
     ".": "./dist/index.js",
     "./runtime": "./dist/runtime/index.js",
@@ -19,7 +22,7 @@
   },
   "scripts": {
     "prebuild": "tsx scripts/generateLanguageMap.ts",
-    "build": "tsc",
+    "build": "tsc && node scripts/postbuild.js",
     "test": "vitest run --reporter=dot",
     "test:watch": "vitest",
     "format": "prettier --write \"src/**/*.{ts,tsx,json}\" \"tests/**/*.{ts,tsx}\" \"scripts/**/*.ts\"",
@@ -39,6 +42,8 @@
     "@babel/generator": "^7.27.5",
     "@babel/parser": "^7.27.5",
     "@babel/traverse": "^7.27.4",
+    "inquirer": "^9.2.12",
+    "inquirer-autocomplete-prompt": "^3.0.1",
     "loader-utils": "^3.3.1"
   },
   "devDependencies": {
@@ -52,6 +57,7 @@
     "@testing-library/react": "^16.0.1",
     "@types/babel__generator": "^7.27.0",
     "@types/babel__traverse": "^7.20.7",
+    "@types/inquirer": "^9.0.7",
     "@types/loader-utils": "^2.0.6",
     "@types/node": "^24.0.3",
     "@types/react": "^19.1.8",
