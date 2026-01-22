@@ -13,6 +13,60 @@ Automated i18n for **Next.js (App Router)** that:
 npm i @dima-algebras/algebras-auto-intl
 ```
 
+## CLI Setup
+
+The easiest way to set up Algebras Auto Intl in your Next.js project is using the CLI command:
+
+### Using npx (recommended for first-time setup)
+
+```bash
+npx @dima-algebras/algebras-auto-intl init
+```
+
+### Using the installed package
+
+After installation, you can run:
+
+```bash
+algebras-auto-intl init
+```
+
+### Command options
+
+You can provide configuration via command-line flags:
+
+- `--default-locale <code>` - Default locale code (e.g., `en`)
+- `--target-locales <codes>` - Comma-separated target locale codes (e.g., `ru,es,fr`)
+- `--output-dir <path>` - Output directory for intl files (default: `./src/intl`)
+- `--api-key <key>` - Algebras AI API key (optional)
+- `--api-url <url>` - Algebras AI API URL (optional, default: `https://platform.algebras.ai/api/v1`)
+
+### Examples
+
+```bash
+# Interactive mode (will prompt for missing options)
+algebras-auto-intl init
+
+# With all options provided
+algebras-auto-intl init --default-locale en --target-locales ru,es,fr --output-dir ./src/intl --api-key your_api_key_here
+
+# Minimal setup
+algebras-auto-intl init --default-locale en --target-locales ru
+```
+
+### What the CLI does
+
+The `init` command automatically:
+
+- ✅ Checks that you're in a Next.js project
+- ✅ Installs the package if not already installed
+- ✅ Updates `next.config.ts/js/mjs` with the plugin configuration
+- ✅ Creates the output directory for intl files
+- ✅ Updates `.env.local` with API credentials (adds empty key with comment if not provided)
+- ✅ The compiler automatically adds `IntlWrapper` to your layout during build
+
+See supported languages: [https://platform.algebras.ai/translation/translate](https://platform.algebras.ai/translation/translate)
+
 ## Quickstart (Next.js App Router)
 
 ### 1) Add the plugin to `next.config.ts`
@@ -36,26 +90,7 @@ const nextConfig: NextConfig = autoIntl({
 export default nextConfig;
 ```
 
-### 2) Wrap your root layout with `IntlWrapper`
-
-`app/layout.tsx`:
-
-```tsx
-import type { ReactNode } from 'react';
-import IntlWrapper from '@dima-algebras/algebras-auto-intl/runtime/server/IntlWrapper';
-
-export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <IntlWrapper>{children}</IntlWrapper>
-      </body>
-    </html>
-  );
-}
-```
-
-### 3) (Optional) Add a locale switcher
+### 2) (Optional) Add a locale switcher
 
 ```tsx
 'use client';
@@ -68,6 +103,65 @@ export function Header() {
       <LocaleSwitcher />
     </header>
   );
+}
+```
+
+#### Programmatic locale management
+
+If you need to manage locales programmatically without using the `LocaleSwitcher` component, you can use the `useAlgebrasIntl` hook:
+
+```tsx
+'use client';
+
+import { useAlgebrasIntl } from '@dima-algebras/algebras-auto-intl/runtime';
+import { useRouter } from 'next/navigation';
+
+export function CustomLocaleButton() {
+  const { locale, setLocale, getLocales } = useAlgebrasIntl();
+  const router = useRouter();
+  const availableLocales = getLocales();
+
+  const handleLocaleChange = (newLocale: string) => {
+    setLocale(newLocale);
+    // Refresh the page to update server components with new locale
+    router.refresh();
+  };
+
+  return (
+    <div>
+      <p>Current locale: {locale}</p>
+      {availableLocales.map((loc) => (
+        <button
+          key={loc}
+          onClick={() => handleLocaleChange(loc)}
+          disabled={loc === locale}
+        >
+          {loc}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
+
+**How it works:**
+
+- `setLocale(locale)` - Updates the locale and automatically sets a cookie: `locale=${locale}; path=/; max-age=31536000; SameSite=Lax`
+- `getLocales()` - Returns an array of all available locales from your dictionary
+- `locale` - Current active locale
+- `router.refresh()` - Required to refresh server components after locale change (from `next/navigation`)
+
+**Server-side locale access:**
+
+On the server, you can read the locale from cookies:
+
+```ts
+import { cookies } from 'next/headers';
+
+export async function ServerComponent() {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('locale')?.value || 'en';
+  // Use locale...
 }
 ```
 
