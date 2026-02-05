@@ -5,13 +5,49 @@ import * as t from '@babel/types';
 import path from 'path';
 import { RUNTIME_PATHS } from '../constants';
 import { findTranslationInstructions } from '../parser/utils';
-import { ScopeMap } from '../types';
+import { ElementPropDescriptor, ScopeData, ScopeMap } from '../types';
 
 // @babel/traverse and @babel/generator have different exports for ESM vs CommonJS
 const traverse = (traverseDefault as any).default || traverseDefault;
 const generate = (generateDefault as any).default || generateDefault;
 
 type JsxChild = t.JSXElement['children'][number];
+
+function valueToExpression(value: unknown): t.Expression {
+  if (value === null || value === undefined) {
+    return t.identifier('undefined');
+  }
+  if (typeof value === 'string') return t.stringLiteral(value);
+  if (typeof value === 'number') return t.numericLiteral(value);
+  if (typeof value === 'boolean') return t.booleanLiteral(value);
+  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+    const props = Object.entries(value as Record<string, unknown>).map(
+      ([k, v]) => t.objectProperty(t.stringLiteral(k), valueToExpression(v))
+    );
+    return t.objectExpression(props);
+  }
+  return t.identifier('undefined');
+}
+
+function elementPropsToArrayExpression(
+  elementProps: ElementPropDescriptor[]
+): t.ArrayExpression {
+  return t.arrayExpression(
+    elementProps.map((desc) =>
+      t.objectExpression([
+        t.objectProperty(t.identifier('tag'), t.stringLiteral(desc.tag)),
+        t.objectProperty(
+          t.identifier('props'),
+          t.objectExpression(
+            Object.entries(desc.props).map(([k, v]) =>
+              t.objectProperty(t.stringLiteral(k), valueToExpression(v))
+            )
+          )
+        ),
+      ])
+    )
+  );
+}
 
 function insertAfterDirectives(ast: t.File, node: t.Statement) {
   const body = ast.program.body;
@@ -31,14 +67,40 @@ function insertAfterDirectives(ast: t.File, node: t.Statement) {
   body.splice(idx, 0, node);
 }
 
-// Injects <Translated tKey="scope" /> (optionally with fallback children)
+// Injects <Translated tKey="scope" /> (optionally with fallback children, elementProps, components)
 export function injectTranslated(
   scope: string,
-  fallbackChildren: JsxChild[] = []
+  fallbackChildren: JsxChild[] = [],
+  options?: {
+    elementProps?: ElementPropDescriptor[];
+    components?: t.Expression;
+  }
 ): t.JSXElement {
-  const attributes = [
+  const attributes: t.JSXAttribute[] = [
     t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
   ];
+  if (
+    options?.elementProps &&
+    Array.isArray(options.elementProps) &&
+    options.elementProps.length > 0
+  ) {
+    attributes.push(
+      t.jsxAttribute(
+        t.jsxIdentifier('elementProps'),
+        t.jsxExpressionContainer(
+          elementPropsToArrayExpression(options.elementProps)
+        )
+      )
+    );
+  }
+  if (options?.components) {
+    attributes.push(
+      t.jsxAttribute(
+        t.jsxIdentifier('components'),
+        t.jsxExpressionContainer(options.components)
+      )
+    );
+  }
 
   if (fallbackChildren.length > 0) {
     return t.jsxElement(
@@ -50,7 +112,7 @@ export function injectTranslated(
   }
 
   return t.jsxElement(
-    t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true), // self-closing
+    t.jsxOpeningElement(t.jsxIdentifier('Translated'), attributes, true),
     null,
     [],
     true
@@ -61,22 +123,46 @@ export function injectTranslated(
 export function injectTranslatedWithParams(
   scope: string,
   params: Record<string, t.Expression>,
-  fallbackChildren: JsxChild[] = []
+  fallbackChildren: JsxChild[] = [],
+  options?: {
+    elementProps?: ElementPropDescriptor[];
+    components?: t.Expression;
+  }
 ): t.JSXElement {
   const attributes: t.JSXAttribute[] = [
     t.jsxAttribute(t.jsxIdentifier('tKey'), t.stringLiteral(scope)),
   ];
 
-  // Create params object expression
   if (Object.keys(params).length > 0) {
     const properties = Object.entries(params).map(([key, value]) =>
       t.objectProperty(t.identifier(key), value)
     );
-    const paramsObject = t.objectExpression(properties);
     attributes.push(
       t.jsxAttribute(
         t.jsxIdentifier('params'),
-        t.jsxExpressionContainer(paramsObject)
+        t.jsxExpressionContainer(t.objectExpression(properties))
+      )
+    );
+  }
+  if (
+    options?.elementProps &&
+    Array.isArray(options.elementProps) &&
+    options.elementProps.length > 0
+  ) {
+    attributes.push(
+      t.jsxAttribute(
+        t.jsxIdentifier('elementProps'),
+        t.jsxExpressionContainer(
+          elementPropsToArrayExpression(options.elementProps)
+        )
+      )
+    );
+  }
+  if (options?.components) {
+    attributes.push(
+      t.jsxAttribute(
+        t.jsxIdentifier('components'),
+        t.jsxExpressionContainer(options.components)
       )
     );
   }
@@ -450,6 +536,79 @@ export function transformProject(
       return fullPath.replace(/\[(\d+)\]/g, '$1').replace(/\./g, '/');
     };
 
+    // Build __intlComponents map for PascalCase tags used in <element:...> and get inject options helper
+    const pascalCaseTags = new Set<string>();
+    for (const scopeData of Object.values(fileScopes) as ScopeData[]) {
+      if (scopeData.elementProps) {
+        for (const { tag } of scopeData.elementProps) {
+          if (
+            tag.length > 0 &&
+            tag[0] === tag[0].toUpperCase() &&
+            tag[0] !== tag[0].toLowerCase()
+          ) {
+            pascalCaseTags.add(tag);
+          }
+        }
+      }
+    }
+    const bindings = new Map<string, string>();
+    if (pascalCaseTags.size > 0) {
+      traverse(ast, {
+        ImportDeclaration(importPath: NodePath<t.ImportDeclaration>) {
+          const specifiers = importPath.node.specifiers;
+          for (const spec of specifiers) {
+            const local = t.isImportDefaultSpecifier(spec)
+              ? spec.local.name
+              : t.isImportSpecifier(spec) && spec.local.name
+                ? spec.local.name
+                : null;
+            if (local && pascalCaseTags.has(local)) bindings.set(local, local);
+          }
+        },
+        FunctionDeclaration(fnPath: NodePath<t.FunctionDeclaration>) {
+          if (fnPath.node.id && t.isIdentifier(fnPath.node.id)) {
+            const name = fnPath.node.id.name;
+            if (pascalCaseTags.has(name)) bindings.set(name, name);
+          }
+        },
+        VariableDeclarator(varPath: NodePath<t.VariableDeclarator>) {
+          if (
+            t.isIdentifier(varPath.node.id) &&
+            (t.isArrowFunctionExpression(varPath.node.init) ||
+              t.isFunctionExpression(varPath.node.init))
+          ) {
+            const name = varPath.node.id.name;
+            if (pascalCaseTags.has(name)) bindings.set(name, name);
+          }
+        },
+      });
+    }
+    let intlComponentsRef: t.Expression | undefined;
+    if (pascalCaseTags.size > 0 && bindings.size > 0) {
+      const componentProps = Array.from(bindings.entries())
+        .filter(([name]) => pascalCaseTags.has(name))
+        .map(([name]) =>
+          t.objectProperty(t.stringLiteral(name), t.identifier(name))
+        );
+      if (componentProps.length > 0) {
+        const varDecl = t.variableDeclaration('const', [
+          t.variableDeclarator(
+            t.identifier('__intlComponents'),
+            t.objectExpression(componentProps)
+          ),
+        ]);
+        insertAfterDirectives(ast, varDecl);
+        intlComponentsRef = t.identifier('__intlComponents');
+      }
+    }
+    const getInjectOptions = (scopePath: string) => {
+      const scopeData = fileScopes[scopePath] as ScopeData | undefined;
+      return {
+        elementProps: scopeData?.elementProps,
+        components: intlComponentsRef,
+      };
+    };
+
     // Pass 0: Translate static string-array literals that the Parser extracted as per-element entries.
     // This enables loop scenarios like:
     //   const items = ['First','Second'];
@@ -570,18 +729,19 @@ export function transformProject(
           }
         }
 
-        // Replace template literal with Translated component
-        // Single translation key for the entire template literal message
         const fallbackChildren: JsxChild[] = [t.jsxExpressionContainer(expr)];
+        const injectOpts = getInjectOptions(elementScopePath);
         const translatedComponent = hasParams
           ? injectTranslatedWithParams(
               `${relativePath}::${elementScopePath}`,
               params,
-              fallbackChildren
+              fallbackChildren,
+              injectOpts
             )
           : injectTranslated(
               `${relativePath}::${elementScopePath}`,
-              fallbackChildren
+              fallbackChildren,
+              injectOpts
             );
 
         // Replace the JSXExpressionContainer with the Translated component
@@ -622,7 +782,8 @@ export function transformProject(
             ];
             expr.consequent = injectTranslated(
               `${relativePath}::${consequentKey}`,
-              fallback
+              fallback,
+              getInjectOptions(consequentKey)
             );
             didInject = true;
           }
@@ -635,7 +796,8 @@ export function transformProject(
             ];
             expr.alternate = injectTranslated(
               `${relativePath}::${alternateKey}`,
-              fallback
+              fallback,
+              getInjectOptions(alternateKey)
             );
             didInject = true;
           }
@@ -689,7 +851,8 @@ export function transformProject(
               const fallback: JsxChild[] = [t.jsxExpressionContainer(original)];
               expr.right = injectTranslated(
                 `${relativePath}::${rightKey}`,
-                fallback
+                fallback,
+                getInjectOptions(rightKey)
               );
               didInject = true;
             }
@@ -946,10 +1109,13 @@ export function transformProject(
         });
 
         if (hasTranslatableContent) {
-          // Replace all children with a single Translated component
           const fallbackChildren = [...path.node.children];
           path.node.children = [
-            injectTranslated(`${relativePath}::${scopePath}`, fallbackChildren),
+            injectTranslated(
+              `${relativePath}::${scopePath}`,
+              fallbackChildren,
+              getInjectOptions(scopePath)
+            ),
           ];
           processedElements.add(scopePath);
           changed = true;
@@ -993,11 +1159,12 @@ export function transformProject(
           parentPath = parentPath.parentPath;
         }
 
-        // Replace text with <Translated tKey="scope" />
         path.replaceWith(
-          injectTranslated(`${relativePath}::${scopePath}`, [
-            t.jsxText(path.node.value),
-          ])
+          injectTranslated(
+            `${relativePath}::${scopePath}`,
+            [t.jsxText(path.node.value)],
+            getInjectOptions(scopePath)
+          )
         );
         changed = true;
       },

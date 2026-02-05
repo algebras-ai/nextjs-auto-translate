@@ -1,16 +1,26 @@
 import * as t from '@babel/types';
 type VariableScope = Map<string, string>;
+/** Descriptor for a single <element:...> placeholder: tag name + serialized props. */
+export type ElementPropDescriptor = {
+    tag: string;
+    props: Record<string, unknown>;
+};
 type FunctionScope = Map<string, string>;
+/** Result of buildContent: content string and element descriptors in same order as <element:...>. */
+export type BuildContentResult = {
+    content: string;
+    elementProps: ElementPropDescriptor[];
+};
 /**
  * Extracts a readable representation of an expression
  * for translation purposes.
  */
 export declare function extractExpressionContent(expression: t.Expression | t.JSXEmptyExpression, variableScope?: VariableScope, functionScope?: FunctionScope): string;
 /**
- * Builds a readable content string from a JSXElement node,
- * using pseudo-tags for JSXElements and trimmed text for JSXText.
+ * Builds a readable content string from a JSXElement node and collects
+ * element descriptors (tag + props) for each <element:...> in the same order.
  */
-export declare function buildContent(node: t.JSXElement, variableScope?: VariableScope, functionScope?: FunctionScope): string;
+export declare function buildContent(node: t.JSXElement, variableScope?: VariableScope, functionScope?: FunctionScope): BuildContentResult;
 /**
  * Convert full AST path to a relative scope path
  */

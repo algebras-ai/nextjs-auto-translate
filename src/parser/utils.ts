@@ -3,8 +3,79 @@ import * as t from '@babel/types';
 // Type for variable scope map: variable name -> string literal value
 type VariableScope = Map<string, string>;
 
+/** Descriptor for a single <element:...> placeholder: tag name + serialized props. */
+export type ElementPropDescriptor = {
+  tag: string;
+  props: Record<string, unknown>;
+};
+
 // Type for function scope map: function name -> string literal return value
 type FunctionScope = Map<string, string>;
+
+/** Result of buildContent: content string and element descriptors in same order as <element:...>. */
+export type BuildContentResult = {
+  content: string;
+  elementProps: ElementPropDescriptor[];
+};
+
+/**
+ * Serialize JSX attributes to a plain object for build-time storage.
+ * Only static values (string literals, numeric literals, boolean, object expressions with literals) are included.
+ */
+function serializeJsxAttributes(
+  attributes: (t.JSXAttribute | t.JSXSpreadAttribute)[]
+): Record<string, unknown> {
+  const props: Record<string, unknown> = {};
+  for (const attr of attributes) {
+    if (!t.isJSXAttribute(attr)) continue;
+    const nameNode = attr.name;
+    const name = t.isJSXIdentifier(nameNode)
+      ? nameNode.name
+      : t.isJSXNamespacedName(nameNode)
+        ? `${nameNode.namespace.name}:${nameNode.name.name}`
+        : null;
+    if (!name) continue;
+
+    if (t.isStringLiteral(attr.value)) {
+      props[name] = attr.value.value;
+      continue;
+    }
+    if (attr.value == null) {
+      props[name] = true;
+      continue;
+    }
+    if (!t.isJSXExpressionContainer(attr.value)) continue;
+    const expr = attr.value.expression;
+    if (t.isStringLiteral(expr)) {
+      props[name] = expr.value;
+    } else if (t.isNumericLiteral(expr)) {
+      props[name] = expr.value;
+    } else if (t.isBooleanLiteral(expr)) {
+      props[name] = expr.value;
+    } else if (t.isObjectExpression(expr)) {
+      const obj: Record<string, unknown> = {};
+      for (const prop of expr.properties) {
+        if (t.isObjectProperty(prop)) {
+          const key = t.isIdentifier(prop.key)
+            ? prop.key.name
+            : t.isStringLiteral(prop.key)
+              ? prop.key.value
+              : null;
+          if (key == null) continue;
+          if (t.isStringLiteral(prop.value)) {
+            obj[key] = prop.value.value;
+          } else if (t.isNumericLiteral(prop.value)) {
+            obj[key] = prop.value.value;
+          } else if (t.isBooleanLiteral(prop.value)) {
+            obj[key] = prop.value.value;
+          }
+        }
+      }
+      if (Object.keys(obj).length > 0) props[name] = obj;
+    }
+  }
+  return props;
+}
 
 /**
  * Checks if an expression node can produce a string output
@@ -433,15 +504,16 @@ export function extractExpressionContent(
 }
 
 /**
- * Builds a readable content string from a JSXElement node,
- * using pseudo-tags for JSXElements and trimmed text for JSXText.
+ * Builds a readable content string from a JSXElement node and collects
+ * element descriptors (tag + props) for each <element:...> in the same order.
  */
 export function buildContent(
   node: t.JSXElement,
   variableScope: VariableScope = new Map(),
   functionScope: FunctionScope = new Map()
-): string {
+): BuildContentResult {
   let out = '';
+  const elementProps: ElementPropDescriptor[] = [];
   const children = node.children;
 
   for (let i = 0; i < children.length; i++) {
@@ -451,14 +523,12 @@ export function buildContent(
 
     if (t.isJSXText(child)) {
       const text = child.value;
-      // Preserve leading space if this text comes after an element or expression
       const hasLeadingSpace = /^\s/.test(text);
       const shouldPreserveLeadingSpace =
         hasLeadingSpace &&
         prevChild &&
         (t.isJSXElement(prevChild) || t.isJSXExpressionContainer(prevChild));
 
-      // Preserve trailing space if this text comes before an element or expression
       const hasTrailingSpace = /\s$/.test(text);
       const shouldPreserveTrailingSpace =
         hasTrailingSpace &&
@@ -467,23 +537,17 @@ export function buildContent(
 
       let processedText = text;
       if (shouldPreserveLeadingSpace && shouldPreserveTrailingSpace) {
-        // Keep as-is (has spaces on both sides that are meaningful)
         processedText = text;
       } else if (shouldPreserveLeadingSpace) {
-        // Preserve leading space, trim trailing
         processedText = text.trimEnd();
       } else if (shouldPreserveTrailingSpace) {
-        // Preserve trailing space, trim leading
         processedText = text.trimStart();
       } else {
-        // No meaningful spaces, trim both sides
         processedText = text.trim();
       }
 
       if (processedText) out += processedText;
     } else if (t.isJSXExpressionContainer(child)) {
-      // Handle JSXExpressionContainer nodes
-      // This includes: string literals, template literals, ternaries, logical expressions, etc.
       const expression = child.expression;
 
       if (isTranslatableExpression(expression)) {
@@ -497,33 +561,30 @@ export function buildContent(
         }
       }
     } else if (t.isJSXElement(child)) {
-      const nameNode = child.openingElement.name;
+      const jsxChild = child as t.JSXElement;
+      const nameNode = jsxChild.openingElement.name;
       let name = 'Unknown';
       if (t.isJSXIdentifier(nameNode)) {
         name = nameNode.name;
       } else if (t.isJSXMemberExpression(nameNode)) {
         name = nameNode.property.name;
       }
-      // Skip <p> tags - just include their content directly without the element wrapper
       if (name === 'p') {
-        const inner = buildContent(
-          child as t.JSXElement,
-          variableScope,
-          functionScope
-        );
-        out += inner;
+        const inner = buildContent(jsxChild, variableScope, functionScope);
+        out += inner.content;
+        elementProps.push(...inner.elementProps);
       } else {
-        // Recursively build inner content if needed
-        const inner = buildContent(
-          child as t.JSXElement,
-          variableScope,
-          functionScope
+        const inner = buildContent(jsxChild, variableScope, functionScope);
+        const props = serializeJsxAttributes(
+          jsxChild.openingElement.attributes
         );
-        out += `<element:${name}>${inner}</element:${name}>`;
+        elementProps.push({ tag: name, props });
+        elementProps.push(...inner.elementProps);
+        out += `<element:${name}>${inner.content}</element:${name}>`;
       }
     }
   }
-  return out;
+  return { content: out, elementProps };
 }
 
 /**

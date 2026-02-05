@@ -5,14 +5,23 @@ import { useAlgebrasIntl } from '../Provider';
 
 const loggedMissingKeys = new Set<string>();
 
+export type ElementPropDescriptor = {
+  tag: string;
+  props: Record<string, unknown>;
+};
+
 interface TranslatedProps {
   tKey: string;
   params?: Record<string, unknown>;
   children?: React.ReactNode;
+  /** Build-time injected: tag + props for each <element:...> in content (same order). */
+  elementProps?: ElementPropDescriptor[];
+  /** Build-time injected: map of PascalCase tag name -> React component for <element:Component>. */
+  components?: Record<string, React.ComponentType<unknown>>;
 }
 
 const Translated = (props: TranslatedProps) => {
-  const { tKey, params, children } = props;
+  const { tKey, params, children, elementProps, components } = props;
   const [fileKey, entryKey] = tKey.split('::');
 
   const { dictionary, locale } = useAlgebrasIntl();
@@ -131,8 +140,10 @@ const Translated = (props: TranslatedProps) => {
   };
 
   // Parse content with <element:tag> syntax back into React elements
-  const parseContent = (text: string): React.ReactNode => {
-    // First replace placeholders with translated variable values
+  const parseContent = (
+    text: string,
+    elementIndexRef: { current: number } = { current: 0 }
+  ): React.ReactNode => {
     const textWithPlaceholders = replacePlaceholders(text);
 
     const elementRegex = /<element:(\w+)>(.*?)<\/element:\1>/gs;
@@ -140,9 +151,8 @@ const Translated = (props: TranslatedProps) => {
     let lastIndex = 0;
     let match;
     let iterationCount = 0;
-    const maxIterations = 100; // Prevent infinite loops
+    const maxIterations = 100;
 
-    // Void elements that cannot have children
     const voidElements = new Set([
       'area',
       'base',
@@ -160,45 +170,54 @@ const Translated = (props: TranslatedProps) => {
       'wbr',
     ]);
 
-    while ((match = elementRegex.exec(text)) !== null) {
-      // Safety check to prevent infinite loops
+    const isPascalCase = (s: string) =>
+      s.length > 0 &&
+      s[0] === s[0].toUpperCase() &&
+      s[0] !== s[0].toLowerCase();
+
+    while ((match = elementRegex.exec(textWithPlaceholders)) !== null) {
       if (++iterationCount > maxIterations) {
         console.error('Maximum iterations exceeded in parseContent');
         break;
       }
 
-      // Add text before the element (with placeholders replaced)
       if (match.index > lastIndex) {
         parts.push(textWithPlaceholders.substring(lastIndex, match.index));
       }
 
-      // Add the element
-      const tagName = match[1];
+      const tagFromString = match[1];
       const innerContent = match[2];
+      const descriptor = elementProps?.[elementIndexRef.current];
+      const tagName = descriptor?.tag ?? tagFromString;
+      const propsFromDescriptor = descriptor?.props ?? {};
+      elementIndexRef.current += 1;
 
-      // Void elements cannot have children
+      const resolvedComponent =
+        isPascalCase(tagName) && components?.[tagName]
+          ? components[tagName]
+          : null;
+      const elementType = resolvedComponent ?? tagName;
+      const mergedProps = { ...propsFromDescriptor, key: match.index };
+
       if (voidElements.has(tagName)) {
-        parts.push(createElement(tagName, { key: match.index }));
+        parts.push(createElement(elementType, mergedProps));
       } else {
         parts.push(
           createElement(
-            tagName,
-            { key: match.index },
-            parseContent(innerContent)
+            elementType,
+            mergedProps,
+            parseContent(innerContent, elementIndexRef)
           )
         );
       }
 
       lastIndex = elementRegex.lastIndex;
-
-      // Safety check: if we're not advancing, break to prevent infinite loop
       if (lastIndex <= match.index) {
         console.error('Regex not advancing, breaking to prevent infinite loop');
         break;
       }
     }
 
-    // Add remaining text (with placeholders replaced)
     if (lastIndex < textWithPlaceholders.length) {
       parts.push(textWithPlaceholders.substring(lastIndex));
     }
@@ -206,7 +225,7 @@ const Translated = (props: TranslatedProps) => {
     return parts.length > 0 ? parts : textWithPlaceholders;
   };
 
-  return <>{parseContent(content)}</>;
+  return <>{parseContent(content, { current: 0 })}</>;
 };
 
 export default Translated;

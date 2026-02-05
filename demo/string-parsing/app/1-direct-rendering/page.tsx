@@ -1,3 +1,5 @@
+import ElementPropsDemo from './components/ElementPropsDemo';
+import LinkAndImageDemo from './components/LinkAndImageDemo';
 import SimpleText from './components/SimpleText';
 import TextBetweenElements from './components/TextBetweenElements';
 import TextWithExplicitSpaces from './components/TextWithExplicitSpaces';
@@ -34,6 +36,18 @@ export default function DirectRenderingPage() {
               1.4 Text with explicit spaces via expression
             </h2>
             <TextWithExplicitSpaces />
+          </section>
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+              1.5 Element props (style, className, data-*) preserved
+            </h2>
+            <ElementPropsDemo />
+          </section>
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+              1.6 Next.js Link and Image (PascalCase components)
+            </h2>
+            <LinkAndImageDemo />
           </section>
         </div>
       </main>
