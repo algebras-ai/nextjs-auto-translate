@@ -1,4 +1,9 @@
 // types.ts
+export type ElementPropDescriptor = {
+  tag: string;
+  props: Record<string, unknown>;
+};
+
 export type ScopeData = {
   type: 'text' | 'element' | 'attribute';
   hash: string;
@@ -6,6 +11,8 @@ export type ScopeData = {
   skip: boolean;
   overrides: Record<string, string>;
   content: string;
+  /** For element scopes: tag + props for each <element:...> in content (same order). */
+  elementProps?: ElementPropDescriptor[];
 };
 
 export type FileScopes = {

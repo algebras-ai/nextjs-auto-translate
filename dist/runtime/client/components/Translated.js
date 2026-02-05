@@ -6,7 +6,7 @@ const react_1 = require("react");
 const Provider_1 = require("../Provider");
 const loggedMissingKeys = new Set();
 const Translated = (props) => {
-    const { tKey, params, children } = props;
+    const { tKey, params, children, elementProps, components } = props;
     const [fileKey, entryKey] = tKey.split('::');
     const { dictionary, locale } = (0, Provider_1.useAlgebrasIntl)();
     // Check if the file exists in dictionary
@@ -107,16 +107,14 @@ const Translated = (props) => {
         return result;
     };
     // Parse content with <element:tag> syntax back into React elements
-    const parseContent = (text) => {
-        // First replace placeholders with translated variable values
+    const parseContent = (text, elementIndexRef = { current: 0 }) => {
         const textWithPlaceholders = replacePlaceholders(text);
         const elementRegex = /<element:(\w+)>(.*?)<\/element:\1>/gs;
         const parts = [];
         let lastIndex = 0;
         let match;
         let iterationCount = 0;
-        const maxIterations = 100; // Prevent infinite loops
-        // Void elements that cannot have children
+        const maxIterations = 100;
         const voidElements = new Set([
             'area',
             'base',
@@ -133,39 +131,45 @@ const Translated = (props) => {
             'track',
             'wbr',
         ]);
-        while ((match = elementRegex.exec(text)) !== null) {
-            // Safety check to prevent infinite loops
+        const isPascalCase = (s) => s.length > 0 &&
+            s[0] === s[0].toUpperCase() &&
+            s[0] !== s[0].toLowerCase();
+        while ((match = elementRegex.exec(textWithPlaceholders)) !== null) {
             if (++iterationCount > maxIterations) {
                 console.error('Maximum iterations exceeded in parseContent');
                 break;
             }
-            // Add text before the element (with placeholders replaced)
             if (match.index > lastIndex) {
                 parts.push(textWithPlaceholders.substring(lastIndex, match.index));
             }
-            // Add the element
-            const tagName = match[1];
+            const tagFromString = match[1];
             const innerContent = match[2];
-            // Void elements cannot have children
+            const descriptor = elementProps?.[elementIndexRef.current];
+            const tagName = descriptor?.tag ?? tagFromString;
+            const propsFromDescriptor = descriptor?.props ?? {};
+            elementIndexRef.current += 1;
+            const resolvedComponent = isPascalCase(tagName) && components?.[tagName]
+                ? components[tagName]
+                : null;
+            const elementType = resolvedComponent ?? tagName;
+            const mergedProps = { ...propsFromDescriptor, key: match.index };
             if (voidElements.has(tagName)) {
-                parts.push((0, react_1.createElement)(tagName, { key: match.index }));
+                parts.push((0, react_1.createElement)(elementType, mergedProps));
             }
             else {
-                parts.push((0, react_1.createElement)(tagName, { key: match.index }, parseContent(innerContent)));
+                parts.push((0, react_1.createElement)(elementType, mergedProps, parseContent(innerContent, elementIndexRef)));
             }
             lastIndex = elementRegex.lastIndex;
-            // Safety check: if we're not advancing, break to prevent infinite loop
             if (lastIndex <= match.index) {
                 console.error('Regex not advancing, breaking to prevent infinite loop');
                 break;
             }
         }
-        // Add remaining text (with placeholders replaced)
         if (lastIndex < textWithPlaceholders.length) {
             parts.push(textWithPlaceholders.substring(lastIndex));
         }
         return parts.length > 0 ? parts : textWithPlaceholders;
     };
-    return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: parseContent(content) });
+    return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: parseContent(content, { current: 0 }) });
 };
 exports.default = Translated;

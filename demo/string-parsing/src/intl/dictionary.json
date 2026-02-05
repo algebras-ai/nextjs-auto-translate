@@ -1,6 +1,63 @@
 {
   "version": 0.1,
   "files": {
+    "app/1-direct-rendering/components/ElementPropsDemo.tsx": {
+      "entries": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "content": {
+            "en": "<p>... <span\n          style={{color:\"red\"}}\n          className=\"red-text\"\n          data-name=\"red-span\">span</span></p>",
+            "ru": "<p>...<span\n          style={{color:\"red\"}}\n          className=\"red-text\"\n          data-name=\"red-span\">спан</span></p>"
+          },
+          "hash": "841566f5677394af92be1c5eb5b99491"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "Paragraph with styled \n          <element:span>span</element:span>",
+            "ru": "Абзац со стилизованным\n          <element:span>элементом span</element:span>"
+          },
+          "hash": "7c0cfd84a9fd5808fd53633ad4f37488"
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "content": {
+            "en": "<element:strong>Test:</element:strong> elementProps – after translate the span should\n        keep red color, .red-text class and data-name attribute.",
+            "ru": "<element:strong>Тест:</element:strong> elementProps - после перевода спан должен\n        сохранить красный цвет, класс .red-text и атрибут data-name."
+          },
+          "hash": "f8e80e83f259718f3650e07c6735dc96"
+        }
+      }
+    },
+    "app/1-direct-rendering/components/LinkAndImageDemo.tsx": {
+      "entries": {
+        "program/body2/declaration/body/body0/argument/children1/children1": {
+          "content": {
+            "en": "<Link href=\"/about\">About</Link> and <Image\n          alt=\"...\" />",
+            "ru": "<Link href=\"/about\">О нас</Link> и <Image\n          alt=...\"\" />"
+          },
+          "hash": "240d8f0cc2839dde7c7b49dd0b91eac6"
+        },
+        "program/body2/declaration/body/body0/argument/children3/children1": {
+          "content": {
+            "en": "Visit the <element:Link>About</element:Link> page for more info.",
+            "ru": "Для получения дополнительной информации посетите страницу <element:Link>О нас</element:Link>."
+          },
+          "hash": "de70c605ac84dfe1a7285f1999745ad9"
+        },
+        "program/body2/declaration/body/body0/argument/children3/children3": {
+          "content": {
+            "en": "Icon: \n          <element:Image></element:Image>",
+            "ru": "Иконка:\n          <element:Image></element:Image>"
+          },
+          "hash": "a71c69b1333ba60087807ac7fae782a1"
+        },
+        "program/body2/declaration/body/body0/argument/children5": {
+          "content": {
+            "en": "<element:strong>Test:</element:strong> PascalCase components – Link and Image should\n        render as React components (not unknown tags) with props preserved.",
+            "ru": "<element:strong>Тест:</element:strong> Компоненты в стиле PascalCase - Link и Image - должны\n        отображаться как React-компоненты (а не как неизвестные теги) с сохранением их свойств."
+          },
+          "hash": "6890c9b74ee754ff314b5bc43fd8853e"
+        }
+      }
+    },
     "app/1-direct-rendering/components/SimpleText.tsx": {
       "entries": {
         "program/body0/declaration/body/body0/argument/children1/children1": {
@@ -103,40 +160,54 @@
     },
     "app/1-direct-rendering/page.tsx": {
       "entries": {
-        "program/body4/declaration/body/body0/argument/children1/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children1": {
           "content": {
             "en": "1. Direct Rendering - JSXText between tags",
             "ru": "1. Прямой рендеринг - текст JSX между тегами"
           },
           "hash": "353b9ffd4b835fff6902a40a08eb5cac"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children1/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children1/children1": {
           "content": {
             "en": "1.1 Simple text between tags",
             "ru": "1.1 Простой текст между тегами"
           },
           "hash": "55d5c089982b9df64b510b54c370a15c"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children3/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children3/children1": {
           "content": {
             "en": "1.2 Text with spaces",
             "ru": "1.2 Текст с пробелами"
           },
           "hash": "4871133373336feda1880382cc9b6496"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children5/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children5/children1": {
           "content": {
             "en": "1.3 Text with spaces between elements",
             "ru": "1.3 Текст с пробелами между элементами"
           },
           "hash": "280b903c34527fb8d65afbc564ff8f50"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children7/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children7/children1": {
           "content": {
             "en": "1.4 Text with explicit spaces via expression",
             "ru": "1.4 Текст с явными пробелами посредством выражения"
           },
           "hash": "ea5be83c9d137553da1690b08996da68"
+        },
+        "program/body6/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "content": {
+            "en": "1.5 Element props (style, className, data-*) preserved",
+            "ru": "1.5 Свойства элементов (style, className, data-*) сохранены"
+          },
+          "hash": "5f7c89e0bcc3aee64580af1886645364"
+        },
+        "program/body6/declaration/body/body0/argument/children1/children3/children11/children1": {
+          "content": {
+            "en": "1.6 Next.js Link and Image (PascalCase components)",
+            "ru": "1.6 Next.js: компоненты Link и Image (в формате PascalCase)"
+          },
+          "hash": "78c58d474d6e7ec742ccc0dd0bbffe10"
         }
       }
     },

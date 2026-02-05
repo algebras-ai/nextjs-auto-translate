@@ -1,6 +1,113 @@
 {
   "version": 0.1,
   "files": {
+    "app/1-direct-rendering/components/ElementPropsDemo.tsx": {
+      "scopes": {
+        "program/body0/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "841566f5677394af92be1c5eb5b99491",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<p>... <span\n          style={{color:\"red\"}}\n          className=\"red-text\"\n          data-name=\"red-span\">span</span></p>"
+        },
+        "program/body0/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "7c0cfd84a9fd5808fd53633ad4f37488",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Paragraph with styled \n          <element:span>span</element:span>",
+          "elementProps": [
+            {
+              "tag": "span",
+              "props": {
+                "style": {
+                  "color": "red"
+                },
+                "className": "red-text font-semibold",
+                "data-name": "red-span"
+              }
+            }
+          ]
+        },
+        "program/body0/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "f8e80e83f259718f3650e07c6735dc96",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>Test:</element:strong> elementProps – after translate the span should\n        keep red color, .red-text class and data-name attribute.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
+        }
+      }
+    },
+    "app/1-direct-rendering/components/LinkAndImageDemo.tsx": {
+      "scopes": {
+        "program/body2/declaration/body/body0/argument/children1/children1": {
+          "type": "element",
+          "hash": "240d8f0cc2839dde7c7b49dd0b91eac6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<Link href=\"/about\">About</Link> and <Image\n          alt=\"...\" />"
+        },
+        "program/body2/declaration/body/body0/argument/children3/children1": {
+          "type": "element",
+          "hash": "de70c605ac84dfe1a7285f1999745ad9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Visit the <element:Link>About</element:Link> page for more info.",
+          "elementProps": [
+            {
+              "tag": "Link",
+              "props": {
+                "href": "/about"
+              }
+            }
+          ]
+        },
+        "program/body2/declaration/body/body0/argument/children3/children3": {
+          "type": "element",
+          "hash": "a71c69b1333ba60087807ac7fae782a1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Icon: \n          <element:Image></element:Image>",
+          "elementProps": [
+            {
+              "tag": "Image",
+              "props": {
+                "src": "/globe.svg",
+                "alt": "Globe icon",
+                "width": 24,
+                "height": 24
+              }
+            }
+          ]
+        },
+        "program/body2/declaration/body/body0/argument/children5": {
+          "type": "element",
+          "hash": "6890c9b74ee754ff314b5bc43fd8853e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:strong>Test:</element:strong> PascalCase components – Link and Image should\n        render as React components (not unknown tags) with props preserved.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
+        }
+      }
+    },
     "app/1-direct-rendering/components/SimpleText.tsx": {
       "scopes": {
         "program/body0/declaration/body/body0/argument/children1/children1": {
@@ -25,7 +132,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> The simplest way - a string directly\n        between opening and closing tags."
+          "content": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> The simplest way - a string directly\n        between opening and closing tags.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -45,7 +166,15 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Text <element:span>between</element:span> elements"
+          "content": "Text <element:span>between</element:span> elements",
+          "elementProps": [
+            {
+              "tag": "span",
+              "props": {
+                "className": "font-semibold"
+              }
+            }
+          ]
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -53,7 +182,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> Multiple JSXText nodes\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Each text fragment between elements\n        becomes a separate JSXText node."
+          "content": "<element:strong>AST Type:</element:strong> Multiple JSXText nodes\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Each text fragment between elements\n        becomes a separate JSXText node.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -73,7 +216,15 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Text \n          <element:span>with space</element:span>\n           between elements"
+          "content": "Text \n          <element:span>with space</element:span>\n           between elements",
+          "elementProps": [
+            {
+              "tag": "span",
+              "props": {
+                "className": "font-semibold"
+              }
+            }
+          ]
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -81,7 +232,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText + JSXExpressionContainer +\n        JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Uses { } to explicitly preserve\n        spaces between elements."
+          "content": "<element:strong>AST Type:</element:strong> JSXText + JSXExpressionContainer +\n        JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Uses { } to explicitly preserve\n        spaces between elements.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -109,13 +274,27 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Spaces and line breaks are preserved in\n        JSXText, but React normalizes them during rendering."
+          "content": "<element:strong>AST Type:</element:strong> JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Spaces and line breaks are preserved in\n        JSXText, but React normalizes them during rendering.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
     "app/1-direct-rendering/page.tsx": {
       "scopes": {
-        "program/body4/declaration/body/body0/argument/children1/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children1": {
           "type": "element",
           "hash": "353b9ffd4b835fff6902a40a08eb5cac",
           "context": "",
@@ -123,7 +302,7 @@
           "overrides": {},
           "content": "1. Direct Rendering - JSXText between tags"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children1/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children1/children1": {
           "type": "element",
           "hash": "55d5c089982b9df64b510b54c370a15c",
           "context": "",
@@ -131,7 +310,7 @@
           "overrides": {},
           "content": "1.1 Simple text between tags"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children3/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children3/children1": {
           "type": "element",
           "hash": "4871133373336feda1880382cc9b6496",
           "context": "",
@@ -139,7 +318,7 @@
           "overrides": {},
           "content": "1.2 Text with spaces"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children5/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children5/children1": {
           "type": "element",
           "hash": "280b903c34527fb8d65afbc564ff8f50",
           "context": "",
@@ -147,13 +326,29 @@
           "overrides": {},
           "content": "1.3 Text with spaces between elements"
         },
-        "program/body4/declaration/body/body0/argument/children1/children3/children7/children1": {
+        "program/body6/declaration/body/body0/argument/children1/children3/children7/children1": {
           "type": "element",
           "hash": "ea5be83c9d137553da1690b08996da68",
           "context": "",
           "skip": false,
           "overrides": {},
           "content": "1.4 Text with explicit spaces via expression"
+        },
+        "program/body6/declaration/body/body0/argument/children1/children3/children9/children1": {
+          "type": "element",
+          "hash": "5f7c89e0bcc3aee64580af1886645364",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1.5 Element props (style, className, data-*) preserved"
+        },
+        "program/body6/declaration/body/body0/argument/children1/children3/children11/children1": {
+          "type": "element",
+          "hash": "78c58d474d6e7ec742ccc0dd0bbffe10",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1.6 Next.js Link and Image (PascalCase components)"
         }
       }
     },
@@ -189,7 +384,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXElement with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Error Boundary fallback component."
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Error Boundary fallback component.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -217,7 +426,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (createPortal)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered through a portal to\n        another DOM node."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (createPortal)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered through a portal to\n        another DOM node.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -253,7 +476,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXElement (Suspense) with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Suspense fallback component."
+          "content": "<element:strong>AST Type:</element:strong> JSXElement (Suspense) with JSXAttribute (fallback)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in Suspense fallback component.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -341,7 +578,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with\n        ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional expression returns a string\n        that is rendered.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -369,7 +620,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function is called and returns a string\n        that is rendered."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function is called and returns a string\n        that is rendered.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -413,7 +678,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> If the left part is true, the right part\n        (string) is rendered."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> If the left part is true, the right part\n        (string) is rendered.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -441,7 +720,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with BinaryExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Result of string concatenation is rendered\n        as text."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with BinaryExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Result of string concatenation is rendered\n        as text.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -469,7 +762,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but\n        it's still a string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String wrapped in curly braces, but\n        it's still a string.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -497,7 +804,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String method returns a new string that\n        is rendered."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String method returns a new string that\n        is rendered.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -525,7 +846,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with TemplateLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Template literal is evaluated and rendered\n        as a string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with TemplateLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Template literal is evaluated and rendered\n        as a string.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -553,7 +888,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Variable containing a string is rendered\n        as text."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Variable containing a string is rendered\n        as text.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -657,7 +1006,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed\n        if the image fails to load and is used by screen readers. Visible to\n        users."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the alt attribute is displayed\n        if the image fails to load and is used by screen readers. Visible to\n        users.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -693,7 +1056,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby,\n        aria-placeholder and other ARIA attributes are used by screen readers\n        and visible to users with disabilities. Subject to localization."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> aria-label, aria-describedby,\n        aria-placeholder and other ARIA attributes are used by screen readers\n        and visible to users with disabilities. Subject to localization.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -721,7 +1098,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String in the title attribute is displayed\n        in a tooltip when hovering. Visible to users.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         },
         "program/body0/declaration/body/body0/argument/children3/children3_attr_title": {
           "type": "attribute",
@@ -793,7 +1184,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXElement with JSXText in children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed as children of the component."
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with JSXText in children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed as children of the component.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -821,7 +1226,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXElement with children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through the children prop."
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with children\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through the children prop.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -841,7 +1260,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and\n        rendered as visible text. Important: technical props (id, className,\n        data-*, etc.) are not subject to localization."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is passed through a prop and\n        rendered as visible text. Important: technical props (id, className,\n        data-*, etc.) are not subject to localization.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -861,7 +1294,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXElement (component)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component receives a string and renders it."
+          "content": "<element:strong>AST Type:</element:strong> JSXElement (component)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component receives a string and renders it.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -889,7 +1336,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXElement with nested JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component wraps a string in additional tags."
+          "content": "<element:strong>AST Type:</element:strong> JSXElement with nested JSXText\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Component wraps a string in additional tags.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -969,7 +1430,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Arrow function returning a string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Arrow function returning a string.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -997,7 +1472,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function call returning a string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Function call returning a string.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1025,7 +1514,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Object method returning a string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (MemberExpression)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Object method returning a string.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1069,7 +1572,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Built-in JavaScript string methods."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Built-in JavaScript string methods.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1089,7 +1606,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Imported function returning a string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Imported function returning a string.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1209,7 +1740,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional logic is extracted into a function."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional logic is extracted into a function.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1253,7 +1798,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is rendered only if the condition is true."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> String is rendered only if the condition is true.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1297,7 +1856,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Default string is rendered if the main one is missing."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with LogicalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Default string is rendered if the main one is missing.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1365,7 +1938,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Switch-case logic in a function.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1417,7 +2004,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional choice of string for rendering."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with ConditionalExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Conditional choice of string for rendering.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1529,7 +2130,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with chain of CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Chain of methods for filtering and rendering strings."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with chain of CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Chain of methods for filtering and rendering strings.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1573,7 +2188,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (join)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is combined into one string."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (join)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is combined into one string.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1609,7 +2238,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are formed dynamically in map."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are formed dynamically in map.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1653,7 +2296,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression\n        (map)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Array of strings is rendered through map.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1697,7 +2354,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (reduce)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Reduce for combining strings into one."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with CallExpression (reduce)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Reduce for combining strings into one.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1769,7 +2440,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the client.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1797,7 +2482,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> FunctionDeclaration with ReturnStatement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Dynamic metadata via function."
+          "content": "<element:strong>AST Type:</element:strong> FunctionDeclaration with ReturnStatement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Dynamic metadata via function.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1825,7 +2524,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> ExportNamedDeclaration with ObjectExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings in Next.js App Router metadata."
+          "content": "<element:strong>AST Type:</element:strong> ExportNamedDeclaration with ObjectExpression\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings in Next.js App Router metadata.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1845,7 +2558,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the server in App Router."
+          "content": "<element:strong>AST Type:</element:strong> JSXExpressionContainer with Identifier\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Strings are rendered on the server in App Router.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1917,7 +2644,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute."
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement or JSXAttribute (value for input\n        type=\"submit\")\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Button text is visible to users. For\n        <input type=\"submit\"> text is set via the value attribute.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1953,7 +2694,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <summary> is visible to users\n        as a clickable heading for an expandable block."
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (summary)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <summary> is visible to users\n        as a clickable heading for an expandable block.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -1981,7 +2736,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields."
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (legend)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Text in <legend> is visible to users\n        as a heading for a group of fields.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -2009,7 +2778,16 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Email address\n            <element:input></element:input>"
+          "content": "Email address\n            <element:input></element:input>",
+          "elementProps": [
+            {
+              "tag": "input",
+              "props": {
+                "type": "email",
+                "className": "mt-1 w-full rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 px-3 py-2"
+              }
+            }
+          ]
         },
         "program/body0/declaration/body/body0/argument/children5": {
           "type": "element",
@@ -2017,7 +2795,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Label text for input field is visible to\n        users. The htmlFor attribute (technical) is not localized, but text\n        inside <label> is subject to localization."
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Label text for input field is visible to\n        users. The htmlFor attribute (technical) is not localized, but text\n        inside <label> is subject to localization.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -2037,7 +2829,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or\n        JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Hint string in input field is visible to\n        users before entering text.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -2073,7 +2879,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Option text in select is visible to users\n        when opening the list. The value attribute (technical) is not localized."
+          "content": "<element:strong>AST Type:</element:strong> JSXText in JSXElement (option)\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Option text in select is visible to users\n        when opening the list. The value attribute (technical) is not localized.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -2093,7 +2913,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral or JSXExpressionContainer\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Placeholder and value in textarea are\n        visible to users.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -2113,7 +2947,21 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field default value is visible to\n        users in the field. Used for pre-filled uncontrolled fields."
+          "content": "<element:strong>AST Type:</element:strong> JSXAttribute with StringLiteral\n        <element:br></element:br>\n        <element:strong>Description:</element:strong> Input field default value is visible to\n        users in the field. Used for pre-filled uncontrolled fields.",
+          "elementProps": [
+            {
+              "tag": "strong",
+              "props": {}
+            },
+            {
+              "tag": "br",
+              "props": {}
+            },
+            {
+              "tag": "strong",
+              "props": {}
+            }
+          ]
         }
       }
     },
@@ -2385,7 +3233,45 @@
           "context": "",
           "skip": false,
           "overrides": {},
-          "content": "Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>"
+          "content": "Technical attributes: \n              <element:code>id</element:code>\n              , \n              <element:code>className</element:code>\n              , \n              <element:code>htmlFor</element:code>\n              , \n              <element:code>data-*</element:code>\n              , \n              <element:code>key</element:code>\n              , \n              <element:code>ref</element:code>",
+          "elementProps": [
+            {
+              "tag": "code",
+              "props": {
+                "className": "rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300"
+              }
+            },
+            {
+              "tag": "code",
+              "props": {
+                "className": "rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300"
+              }
+            },
+            {
+              "tag": "code",
+              "props": {
+                "className": "rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300"
+              }
+            },
+            {
+              "tag": "code",
+              "props": {
+                "className": "rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300"
+              }
+            },
+            {
+              "tag": "code",
+              "props": {
+                "className": "rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300"
+              }
+            },
+            {
+              "tag": "code",
+              "props": {
+                "className": "rounded bg-gray-100 px-1 dark:bg-gray-700 dark:text-gray-300"
+              }
+            }
+          ]
         },
         "program/body1/declaration/body/body0/argument/children1/children5/children3/children3": {
           "type": "element",

@@ -803,14 +803,14 @@ class Parser {
                         if (hasTranslatableContent) {
                             const fullScopePath = path.getPathLocation();
                             const relativeScopePath = (0, utils_1.getRelativeScopePath)(fullScopePath);
-                            // Pass variableScope to buildContent
-                            const content = (0, utils_1.buildContent)(path.node, variableScope, functionReturnScope);
+                            const buildResult = (0, utils_1.buildContent)(path.node, variableScope, functionReturnScope);
+                            const content = buildResult.content;
                             if (content.trim()) {
                                 const hash = crypto_1.default
                                     .createHash('md5')
                                     .update(content)
                                     .digest('hex');
-                                fileScopes[relativeScopePath] = {
+                                const scopeEntry = {
                                     type: 'element',
                                     hash,
                                     context: '',
@@ -818,6 +818,11 @@ class Parser {
                                     overrides: {},
                                     content,
                                 };
+                                if (buildResult.elementProps &&
+                                    buildResult.elementProps.length > 0) {
+                                    scopeEntry.elementProps = buildResult.elementProps;
+                                }
+                                fileScopes[relativeScopePath] = scopeEntry;
                                 // Static variables are now resolved directly in extractExpressionContent
                                 // Only runtime variables (not in variableScope) will remain as placeholders
                                 // Extract conditional expression branches (ternary) as separate entries

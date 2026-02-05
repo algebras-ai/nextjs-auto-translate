@@ -904,19 +904,19 @@ export class Parser {
               const fullScopePath = path.getPathLocation();
               const relativeScopePath = getRelativeScopePath(fullScopePath);
 
-              // Pass variableScope to buildContent
-              const content = buildContent(
+              const buildResult = buildContent(
                 path.node,
                 variableScope,
                 functionReturnScope
               );
+              const content = buildResult.content;
               if (content.trim()) {
                 const hash = crypto
                   .createHash('md5')
                   .update(content)
                   .digest('hex');
 
-                fileScopes[relativeScopePath] = {
+                const scopeEntry: ScopeData = {
                   type: 'element',
                   hash,
                   context: '',
@@ -924,6 +924,13 @@ export class Parser {
                   overrides: {},
                   content,
                 };
+                if (
+                  buildResult.elementProps &&
+                  buildResult.elementProps.length > 0
+                ) {
+                  scopeEntry.elementProps = buildResult.elementProps;
+                }
+                fileScopes[relativeScopePath] = scopeEntry;
 
                 // Static variables are now resolved directly in extractExpressionContent
                 // Only runtime variables (not in variableScope) will remain as placeholders
